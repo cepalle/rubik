@@ -37,30 +37,30 @@ type dispatcher struct {
 	fun  moveFunction
 }
 
-func clockwiseWithPose(cube Rubik, lp2 [4] uint8, lp3 [4] uint8) Rubik {
+func clockwiseWithPose(cube Rubik, ip2 [4] uint8, ip3 [4] uint8) Rubik {
 	var tmp uint8 = 0
 
-	tmp = cube.pos_p3[lp3[0]]
-	cube.pos_p3[lp3[0]] = cube.pos_p3[lp3[1]]
-	cube.pos_p3[lp3[1]] = cube.pos_p3[lp3[2]]
-	cube.pos_p3[lp3[2]] = cube.pos_p3[lp3[3]]
-	cube.pos_p3[lp3[3]] = tmp
+	tmp = cube.pos_p3[ip3[0]]
+	cube.pos_p3[ip3[0]] = cube.pos_p3[ip3[3]]
+	cube.pos_p3[ip3[3]] = cube.pos_p3[ip3[2]]
+	cube.pos_p3[ip3[2]] = cube.pos_p3[ip3[1]]
+	cube.pos_p3[ip3[1]] = tmp
 
-	tmp = cube.pos_p2[lp2[0]]
-	cube.pos_p2[lp2[0]] = cube.pos_p2[lp2[1]]
-	cube.pos_p2[lp2[1]] = cube.pos_p2[lp2[2]]
-	cube.pos_p2[lp2[2]] = cube.pos_p2[lp2[3]]
-	cube.pos_p2[lp2[3]] = tmp
+	tmp = cube.pos_p2[ip2[0]]
+	cube.pos_p2[ip2[0]] = cube.pos_p2[ip2[3]]
+	cube.pos_p2[ip2[3]] = cube.pos_p2[ip2[2]]
+	cube.pos_p2[ip2[2]] = cube.pos_p2[ip2[1]]
+	cube.pos_p2[ip2[1]] = tmp
 
-	cube.rot_p3[cube.pos_p3[lp3[0]]] = (cube.rot_p3[cube.pos_p3[lp3[0]]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[lp3[1]]] = (cube.rot_p3[cube.pos_p3[lp3[1]]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[lp3[2]]] = (cube.rot_p3[cube.pos_p3[lp3[2]]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[lp3[3]]] = (cube.rot_p3[cube.pos_p3[lp3[3]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[ip3[1]]] = (cube.rot_p3[cube.pos_p3[ip3[1]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[ip3[3]]] = (cube.rot_p3[cube.pos_p3[ip3[3]]] + 1) % 3
 
-	cube.rot_p2[cube.pos_p2[lp2[0]]] = (cube.rot_p2[cube.pos_p2[lp2[0]]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[lp2[1]]] = (cube.rot_p2[cube.pos_p2[lp2[1]]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[lp2[2]]] = (cube.rot_p2[cube.pos_p2[lp2[2]]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[lp2[3]]] = (cube.rot_p2[cube.pos_p2[lp2[3]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[ip2[0]]] = (cube.rot_p2[cube.pos_p2[ip2[0]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[ip2[1]]] = (cube.rot_p2[cube.pos_p2[ip2[1]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[ip2[2]]] = (cube.rot_p2[cube.pos_p2[ip2[2]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[ip2[3]]] = (cube.rot_p2[cube.pos_p2[ip2[3]]] + 1) % 2
 	return cube
 }
 
