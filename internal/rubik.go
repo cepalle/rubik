@@ -37,143 +37,30 @@ type dispatcher struct {
 	fun  moveFunction
 }
 
-func clockwiseU(cube Rubik) Rubik {
+func clockwiseWithPose(cube Rubik, lp2 [4] uint8, lp3 [4] uint8) Rubik {
 	var tmp uint8 = 0
 
-	tmp = cube.pos_p3[0]
-	cube.pos_p3[0] = cube.pos_p3[3]
-	cube.pos_p3[3] = cube.pos_p3[2]
-	cube.pos_p3[2] = cube.pos_p3[1]
-	cube.pos_p3[0] = tmp
+	tmp = cube.pos_p3[lp3[0]]
+	cube.pos_p3[lp3[0]] = cube.pos_p3[lp3[1]]
+	cube.pos_p3[lp3[1]] = cube.pos_p3[lp3[2]]
+	cube.pos_p3[lp3[2]] = cube.pos_p3[lp3[3]]
+	cube.pos_p3[lp3[3]] = tmp
 
-	tmp = cube.pos_p2[0]
-	cube.pos_p2[0] = cube.pos_p2[3]
-	cube.pos_p2[3] = cube.pos_p2[2]
-	cube.pos_p2[2] = cube.pos_p2[1]
-	cube.pos_p2[0] = tmp
+	tmp = cube.pos_p2[lp2[0]]
+	cube.pos_p2[lp2[0]] = cube.pos_p2[lp2[1]]
+	cube.pos_p2[lp2[1]] = cube.pos_p2[lp2[2]]
+	cube.pos_p2[lp2[2]] = cube.pos_p2[lp2[3]]
+	cube.pos_p2[lp2[3]] = tmp
 
-	cube.rot_p2[cube.pos_p2[0]] = (cube.rot_p2[cube.pos_p2[0]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[1]] = (cube.rot_p2[cube.pos_p2[1]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[3]] = (cube.rot_p2[cube.pos_p2[3]] + 1) % 2
+	cube.rot_p3[cube.pos_p3[lp3[0]]] = (cube.rot_p3[cube.pos_p3[lp3[0]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[lp3[1]]] = (cube.rot_p3[cube.pos_p3[lp3[1]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[lp3[2]]] = (cube.rot_p3[cube.pos_p3[lp3[2]]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[lp3[3]]] = (cube.rot_p3[cube.pos_p3[lp3[3]]] + 1) % 3
 
-	cube.rot_p3[cube.pos_p3[0]] = (cube.rot_p3[cube.pos_p3[0]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[3]] = (cube.rot_p3[cube.pos_p3[3]] + 1) % 3
-	return cube
-}
-
-func counterClockwiseU(cube Rubik) Rubik {
-	var tmp uint8 = 0
-
-	tmp = cube.pos_p3[0]
-	cube.pos_p3[0] = cube.pos_p3[1]
-	cube.pos_p3[1] = cube.pos_p3[2]
-	cube.pos_p3[2] = cube.pos_p3[3]
-	cube.pos_p3[3] = tmp
-
-	tmp = cube.pos_p2[0]
-	cube.pos_p2[0] = cube.pos_p2[1]
-	cube.pos_p2[1] = cube.pos_p2[2]
-	cube.pos_p2[2] = cube.pos_p2[3]
-	cube.pos_p2[3] = tmp
-
-	cube.rot_p2[cube.pos_p2[0]] = (cube.rot_p2[cube.pos_p2[0]] - 1) % 2
-	cube.rot_p2[cube.pos_p2[1]] = (cube.rot_p2[cube.pos_p2[1]] - 1) % 2
-	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] - 1) % 2
-	cube.rot_p2[cube.pos_p2[3]] = (cube.rot_p2[cube.pos_p2[3]] - 1) % 2
-
-	cube.rot_p3[cube.pos_p3[0]] = (cube.rot_p3[cube.pos_p3[0]] - 1) % 3
-	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] - 1) % 3
-	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] - 1) % 3
-	cube.rot_p3[cube.pos_p3[3]] = (cube.rot_p3[cube.pos_p3[3]] - 1) % 3
-	return cube
-}
-
-func clockwiseL(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseL(cube Rubik) Rubik {
-	return cube
-}
-
-func clockwiseF(cube Rubik) Rubik {
-	var tmp uint8 = 0
-
-	tmp = cube.pos_p3[1]
-	cube.pos_p3[1] = cube.pos_p3[2]
-	cube.pos_p3[2] = cube.pos_p3[6]
-	cube.pos_p3[6] = cube.pos_p3[5]
-	cube.pos_p3[5] = tmp
-
-	tmp = cube.pos_p2[2]
-	cube.pos_p2[2] = cube.pos_p2[7]
-	cube.pos_p2[7] = cube.pos_p2[11]
-	cube.pos_p2[11] = cube.pos_p2[6]
-	cube.pos_p2[6] = tmp
-
-	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[7]] = (cube.rot_p2[cube.pos_p2[7]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[11]] = (cube.rot_p2[cube.pos_p2[11]] + 1) % 2
-	cube.rot_p2[cube.pos_p2[6]] = (cube.rot_p2[cube.pos_p2[6]] + 1) % 2
-
-	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[6]] = (cube.rot_p3[cube.pos_p3[6]] + 1) % 3
-	cube.rot_p3[cube.pos_p3[5]] = (cube.rot_p3[cube.pos_p3[5]] + 1) % 3
-	return cube
-}
-
-func counterClockwiseF(cube Rubik) Rubik {
-	var tmp uint8 = 0
-
-	tmp = cube.pos_p3[1]
-	cube.pos_p3[1] = cube.pos_p3[5]
-	cube.pos_p3[5] = cube.pos_p3[6]
-	cube.pos_p3[6] = cube.pos_p3[2]
-	cube.pos_p3[2] = tmp
-
-	tmp = cube.pos_p2[2]
-	cube.pos_p2[2] = cube.pos_p2[6]
-	cube.pos_p2[6] = cube.pos_p2[11]
-	cube.pos_p2[11] = cube.pos_p2[7]
-	cube.pos_p2[7] = tmp
-
-	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] - 1) % 2
-	cube.rot_p2[cube.pos_p2[7]] = (cube.rot_p2[cube.pos_p2[7]] - 1) % 2
-	cube.rot_p2[cube.pos_p2[11]] = (cube.rot_p2[cube.pos_p2[11]] - 1) % 2
-	cube.rot_p2[cube.pos_p2[6]] = (cube.rot_p2[cube.pos_p2[6]] - 1) % 2
-
-	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] - 1) % 3
-	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] - 1) % 3
-	cube.rot_p3[cube.pos_p3[6]] = (cube.rot_p3[cube.pos_p3[6]] - 1) % 3
-	cube.rot_p3[cube.pos_p3[5]] = (cube.rot_p3[cube.pos_p3[5]] - 1) % 3
-	return cube
-}
-
-func clockwiseR(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseR(cube Rubik) Rubik {
-	return cube
-}
-
-func clockwiseB(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseB(cube Rubik) Rubik {
-	return cube
-}
-
-func clockwiseD(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseD(cube Rubik) Rubik {
+	cube.rot_p2[cube.pos_p2[lp2[0]]] = (cube.rot_p2[cube.pos_p2[lp2[0]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[lp2[1]]] = (cube.rot_p2[cube.pos_p2[lp2[1]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[lp2[2]]] = (cube.rot_p2[cube.pos_p2[lp2[2]]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[lp2[3]]] = (cube.rot_p2[cube.pos_p2[lp2[3]]] + 1) % 2
 	return cube
 }
 
@@ -185,84 +72,168 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			face: U,
 			turn: Clockwise,
 		},
-		fun: clockwiseU,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 1, 2, 3,
+				}, [4]uint8{
+					0, 1, 2, 3,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: U,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseU,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: L,
 			turn: Clockwise,
 		},
-		fun: clockwiseL,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: L,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseL,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: F,
 			turn: Clockwise,
 		},
-		fun: clockwiseF,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: F,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseF,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: R,
 			turn: Clockwise,
 		},
-		fun: clockwiseR,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: R,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseR,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: B,
 			turn: Clockwise,
 		},
-		fun: clockwiseB,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: B,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseB,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: D,
 			turn: Clockwise,
 		},
-		fun: clockwiseD,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 	dispatcher{
 		move: RubikMove{
 			face: D,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseD,
+		fun: func(r Rubik) Rubik {
+			return clockwiseWithPose(r,
+				[4]uint8{
+					0, 0, 0, 0,
+				}, [4]uint8{
+					0, 0, 0, 0,
+				})
+		},
 	},
 }
 
