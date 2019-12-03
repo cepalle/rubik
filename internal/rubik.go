@@ -100,10 +100,56 @@ func counterClockwiseL(cube Rubik) Rubik {
 }
 
 func clockwiseF(cube Rubik) Rubik {
+	var tmp uint8 = 0
+
+	tmp = cube.pos_p3[1]
+	cube.pos_p3[1] = cube.pos_p3[2]
+	cube.pos_p3[2] = cube.pos_p3[6]
+	cube.pos_p3[6] = cube.pos_p3[5]
+	cube.pos_p3[5] = tmp
+
+	tmp = cube.pos_p2[2]
+	cube.pos_p2[2] = cube.pos_p2[7]
+	cube.pos_p2[7] = cube.pos_p2[11]
+	cube.pos_p2[11] = cube.pos_p2[6]
+	cube.pos_p2[6] = tmp
+
+	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[7]] = (cube.rot_p2[cube.pos_p2[7]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[11]] = (cube.rot_p2[cube.pos_p2[11]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[6]] = (cube.rot_p2[cube.pos_p2[6]] + 1) % 2
+
+	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[6]] = (cube.rot_p3[cube.pos_p3[6]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[5]] = (cube.rot_p3[cube.pos_p3[5]] + 1) % 3
 	return cube
 }
 
 func counterClockwiseF(cube Rubik) Rubik {
+	var tmp uint8 = 0
+
+	tmp = cube.pos_p3[1]
+	cube.pos_p3[1] = cube.pos_p3[5]
+	cube.pos_p3[5] = cube.pos_p3[6]
+	cube.pos_p3[6] = cube.pos_p3[2]
+	cube.pos_p3[2] = tmp
+
+	tmp = cube.pos_p2[2]
+	cube.pos_p2[2] = cube.pos_p2[6]
+	cube.pos_p2[6] = cube.pos_p2[11]
+	cube.pos_p2[11] = cube.pos_p2[7]
+	cube.pos_p2[7] = tmp
+
+	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] - 1) % 2
+	cube.rot_p2[cube.pos_p2[7]] = (cube.rot_p2[cube.pos_p2[7]] - 1) % 2
+	cube.rot_p2[cube.pos_p2[11]] = (cube.rot_p2[cube.pos_p2[11]] - 1) % 2
+	cube.rot_p2[cube.pos_p2[6]] = (cube.rot_p2[cube.pos_p2[6]] - 1) % 2
+
+	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] - 1) % 3
+	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] - 1) % 3
+	cube.rot_p3[cube.pos_p3[6]] = (cube.rot_p3[cube.pos_p3[6]] - 1) % 3
+	cube.rot_p3[cube.pos_p3[5]] = (cube.rot_p3[cube.pos_p3[5]] - 1) % 3
 	return cube
 }
 
