@@ -3,26 +3,26 @@ package internal
 type RubikFace uint8
 
 const (
-	U RubikFace = 0
-	L RubikFace = 1
-	F RubikFace = 2
-	R RubikFace = 3
-	B RubikFace = 4
-	D RubikFace = 5
+	U RubikFace = iota + 1
+	L
+	F
+	R
+	B
+	D
 )
 
 type RubikFaceTurn uint8
 
 const (
-	Clockwise        RubikFaceTurn = 0
-	CounterClockwise RubikFaceTurn = 1
+	Clockwise RubikFaceTurn = iota + 1
+	CounterClockwise
 )
 
 type Rubik struct {
-	g1 [8]uint8
-	g2 [12]uint8
-	g3 [8]uint8
-	g4 [12]uint8
+	pos_p3 [8]uint8
+	rot_p3 [8]uint8
+	pos_p2 [12]uint8
+	rot_p2 [12]uint8
 }
 
 type RubikMove struct {
@@ -37,7 +37,57 @@ type dispatcher struct {
 	fun  moveFunction
 }
 
-func clockwiseR(cube Rubik) Rubik {
+func clockwiseU(cube Rubik) Rubik {
+	var tmp uint8 = 0
+
+	tmp = cube.pos_p3[0]
+	cube.pos_p3[0] = cube.pos_p3[3]
+	cube.pos_p3[3] = cube.pos_p3[2]
+	cube.pos_p3[2] = cube.pos_p3[1]
+	cube.pos_p3[0] = tmp
+
+	tmp = cube.pos_p2[0]
+	cube.pos_p2[0] = cube.pos_p2[3]
+	cube.pos_p2[3] = cube.pos_p2[2]
+	cube.pos_p2[2] = cube.pos_p2[1]
+	cube.pos_p2[0] = tmp
+
+	cube.rot_p2[cube.pos_p2[0]] = (cube.rot_p2[cube.pos_p2[0]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[1]] = (cube.rot_p2[cube.pos_p2[1]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] + 1) % 2
+	cube.rot_p2[cube.pos_p2[3]] = (cube.rot_p2[cube.pos_p2[3]] + 1) % 2
+
+	cube.rot_p3[cube.pos_p3[0]] = (cube.rot_p3[cube.pos_p3[0]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] + 1) % 3
+	cube.rot_p3[cube.pos_p3[3]] = (cube.rot_p3[cube.pos_p3[3]] + 1) % 3
+	return cube
+}
+
+func counterClockwiseU(cube Rubik) Rubik {
+	var tmp uint8 = 0
+
+	tmp = cube.pos_p3[0]
+	cube.pos_p3[0] = cube.pos_p3[1]
+	cube.pos_p3[1] = cube.pos_p3[2]
+	cube.pos_p3[2] = cube.pos_p3[3]
+	cube.pos_p3[3] = tmp
+
+	tmp = cube.pos_p2[0]
+	cube.pos_p2[0] = cube.pos_p2[1]
+	cube.pos_p2[1] = cube.pos_p2[2]
+	cube.pos_p2[2] = cube.pos_p2[3]
+	cube.pos_p2[3] = tmp
+
+	cube.rot_p2[cube.pos_p2[0]] = (cube.rot_p2[cube.pos_p2[0]] - 1) % 2
+	cube.rot_p2[cube.pos_p2[1]] = (cube.rot_p2[cube.pos_p2[1]] - 1) % 2
+	cube.rot_p2[cube.pos_p2[2]] = (cube.rot_p2[cube.pos_p2[2]] - 1) % 2
+	cube.rot_p2[cube.pos_p2[3]] = (cube.rot_p2[cube.pos_p2[3]] - 1) % 2
+
+	cube.rot_p3[cube.pos_p3[0]] = (cube.rot_p3[cube.pos_p3[0]] - 1) % 3
+	cube.rot_p3[cube.pos_p3[1]] = (cube.rot_p3[cube.pos_p3[1]] - 1) % 3
+	cube.rot_p3[cube.pos_p3[2]] = (cube.rot_p3[cube.pos_p3[2]] - 1) % 3
+	cube.rot_p3[cube.pos_p3[3]] = (cube.rot_p3[cube.pos_p3[3]] - 1) % 3
 	return cube
 }
 
@@ -45,11 +95,7 @@ func clockwiseL(cube Rubik) Rubik {
 	return cube
 }
 
-func clockwiseD(cube Rubik) Rubik {
-	return cube
-}
-
-func clockwiseU(cube Rubik) Rubik {
+func counterClockwiseL(cube Rubik) Rubik {
 	return cube
 }
 
@@ -57,7 +103,11 @@ func clockwiseF(cube Rubik) Rubik {
 	return cube
 }
 
-func clockwiseB(cube Rubik) Rubik {
+func counterClockwiseF(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseR(cube Rubik) Rubik {
 	return cube
 }
 
@@ -65,23 +115,19 @@ func counterClockwiseR(cube Rubik) Rubik {
 	return cube
 }
 
-func counterClockwiseL(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseD(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseU(cube Rubik) Rubik {
-	return cube
-}
-
-func counterClockwiseF(cube Rubik) Rubik {
+func clockwiseB(cube Rubik) Rubik {
 	return cube
 }
 
 func counterClockwiseB(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseD(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseD(cube Rubik) Rubik {
 	return cube
 }
 
