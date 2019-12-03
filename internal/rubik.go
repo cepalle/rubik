@@ -37,157 +37,148 @@ type dispatcher struct {
 	fun  moveFunction
 }
 
-const dispatcherTab = [12]dispatcher{
+func clockwiseR(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseL(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseD(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseU(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseF(cube Rubik) Rubik {
+	return cube
+}
+
+func clockwiseB(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseR(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseL(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseD(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseU(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseF(cube Rubik) Rubik {
+	return cube
+}
+
+func counterClockwiseB(cube Rubik) Rubik {
+	return cube
+}
+
+const dispatcherLen = 12
+
+var dispatcherTab = [dispatcherLen]dispatcher{
 	dispatcher{
-		RubikMove{
-			face: RubikFace.U,
-			turn: RubikFaceTurn.Clockwise,
+		move: RubikMove{
+			face: U,
+			turn: Clockwise,
 		},
 		fun: clockwiseU,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.U,
-			turn: RubikFaceTurn.CounterClockwise,
+		move: RubikMove{
+			face: U,
+			turn: CounterClockwise,
 		},
-		fun: clockwiseU,
+		fun: counterClockwiseU,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.L,
-			turn: RubikFaceTurn.Clockwise,
+		move: RubikMove{
+			face: L,
+			turn: Clockwise,
 		},
-		fun: clockwiseU,
+		fun: clockwiseL,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.L,
-			turn: RubikFaceTurn.CounterClockwise,
+		move: RubikMove{
+			face: L,
+			turn: CounterClockwise,
 		},
-		fun: clockwiseU,
+		fun: counterClockwiseL,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.F,
-			turn: RubikFaceTurn.Clockwise,
+		move: RubikMove{
+			face: F,
+			turn: Clockwise,
 		},
-		fun: clockwiseU,
+		fun: clockwiseF,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.F,
-			turn: RubikFaceTurn.CounterClockwise,
+		move: RubikMove{
+			face: F,
+			turn: CounterClockwise,
 		},
-		fun: clockwiseU,
+		fun: counterClockwiseF,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.R,
-			turn: RubikFaceTurn.Clockwise,
+		move: RubikMove{
+			face: R,
+			turn: Clockwise,
 		},
-		fun: clockwiseU,
+		fun: clockwiseR,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.R,
-			turn: RubikFaceTurn.CounterClockwise,
+		move: RubikMove{
+			face: R,
+			turn: CounterClockwise,
 		},
-		fun: clockwiseU,
+		fun: counterClockwiseR,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.B,
-			turn: RubikFaceTurn.Clockwise,
+		move: RubikMove{
+			face: B,
+			turn: Clockwise,
 		},
-		fun: clockwiseU,
+		fun: clockwiseB,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.B,
-			turn: RubikFaceTurn.CounterClockwise,
+		move: RubikMove{
+			face: B,
+			turn: CounterClockwise,
 		},
-		fun: clockwiseU,
+		fun: counterClockwiseB,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.D,
-			turn: RubikFaceTurn.Clockwise,
+		move: RubikMove{
+			face: D,
+			turn: Clockwise,
 		},
-		fun: clockwiseU,
+		fun: clockwiseD,
 	},
 	dispatcher{
-		RubikMove{
-			face: RubikFace.D,
-			turn: RubikFaceTurn.CounterClockwise,
+		move: RubikMove{
+			face: D,
+			turn: CounterClockwise,
 		},
-		fun: clockwiseU,
+		fun: counterClockwiseD,
 	},
 }
 
-func (cube Rubik) Move(m RubikMove) {
-	if m.turn == Right {
-		if m.face == U {
-		} else if m.face == L {
-		} else if m.face == F {
-		} else if m.face == R {
-		} else if m.face == B {
-		} else if m.face == D {
-		}
-	} else {
-		if m.face == U {
-		} else if m.face == L {
-		} else if m.face == F {
-		} else if m.face == R {
-		} else if m.face == B {
-		} else if m.face == D {
+func (cube Rubik) Move(m RubikMove) Rubik {
+	for i := 0; i < dispatcherLen; i++ {
+		if m == dispatcherTab[i].move {
+			return dispatcherTab[i].fun(cube)
 		}
 	}
-}
-
-func clockwiseR(cube Rubik) {
-	return cube
-}
-
-func clockwiseL(cube Rubik) {
-	return cube
-}
-
-func clockwiseD(cube Rubik) {
-	return cube
-}
-
-func clockwiseU(cube Rubik) {
-	return cube
-}
-
-func clockwiseF(cube Rubik) {
-	return cube
-}
-
-func clockwiseB(cube Rubik) {
-	return cube
-}
-
-func counterClockwiseR(cube Rubik) {
-	return cube
-}
-
-func counterClockwiseL(cube Rubik) {
-	return cube
-}
-
-func counterClockwiseD(cube Rubik) {
-	return cube
-}
-
-func counterClockwiseU(cube Rubik) {
-	return cube
-}
-
-func counterClockwiseF(cube Rubik) {
-	return cube
-}
-
-func counterClockwiseB(cube Rubik) {
 	return cube
 }
