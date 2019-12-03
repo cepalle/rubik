@@ -3,30 +3,31 @@ package internal
 type RubikFace uint8
 
 const (
-	U	RubikFace = 0
-	L	RubikFace = 1
-	F	RubikFace = 2
-	R	RubikFace = 3
-	B	RubikFace = 4
-	D	RubikFace = 5
+	U RubikFace = 0
+	L RubikFace = 1
+	F RubikFace = 2
+	R RubikFace = 3
+	B RubikFace = 4
+	D RubikFace = 5
 )
 
 type RubikFaceTurn uint8
 
 const (
-	Right	RubikFaceTurn = 0
-	Left	RubikFaceTurn = 1
+	Right RubikFaceTurn = 0
+	Left  RubikFaceTurn = 1
 )
 
 type Rubik struct {
-	up[12]   uint8
-	mid[4]   uint8
-	down[12] uint8
+	g1 [8]    uint8
+	g2 [12]    uint8
+	g3 [8]    uint8
+	g4 [12]    uint8
 }
 
 type RubikMove struct {
-	face	RubikFace
-	turn	RubikFaceTurn
+	face RubikFace
+	turn RubikFaceTurn
 }
 
 func (p Rubik) move(m RubikMove) {
