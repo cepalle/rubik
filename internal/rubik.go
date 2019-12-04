@@ -30,6 +30,37 @@ type RubikMove struct {
 	turn RubikFaceTurn
 }
 
+type RubikMoves struct {
+	face   RubikFace
+	turn   RubikFaceTurn
+	nbTurn uint8
+}
+
+const NbRubikMoves = 18
+
+var AllRubikMoves = [NbRubikMoves]RubikMoves{
+	RubikMoves{U, Clockwise, 1},
+	RubikMoves{L, Clockwise, 1},
+	RubikMoves{F, Clockwise, 1},
+	RubikMoves{R, Clockwise, 1},
+	RubikMoves{B, Clockwise, 1},
+	RubikMoves{D, Clockwise, 1},
+
+	RubikMoves{U, CounterClockwise, 1},
+	RubikMoves{L, CounterClockwise, 1},
+	RubikMoves{F, CounterClockwise, 1},
+	RubikMoves{R, CounterClockwise, 1},
+	RubikMoves{B, CounterClockwise, 1},
+	RubikMoves{D, CounterClockwise, 1},
+
+	RubikMoves{U, Clockwise, 2},
+	RubikMoves{L, Clockwise, 2},
+	RubikMoves{F, Clockwise, 2},
+	RubikMoves{R, Clockwise, 2},
+	RubikMoves{B, Clockwise, 2},
+	RubikMoves{D, Clockwise, 2},
+}
+
 type moveFunction func(Rubik) Rubik
 
 type dispatcher struct {
@@ -130,9 +161,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return clockwiseWithPose(r,
 				[4]uint8{
-					0, 0, 0, 0,
+					3, 6, 11, 7,
 				}, [4]uint8{
-					0, 0, 0, 0,
+					2, 6, 7, 3,
 				})
 		},
 	},
@@ -144,9 +175,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return counterClockwiseWithPose(r,
 				[4]uint8{
-					0, 0, 0, 0,
+					3, 6, 11, 7,
 				}, [4]uint8{
-					0, 0, 0, 0,
+					2, 6, 7, 3,
 				})
 		},
 	},
@@ -158,7 +189,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return clockwiseWithPose(r,
 				[4]uint8{
-					2, 6, 10, 7,
+					2, 5, 10, 6,
 				}, [4]uint8{
 					1, 5, 6, 2,
 				})
@@ -172,7 +203,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return counterClockwiseWithPose(r,
 				[4]uint8{
-					2, 6, 10, 7,
+					2, 5, 10, 6,
 				}, [4]uint8{
 					1, 5, 6, 2,
 				})
@@ -186,9 +217,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return clockwiseWithPose(r,
 				[4]uint8{
-					1, 5, 9, 6,
+					1, 4, 9, 5,
 				}, [4]uint8{
-					0, 4, 5, 1,
+					1, 0, 4, 5,
 				})
 		},
 	},
@@ -200,9 +231,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return counterClockwiseWithPose(r,
 				[4]uint8{
-					1, 5, 9, 6,
+					1, 4, 9, 5,
 				}, [4]uint8{
-					0, 4, 5, 1,
+					1, 0, 4, 5,
 				})
 		},
 	},
@@ -214,9 +245,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return clockwiseWithPose(r,
 				[4]uint8{
-					0, 0, 0, 0,
+					0, 7, 8, 4,
 				}, [4]uint8{
-					0, 0, 0, 0,
+					0, 3, 7, 4,
 				})
 		},
 	},
@@ -228,9 +259,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return counterClockwiseWithPose(r,
 				[4]uint8{
-					0, 0, 0, 0,
+					0, 7, 8, 4,
 				}, [4]uint8{
-					0, 0, 0, 0,
+					0, 3, 7, 4,
 				})
 		},
 	},
@@ -242,9 +273,9 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return clockwiseWithPose(r,
 				[4]uint8{
-					0, 0, 0, 0,
+					10, 9, 8, 11,
 				}, [4]uint8{
-					0, 0, 0, 0,
+					6, 5, 4, 7,
 				})
 		},
 	},
@@ -256,18 +287,21 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: func(r Rubik) Rubik {
 			return counterClockwiseWithPose(r,
 				[4]uint8{
-					0, 0, 0, 0,
+					10, 9, 8, 11,
 				}, [4]uint8{
-					0, 0, 0, 0,
+					6, 5, 4, 7,
 				})
 		},
 	},
 }
 
-func (cube Rubik) Move(m RubikMove) Rubik {
+func (cube Rubik) Move(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
-		if m == dispatcherTab[i].move {
-			return dispatcherTab[i].fun(cube)
+		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
+			for j := uint8(0); j < m.nbTurn; j++ {
+				cube = dispatcherTab[j].fun(cube)
+			}
+			return cube
 		}
 	}
 	return cube
