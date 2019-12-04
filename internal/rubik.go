@@ -37,7 +37,7 @@ type dispatcher struct {
 	fun  moveFunction
 }
 
-func clockwiseWithPose(cube Rubik, ip2 [4] uint8, ip3 [4] uint8) Rubik {
+func clockwiseWithPose(cube Rubik, ip2 [4]uint8, ip3 [4]uint8) Rubik {
 	var tmp uint8 = 0
 
 	tmp = cube.pos_p3[ip3[0]]
@@ -64,7 +64,7 @@ func clockwiseWithPose(cube Rubik, ip2 [4] uint8, ip3 [4] uint8) Rubik {
 	return cube
 }
 
-func counterClockwiseWithPose(cube Rubik, ip2 [4] uint8, ip3 [4] uint8) Rubik {
+func counterClockwiseWithPose(cube Rubik, ip2 [4]uint8, ip3 [4]uint8) Rubik {
 	var tmp uint8 = 0
 
 	tmp = cube.pos_p3[ip3[0]]

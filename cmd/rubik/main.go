@@ -1,15 +1,25 @@
 package main
 
 import (
+	"flag"
 	"fmt"
+	"os"
 )
 
 func main() {
-	var a, b float32 = 1, 2
-	var c float32 = 1.
-	d := true
-	fmt.Println("hello, world")
-	fmt.Println("Test opp fint float : ", c/b)
-	fmt.Println("Test opp fint float : ", a/1.2)
-	fmt.Println(d)
+	var moves string
+	var nbrMove int
+	flag.StringVar(&moves, "m", "",
+		"Moves that has to be done to shuffle the cube")
+	flag.IntVar(&nbrMove, "r", 0,
+		"Number of random move to shuffle the cube")
+	flag.Parse()
+	if nbrMove < 0 {
+		fmt.Fprintf(os.Stderr, "Number of move to shuffle not valid\n")
+		os.Exit(1)
+	}
+	if nbrMove != 0 && len(moves) != 0 {
+		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
+	}
+	fmt.Println(moves)
 }
