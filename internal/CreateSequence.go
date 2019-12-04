@@ -30,9 +30,10 @@ func GenereateFromString(moves string) []RubikMoves {
 		rubikMove := getMoves(move)
 		if rubikMove == nil {
 			//todo
+			return nil
 		} else {
 			listMoves = append(listMoves, rubikMove)
 		}
 	}
-	return listMoves
+	return nil
 }

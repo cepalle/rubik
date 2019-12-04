@@ -339,7 +339,8 @@ func (cube Rubik) Move(m RubikMoves) Rubik {
 			return cube
 		}
 	}
-	return nil
+	// Unreachable
+	return cube
 }
 
 func (cube Rubik) IsResolve() bool {
