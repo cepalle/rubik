@@ -20,9 +20,9 @@ func Bfs(r Rubik) []RubikMoves {
 		}
 
 		for i := uint8(0); i < NbRubikMoves; i++ {
-			var nCube = cur.cube.Move(AllRubikMoves[i])
+			var nCube = cur.cube.Move(AllRubikMoves[i].move)
 
-			_, found = hys[nCube]
+			_, found := hys[nCube]
 			if found {
 				continue
 			}
@@ -31,7 +31,7 @@ func Bfs(r Rubik) []RubikMoves {
 			var mvsCp = cur.moves
 			var nNode = Node{
 				nCube,
-				append(mvsCp, AllRubikMoves[i]),
+				append(mvsCp, AllRubikMoves[i].move),
 			}
 			pile = append(pile, nNode)
 		}

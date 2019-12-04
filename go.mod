@@ -1,3 +1,3 @@
-module gihub.com/cepalle/rubik
+module github.com/cepalle/rubik
 
 go 1.13

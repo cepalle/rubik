@@ -1,24 +1,27 @@
 package internal
 
 import (
+	"errors"
+	"fmt"
+	"log"
 	"math/rand"
 	"strings"
 )
 
-func getMoves(move string) RubikMoves {
-	for name, rubikMove := range AllRubikMoves {
-		if move == name {
-			return rubikMove
+func getMoves(move string) (RubikMoves, error) {
+	for _, rubikMoves := range AllRubikMoves {
+		if move == rubikMoves.name {
+			return rubikMoves.move, nil
 		}
 	}
-	return nil
+	return RubikMoves{}, errors.New(fmt.Sprintf("Input error: <%s> is not a valid move", move))
 }
 
 func GenerateRandom(nbrMove int) []RubikMoves {
-	var Sequence [nbrMove]RubikMoves
+	var Sequence []RubikMoves
 
 	for i := 0; i < nbrMove; i++ {
-		Sequence[i] = AllRubikMoves[rand.Intn(NbRubikMoves)]
+		Sequence[i] = AllRubikMoves[rand.Intn(NbRubikMoves)].move
 	}
 	return Sequence
 }
@@ -27,8 +30,9 @@ func GenereateFromString(moves string) []RubikMoves {
 	var listMoves []RubikMoves
 	split := strings.Split(moves, " ")
 	for _, move := range split {
-		rubikMove = getMoves(move)
-		if rubikMove == nil {
+		rubikMove, err := getMoves(move)
+		if err != nil {
+			log.Fatal(err)
 			//todo
 		} else {
 			listMoves = append(listMoves, rubikMove)

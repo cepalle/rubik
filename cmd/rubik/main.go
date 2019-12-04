@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/cepalle/rubik/internal"
 	"os"
 )
 
@@ -24,8 +25,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
 	if moves == "" {
-		//soluce =solve(GenerateRandom(nbrMove))
+		GenerateRandom(nbrMove)
 	} else {
-		//soluce =solve(GenerateFromString(nbrMove))
+		GenerateFromString(nbrMove)
 	}
 }

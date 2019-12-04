@@ -1,5 +1,9 @@
 package internal
 
+import (
+	"log"
+)
+
 type RubikFace uint8
 
 const (
@@ -46,75 +50,110 @@ const NbRubikMoves = 18
 var AllRubikMoves = [NbRubikMoves]RubikMovesWithName{
 	RubikMovesWithName{
 		name: "U",
-		RubikMoves{U, Clockwise, 1},
+		move: RubikMoves{
+			U, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "U2",
-		RubikMoves{U, Clockwise, 2},
+		move: RubikMoves{
+			U, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
 		name: "U'",
-		RubikMoves{U, CounterClockwise, 1},
+		move: RubikMoves{
+			U, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "D",
-		RubikMoves{D, Clockwise, 1},
+		move: RubikMoves{
+			D, Clockwise, 1},
 	},
 	RubikMovesWithName{
 		name: "D2",
-		RubikMoves{D, Clockwise, 2},
+		move: RubikMoves{
+			D, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
 		name: "D'",
-		RubikMoves{D, CounterClockwise, 1},
+		move: RubikMoves{
+			D, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "L",
-		RubikMoves{L, Clockwise, 1},
+		move: RubikMoves{
+			L, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "L2",
-		RubikMoves{L, Clockwise, 2},
+		move: RubikMoves{
+			L, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
 		name: "L'",
-		RubikMoves{L, CounterClockwise, 1},
+		move: RubikMoves{
+			L, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "R",
-		RubikMoves{R, Clockwise, 1},
+		move: RubikMoves{
+			R, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "R2",
-		RubikMoves{R, Clockwise, 2},
+		move: RubikMoves{
+			R, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
 		name: "R'",
-		RubikMoves{R, CounterClockwise, 1},
+		move: RubikMoves{
+			R, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "F",
-		RubikMoves{F, Clockwise, 1},
+		move: RubikMoves{
+			F, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "F2",
-		RubikMoves{F, Clockwise, 2},
+		move: RubikMoves{
+			F, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
 		name: "F'",
-		RubikMoves{F, CounterClockwise, 1},
+		move: RubikMoves{
+			F, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "B",
-		RubikMoves{B, Clockwise, 1},
+		move: RubikMoves{
+			B, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		name: "B2",
-		RubikMoves{B, Clockwise, 2},
+		move: RubikMoves{
+			B, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
 		name: "B'",
-		RubikMoves{B, CounterClockwise, 1},
+		move: RubikMoves{
+			B, CounterClockwise, 1,
+		},
 	},
 }
 
@@ -361,7 +400,8 @@ func (cube Rubik) Move(m RubikMoves) Rubik {
 			return cube
 		}
 	}
-	return nil
+	log.Fatal("You should not reach this code")
+	return cube
 }
 
 func (cube Rubik) IsResolve() bool {
