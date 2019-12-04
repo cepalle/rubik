@@ -9,6 +9,8 @@ import (
 func main() {
 	var moves string
 	var nbrMove int
+	var soluce []RubikMoves
+
 	flag.StringVar(&moves, "m", "",
 		"Moves that has to be done to shuffle the cube")
 	flag.IntVar(&nbrMove, "r", 0,
@@ -21,5 +23,9 @@ func main() {
 	if nbrMove != 0 && len(moves) != 0 {
 		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
-	fmt.Println(moves)
+	if moves == "" {
+		//soluce =solve(GenerateRandom(nbrMove))
+	} else {
+		//soluce =solve(GenerateFromString(nbrMove))
+	}
 }

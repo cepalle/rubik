@@ -36,29 +36,86 @@ type RubikMoves struct {
 	nbTurn uint8
 }
 
+type RubikMovesWithName struct {
+	name string
+	move RubikMoves
+}
+
 const NbRubikMoves = 18
 
-var AllRubikMoves = [NbRubikMoves]RubikMoves{
-	RubikMoves{U, Clockwise, 1},
-	RubikMoves{L, Clockwise, 1},
-	RubikMoves{F, Clockwise, 1},
-	RubikMoves{R, Clockwise, 1},
-	RubikMoves{B, Clockwise, 1},
-	RubikMoves{D, Clockwise, 1},
-
-	RubikMoves{U, CounterClockwise, 1},
-	RubikMoves{L, CounterClockwise, 1},
-	RubikMoves{F, CounterClockwise, 1},
-	RubikMoves{R, CounterClockwise, 1},
-	RubikMoves{B, CounterClockwise, 1},
-	RubikMoves{D, CounterClockwise, 1},
-
-	RubikMoves{U, Clockwise, 2},
-	RubikMoves{L, Clockwise, 2},
-	RubikMoves{F, Clockwise, 2},
-	RubikMoves{R, Clockwise, 2},
-	RubikMoves{B, Clockwise, 2},
-	RubikMoves{D, Clockwise, 2},
+var AllRubikMoves = [NbRubikMoves]RubikMovesWithName{
+	RubikMovesWithName{
+		name: "U",
+		RubikMoves{U, Clockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "U2",
+		RubikMoves{U, Clockwise, 2},
+	},
+	RubikMovesWithName{
+		name: "U'",
+		RubikMoves{U, CounterClockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "D",
+		RubikMoves{D, Clockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "D2",
+		RubikMoves{D, Clockwise, 2},
+	},
+	RubikMovesWithName{
+		name: "D'",
+		RubikMoves{D, CounterClockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "L",
+		RubikMoves{L, Clockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "L2",
+		RubikMoves{L, Clockwise, 2},
+	},
+	RubikMovesWithName{
+		name: "L'",
+		RubikMoves{L, CounterClockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "R",
+		RubikMoves{R, Clockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "R2",
+		RubikMoves{R, Clockwise, 2},
+	},
+	RubikMovesWithName{
+		name: "R'",
+		RubikMoves{R, CounterClockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "F",
+		RubikMoves{F, Clockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "F2",
+		RubikMoves{F, Clockwise, 2},
+	},
+	RubikMovesWithName{
+		name: "F'",
+		RubikMoves{F, CounterClockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "B",
+		RubikMoves{B, Clockwise, 1},
+	},
+	RubikMovesWithName{
+		name: "B2",
+		RubikMoves{B, Clockwise, 2},
+	},
+	RubikMovesWithName{
+		name: "B'",
+		RubikMoves{B, CounterClockwise, 1},
+	},
 }
 
 type moveFunction func(Rubik) Rubik
@@ -304,7 +361,7 @@ func (cube Rubik) Move(m RubikMoves) Rubik {
 			return cube
 		}
 	}
-	return cube
+	return nil
 }
 
 func (cube Rubik) IsResolve() bool {

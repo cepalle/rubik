@@ -5,23 +5,14 @@ type Node struct {
 	moves []RubikMoves
 }
 
-func contains(s []Rubik, e Rubik) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
-}
-
 func Bfs(r Rubik) []RubikMoves {
-	var hys []Rubik
+	hys := make(map[Rubik]bool)
 	var pile []Node
 
 	pile = append(pile, Node{r, []RubikMoves{}})
-	hys = append(hys, r)
+	hys[r] = true
 
-	for ; len(pile) > 0; {
+	for len(pile) > 0 {
 		cur := pile[0]
 		pile = pile[1:]
 		if cur.cube.IsResolve() {
@@ -31,10 +22,11 @@ func Bfs(r Rubik) []RubikMoves {
 		for i := uint8(0); i < NbRubikMoves; i++ {
 			var nCube = cur.cube.Move(AllRubikMoves[i])
 
-			if contains(hys, nCube) {
+			_, found = hys[nCube]
+			if found {
 				continue
 			}
-			hys = append(hys, nCube)
+			hys[nCube] = true
 
 			var mvsCp = cur.moves
 			var nNode = Node{
@@ -44,5 +36,5 @@ func Bfs(r Rubik) []RubikMoves {
 			pile = append(pile, nNode)
 		}
 	}
-	return []RubikMoves{}
+	return nil
 }
