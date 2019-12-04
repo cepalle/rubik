@@ -9,7 +9,7 @@ import (
 func main() {
 	var moves string
 	var nbrMove int
-	var soluce []RubikMoves
+	// var soluce []RubikMoves
 
 	flag.StringVar(&moves, "m", "",
 		"Moves that has to be done to shuffle the cube")

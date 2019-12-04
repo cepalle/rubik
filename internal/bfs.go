@@ -22,7 +22,7 @@ func Bfs(r Rubik) []RubikMoves {
 		for _, m := range AllRubikMovesWithName {
 			var nCube = cur.cube.Move(m.move)
 
-			_, found = hys[nCube]
+			_, found := hys[nCube]
 			if found {
 				continue
 			}
