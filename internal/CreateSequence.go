@@ -6,28 +6,28 @@ import (
 )
 
 func getMoves(move string) RubikMoves {
-	for name, rubikMove := range AllRubikMoves {
-		if move == name {
-			return rubikMove
+	for _, rubikMove := range AllRubikMovesWithName {
+		if move == rubikMove.name {
+			return rubikMove.move
 		}
 	}
 	return nil
 }
 
 func GenerateRandom(nbrMove int) []RubikMoves {
-	var Sequence [nbrMove]RubikMoves
+	var sequence []RubikMoves
 
 	for i := 0; i < nbrMove; i++ {
-		Sequence[i] = AllRubikMoves[rand.Intn(NbRubikMoves)]
+		sequence = append(sequence, AllRubikMovesWithName[rand.Intn(NbRubikMoves)].move)
 	}
-	return Sequence
+	return sequence
 }
 
 func GenereateFromString(moves string) []RubikMoves {
 	var listMoves []RubikMoves
 	split := strings.Split(moves, " ")
 	for _, move := range split {
-		rubikMove = getMoves(move)
+		rubikMove := getMoves(move)
 		if rubikMove == nil {
 			//todo
 		} else {
