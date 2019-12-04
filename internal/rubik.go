@@ -306,3 +306,28 @@ func (cube Rubik) Move(m RubikMoves) Rubik {
 	}
 	return cube
 }
+
+func (cube Rubik) IsResolve() bool {
+	var i uint8
+	for i = 0; i < 12; i++ {
+		if cube.rot_p2[i] != 0 {
+			return false
+		}
+	}
+	for i = 0; i < 8; i++ {
+		if cube.rot_p3[i] != 0 {
+			return false
+		}
+	}
+	for i = 0; i < 12; i++ {
+		if cube.pos_p2[i] != i {
+			return false
+		}
+	}
+	for i = 0; i < 8; i++ {
+		if cube.pos_p3[i] != i {
+			return false
+		}
+	}
+	return true
+}
