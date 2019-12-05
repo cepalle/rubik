@@ -29,7 +29,8 @@ func aStartWithScoreMax(r makemove.Rubik, scoring func(makemove.Rubik) float64, 
 			}
 			hys[nCube] = true
 
-			var mvsCp = curr.moves
+			mvsCp := make([]makemove.RubikMoves, len(curr.moves))
+			copy(mvsCp, curr.moves)
 			var nNode = node{
 				nCube,
 				append(mvsCp, m.Move),

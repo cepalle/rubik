@@ -51,6 +51,7 @@ type RubikMoves struct {
 type RubikMovesWithName struct {
 	Name string
 	Move RubikMoves
+	Rev  RubikMoves
 }
 
 const NbRubikMoves = 18
@@ -61,10 +62,16 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			U, Clockwise, 1,
 		},
+		Rev: RubikMoves{
+			U, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "U2",
 		Move: RubikMoves{
+			U, Clockwise, 2,
+		},
+		Rev: RubikMoves{
 			U, Clockwise, 2,
 		},
 	},
@@ -73,15 +80,25 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			U, CounterClockwise, 1,
 		},
+		Rev: RubikMoves{
+			U, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "D",
 		Move: RubikMoves{
-			D, Clockwise, 1},
+			D, Clockwise, 1,
+		},
+		Rev: RubikMoves{
+			D, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "D2",
 		Move: RubikMoves{
+			D, Clockwise, 2,
+		},
+		Rev: RubikMoves{
 			D, Clockwise, 2,
 		},
 	},
@@ -90,16 +107,25 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			D, CounterClockwise, 1,
 		},
+		Rev: RubikMoves{
+			D, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "L",
 		Move: RubikMoves{
 			L, Clockwise, 1,
 		},
+		Rev: RubikMoves{
+			L, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "L2",
 		Move: RubikMoves{
+			L, Clockwise, 2,
+		},
+		Rev: RubikMoves{
 			L, Clockwise, 2,
 		},
 	},
@@ -108,16 +134,25 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			L, CounterClockwise, 1,
 		},
+		Rev: RubikMoves{
+			L, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "R",
 		Move: RubikMoves{
 			R, Clockwise, 1,
 		},
+		Rev: RubikMoves{
+			R, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "R2",
 		Move: RubikMoves{
+			R, Clockwise, 2,
+		},
+		Rev: RubikMoves{
 			R, Clockwise, 2,
 		},
 	},
@@ -126,16 +161,25 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			R, CounterClockwise, 1,
 		},
+		Rev: RubikMoves{
+			R, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "F",
 		Move: RubikMoves{
 			F, Clockwise, 1,
 		},
+		Rev: RubikMoves{
+			F, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "F2",
 		Move: RubikMoves{
+			F, Clockwise, 2,
+		},
+		Rev: RubikMoves{
 			F, Clockwise, 2,
 		},
 	},
@@ -144,16 +188,25 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			F, CounterClockwise, 1,
 		},
+		Rev: RubikMoves{
+			F, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "B",
 		Move: RubikMoves{
 			B, Clockwise, 1,
 		},
+		Rev: RubikMoves{
+			B, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
 		Name: "B2",
 		Move: RubikMoves{
+			B, Clockwise, 2,
+		},
+		Rev: RubikMoves{
 			B, Clockwise, 2,
 		},
 	},
@@ -162,10 +215,13 @@ var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 		Move: RubikMoves{
 			B, CounterClockwise, 1,
 		},
+		Rev: RubikMoves{
+			B, Clockwise, 1,
+		},
 	},
 }
 
-type moveFunction func(Rubik) Rubik
+type moveFunction func(*Rubik) *Rubik
 
 type dispatcher struct {
 	move RubikMove
@@ -173,7 +229,7 @@ type dispatcher struct {
 }
 
 func clockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
-	return func(cube Rubik) Rubik {
+	return func(cube *Rubik) *Rubik {
 		var tmp uint8 = 0
 
 		tmp = cube.pos_p3[ip3[0]]
@@ -202,7 +258,7 @@ func clockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 }
 
 func counterClockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
-	return func(cube Rubik) Rubik {
+	return func(cube *Rubik) *Rubik {
 		var tmp uint8 = 0
 
 		tmp = cube.pos_p3[ip3[0]]
@@ -385,13 +441,26 @@ func (cube Rubik) DoMove(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
 		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {
-				cube = dispatcherTab[i].fun(cube)
+				dispatcherTab[i].fun(&cube)
 			}
 			return cube
 		}
 	}
 	log.Fatal("You should not reach this code")
 	return cube
+}
+
+func (cube *Rubik) DoMovePtr(m RubikMoves) *Rubik {
+	for i := 0; i < dispatcherLen; i++ {
+		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
+			for j := uint8(0); j < m.nbTurn; j++ {
+				dispatcherTab[i].fun(cube)
+			}
+			return cube
+		}
+	}
+	log.Fatal("You should not reach this code")
+	return nil
 }
 
 func (cube Rubik) DoMoves(m []RubikMoves) Rubik {

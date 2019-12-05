@@ -34,7 +34,8 @@ func Bfs(r makemove.Rubik) []makemove.RubikMoves {
 			}
 			hys[nCube] = true
 
-			var mvsCp = cur.moves
+			mvsCp := make([]makemove.RubikMoves, len(cur.moves))
+			copy(mvsCp, cur.moves)
 			var nNode = node{
 				nCube,
 				append(mvsCp, m.Move),
