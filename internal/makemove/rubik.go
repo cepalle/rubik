@@ -29,6 +29,14 @@ type Rubik struct {
 	rot_p2 [12]uint8
 }
 
+func InitRubik() Rubik {
+	var rubik Rubik
+
+	rubik.pos_p3 = [8]uint8{0, 1, 2, 3, 4, 5, 6, 7}
+	rubik.pos_p2 = [12]uint8{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+	return rubik
+}
+
 type RubikMove struct {
 	face RubikFace
 	turn RubikFaceTurn
@@ -180,9 +188,9 @@ func clockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 		cube.pos_p2[ip2[2]] = cube.pos_p2[ip2[1]]
 		cube.pos_p2[ip2[1]] = tmp
 
-		cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 1) % 3
+		cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 2) % 3
 		cube.rot_p3[cube.pos_p3[ip3[1]]] = (cube.rot_p3[cube.pos_p3[ip3[1]]] + 1) % 3
-		cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 1) % 3
+		cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 2) % 3
 		cube.rot_p3[cube.pos_p3[ip3[3]]] = (cube.rot_p3[cube.pos_p3[ip3[3]]] + 1) % 3
 
 		cube.rot_p2[cube.pos_p2[ip2[0]]] = (cube.rot_p2[cube.pos_p2[ip2[0]]] + 1) % 2
@@ -209,9 +217,9 @@ func counterClockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 		cube.pos_p2[ip2[2]] = cube.pos_p2[ip2[3]]
 		cube.pos_p2[ip2[3]] = tmp
 
-		cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 2) % 3
+		cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 1) % 3
 		cube.rot_p3[cube.pos_p3[ip3[1]]] = (cube.rot_p3[cube.pos_p3[ip3[1]]] + 2) % 3
-		cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 2) % 3
+		cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 1) % 3
 		cube.rot_p3[cube.pos_p3[ip3[3]]] = (cube.rot_p3[cube.pos_p3[ip3[3]]] + 2) % 3
 
 		cube.rot_p2[cube.pos_p2[ip2[0]]] = (cube.rot_p2[cube.pos_p2[ip2[0]]] + 1) % 2
@@ -375,12 +383,19 @@ func (cube Rubik) DoMove(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
 		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {
-				cube = dispatcherTab[j].fun(cube)
+				cube = dispatcherTab[i].fun(cube)
 			}
 			return cube
 		}
 	}
 	log.Fatal("You should not reach this code")
+	return cube
+}
+
+func (cube Rubik) DoMoves(m []RubikMoves) Rubik {
+	for _, move := range m {
+		cube = cube.DoMove(move)
+	}
 	return cube
 }
 

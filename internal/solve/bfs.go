@@ -1,6 +1,7 @@
 package solve
 
 import (
+	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
@@ -20,6 +21,7 @@ func Bfs(r makemove.Rubik) []makemove.RubikMoves {
 		cur := pile[0]
 		pile = pile[1:]
 		if cur.cube.IsResolve() {
+			fmt.Println(cur)
 			return cur.moves
 		}
 

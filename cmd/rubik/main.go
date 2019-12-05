@@ -31,9 +31,9 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
 	if moves == "" {
-		soluce = solve.DispatchSolve(input.GenerateRandom(nbrMove))
+		soluce = solve.DispatchSolve(input.GenerateRandomSequence(nbrMove))
 	} else {
-		soluce = solve.DispatchSolve(input.GenerateFromString(moves))
+		soluce = solve.DispatchSolve(input.StringToSequence(moves))
 	}
-	fmt.Println(soluce)
+	fmt.Println(input.SequenceToString(soluce))
 }
