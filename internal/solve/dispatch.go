@@ -12,7 +12,7 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	rubik = rubik.DoMoves(moves)
 	fmt.Println(rubik)
 
-	sequence = Bfs(rubik)
+	sequence = Iddfs(rubik)
 	rubik = rubik.DoMoves(sequence)
 	fmt.Println(rubik)
 	//sequence = []makemove.RubikMoves{}
