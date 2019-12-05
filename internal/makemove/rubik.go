@@ -360,7 +360,8 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		},
 		fun: clockwiseWithPose(
 			[4]uint8{
-				10, 9, 8, 11,
+				8, 9, 10, 11,
+				//				10, 9, 8, 11,
 			}, [4]uint8{
 				4, 7, 6, 5,
 			}),
@@ -372,7 +373,8 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		},
 		fun: counterClockwiseWithPose(
 			[4]uint8{
-				10, 9, 8, 11,
+				8, 9, 10, 11,
+				//				10, 9, 8, 11,
 			}, [4]uint8{
 				4, 7, 6, 5,
 			}),
