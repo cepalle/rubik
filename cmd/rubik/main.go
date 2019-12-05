@@ -3,14 +3,15 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/cepalle/rubik/internal"
+	"github.com/cepalle/rubik/internal/input"
+	//	"github.com/cepalle/rubik/internal/makemove"
 	"os"
 )
 
 func main() {
 	var moves string
 	var nbrMove int
-	var soluce []RubikMoves
+	//	var soluce []makemove.RubikMoves
 
 	flag.StringVar(&moves, "m", "",
 		"Moves that has to be done to shuffle the cube")
@@ -25,8 +26,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
 	if moves == "" {
-		GenerateRandom(nbrMove)
+		input.GenerateRandom(nbrMove)
 	} else {
-		GenerateFromString(nbrMove)
+		input.GenerateFromString(nbrMove)
 	}
 }
