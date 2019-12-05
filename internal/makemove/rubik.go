@@ -217,10 +217,10 @@ func counterClockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 		cube.pos_p2[ip2[2]] = cube.pos_p2[ip2[3]]
 		cube.pos_p2[ip2[3]] = tmp
 
-		cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 1) % 3
-		cube.rot_p3[cube.pos_p3[ip3[1]]] = (cube.rot_p3[cube.pos_p3[ip3[1]]] + 2) % 3
-		cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 1) % 3
-		cube.rot_p3[cube.pos_p3[ip3[3]]] = (cube.rot_p3[cube.pos_p3[ip3[3]]] + 2) % 3
+		cube.rot_p3[cube.pos_p3[ip3[0]]] = (cube.rot_p3[cube.pos_p3[ip3[0]]] + 2) % 3
+		cube.rot_p3[cube.pos_p3[ip3[1]]] = (cube.rot_p3[cube.pos_p3[ip3[1]]] + 1) % 3
+		cube.rot_p3[cube.pos_p3[ip3[2]]] = (cube.rot_p3[cube.pos_p3[ip3[2]]] + 2) % 3
+		cube.rot_p3[cube.pos_p3[ip3[3]]] = (cube.rot_p3[cube.pos_p3[ip3[3]]] + 1) % 3
 
 		cube.rot_p2[cube.pos_p2[ip2[0]]] = (cube.rot_p2[cube.pos_p2[ip2[0]]] + 1) % 2
 		cube.rot_p2[cube.pos_p2[ip2[1]]] = (cube.rot_p2[cube.pos_p2[ip2[1]]] + 1) % 2
@@ -266,7 +266,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				3, 6, 11, 7,
 			}, [4]uint8{
-				2, 6, 7, 3,
+				0, 3, 7, 4,
 			}),
 	},
 	dispatcher{
@@ -278,7 +278,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				3, 6, 11, 7,
 			}, [4]uint8{
-				2, 6, 7, 3,
+				0, 3, 7, 4,
 			}),
 	},
 	dispatcher{
@@ -290,7 +290,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				2, 5, 10, 6,
 			}, [4]uint8{
-				1, 5, 6, 2,
+				3, 2, 6, 7,
 			}),
 	},
 	dispatcher{
@@ -302,7 +302,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				2, 5, 10, 6,
 			}, [4]uint8{
-				1, 5, 6, 2,
+				3, 2, 6, 7,
 			}),
 	},
 	dispatcher{
@@ -314,7 +314,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				1, 4, 9, 5,
 			}, [4]uint8{
-				1, 0, 4, 5,
+				2, 1, 5, 6,
 			}),
 	},
 	dispatcher{
@@ -326,31 +326,31 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				1, 4, 9, 5,
 			}, [4]uint8{
+				2, 1, 5, 6,
+			}),
+	},
+	dispatcher{
+		move: RubikMove{
+			face: B,
+			turn: Clockwise,
+		},
+		fun: clockwiseWithPose(
+			[4]uint8{
+				0, 7, 8, 4,
+			}, [4]uint8{
 				1, 0, 4, 5,
 			}),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: B,
-			turn: Clockwise,
-		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				0, 7, 8, 4,
-			}, [4]uint8{
-				0, 3, 7, 4,
-			}),
-	},
-	dispatcher{
-		move: RubikMove{
-			face: B,
 			turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(
 			[4]uint8{
 				0, 7, 8, 4,
 			}, [4]uint8{
-				0, 3, 7, 4,
+				1, 0, 4, 5,
 			}),
 	},
 	dispatcher{
@@ -362,7 +362,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				10, 9, 8, 11,
 			}, [4]uint8{
-				6, 5, 4, 7,
+				4, 7, 6, 5,
 			}),
 	},
 	dispatcher{
@@ -374,7 +374,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				10, 9, 8, 11,
 			}, [4]uint8{
-				6, 5, 4, 7,
+				4, 7, 6, 5,
 			}),
 	},
 }

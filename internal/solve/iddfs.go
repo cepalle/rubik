@@ -1,14 +1,18 @@
 package solve
 
 import (
+	"github.com/cepalle/rubik/internal/input"
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
 func dls(r makemove.Rubik, depth uint32) []makemove.RubikMoves {
 	var res []makemove.RubikMoves
 
-	if depth == 0 && r.IsResolve() {
-		return []makemove.RubikMoves{}
+	if depth == 0 {
+		if r.IsResolve() {
+			return []makemove.RubikMoves{}
+		}
+		return nil
 	}
 
 	for _, m := range makemove.AllRubikMovesWithName {
@@ -26,7 +30,7 @@ func Iddfs(r makemove.Rubik) []makemove.RubikMoves {
 	for i := uint32(0); ; i++ {
 		res = dls(r, i)
 		if res != nil {
-			return res
+			return input.ReverseMove(res)
 		}
 	}
 }

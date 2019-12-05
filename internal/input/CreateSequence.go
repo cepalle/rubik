@@ -69,3 +69,12 @@ func StringToSequence(moves string) []makemove.RubikMoves {
 	}
 	return listMoves
 }
+
+func ReverseMove(sequence []makemove.RubikMoves) []makemove.RubikMoves {
+	var res []makemove.RubikMoves
+
+	for i := 0; i < len(sequence); i++ {
+		res = append(res, sequence[len(sequence)-i-1])
+	}
+	return res
+}
