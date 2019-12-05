@@ -8,3 +8,5 @@ build: dir
 
 fclean:
 	rm -rf build
+
+re: fclean all

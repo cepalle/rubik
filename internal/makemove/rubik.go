@@ -1,4 +1,8 @@
-package internal
+package makemove
+
+import (
+	"log"
+)
 
 type RubikFace uint8
 
@@ -37,84 +41,119 @@ type RubikMoves struct {
 }
 
 type RubikMovesWithName struct {
-	name string
-	move RubikMoves
+	Name string
+	Move RubikMoves
 }
 
 const NbRubikMoves = 18
 
 var AllRubikMovesWithName = [NbRubikMoves]RubikMovesWithName{
 	RubikMovesWithName{
-		name: "U",
-		move: RubikMoves{U, Clockwise, 1},
+		Name: "U",
+		Move: RubikMoves{
+			U, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "U2",
-		move: RubikMoves{U, Clockwise, 2},
+		Name: "U2",
+		Move: RubikMoves{
+			U, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
-		name: "U'",
-		move: RubikMoves{U, CounterClockwise, 1},
+		Name: "U'",
+		Move: RubikMoves{
+			U, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "D",
-		move: RubikMoves{D, Clockwise, 1},
+		Name: "D",
+		Move: RubikMoves{
+			D, Clockwise, 1},
 	},
 	RubikMovesWithName{
-		name: "D2",
-		move: RubikMoves{D, Clockwise, 2},
+		Name: "D2",
+		Move: RubikMoves{
+			D, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
-		name: "D'",
-		move: RubikMoves{D, CounterClockwise, 1},
+		Name: "D'",
+		Move: RubikMoves{
+			D, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "L",
-		move: RubikMoves{L, Clockwise, 1},
+		Name: "L",
+		Move: RubikMoves{
+			L, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "L2",
-		move: RubikMoves{L, Clockwise, 2},
+		Name: "L2",
+		Move: RubikMoves{
+			L, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
-		name: "L'",
-		move: RubikMoves{L, CounterClockwise, 1},
+		Name: "L'",
+		Move: RubikMoves{
+			L, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "R",
-		move: RubikMoves{R, Clockwise, 1},
+		Name: "R",
+		Move: RubikMoves{
+			R, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "R2",
-		move: RubikMoves{R, Clockwise, 2},
+		Name: "R2",
+		Move: RubikMoves{
+			R, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
-		name: "R'",
-		move: RubikMoves{R, CounterClockwise, 1},
+		Name: "R'",
+		Move: RubikMoves{
+			R, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "F",
-		move: RubikMoves{F, Clockwise, 1},
+		Name: "F",
+		Move: RubikMoves{
+			F, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "F2",
-		move: RubikMoves{F, Clockwise, 2},
+		Name: "F2",
+		Move: RubikMoves{
+			F, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
-		name: "F'",
-		move: RubikMoves{F, CounterClockwise, 1},
+		Name: "F'",
+		Move: RubikMoves{
+			F, CounterClockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "B",
-		move: RubikMoves{B, Clockwise, 1},
+		Name: "B",
+		Move: RubikMoves{
+			B, Clockwise, 1,
+		},
 	},
 	RubikMovesWithName{
-		name: "B2",
-		move: RubikMoves{B, Clockwise, 2},
+		Name: "B2",
+		Move: RubikMoves{
+			B, Clockwise, 2,
+		},
 	},
 	RubikMovesWithName{
-		name: "B'",
-		move: RubikMoves{B, CounterClockwise, 1},
+		Name: "B'",
+		Move: RubikMoves{
+			B, CounterClockwise, 1,
+		},
 	},
 }
 
@@ -183,7 +222,9 @@ func counterClockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 	}
 }
 
-var dispatcherTab = [12]dispatcher{
+const dispatcherLen int = 12
+
+var dispatcherTab = [dispatcherLen]dispatcher{
 	dispatcher{
 		move: RubikMove{
 			face: U,
@@ -330,16 +371,16 @@ var dispatcherTab = [12]dispatcher{
 	},
 }
 
-func (cube Rubik) Move(m RubikMoves) Rubik {
-	for _, d := range dispatcherTab {
-		if d.move.face == m.face && d.move.turn == m.turn {
+func (cube Rubik) DoMove(m RubikMoves) Rubik {
+	for i := 0; i < dispatcherLen; i++ {
+		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {
-				cube = d.fun(cube)
+				cube = dispatcherTab[j].fun(cube)
 			}
 			return cube
 		}
 	}
-	// Unreachable
+	log.Fatal("You should not reach this code")
 	return cube
 }
 
