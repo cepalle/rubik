@@ -6,11 +6,6 @@ import (
 	"math"
 )
 
-type nodeAStar struct {
-	cube  makemove.Rubik
-	moves []makemove.RubikMoves
-}
-
 func AStart(r makemove.Rubik, scoring func(makemove.Rubik) float64) []makemove.RubikMoves {
 	return AStartWithScoreMax(r, scoring, math.MaxFloat64)
 }
@@ -21,7 +16,7 @@ func AStartWithScoreMax(r makemove.Rubik, scoring func(makemove.Rubik) float64, 
 
 	for ; open.Len() > 0; {
 		var cur, _ = open.Pop()
-		curr := cur.(nodeAStar)
+		curr := cur.(node)
 		if curr.cube.IsResolve() {
 			return curr.moves
 		}
@@ -35,7 +30,7 @@ func AStartWithScoreMax(r makemove.Rubik, scoring func(makemove.Rubik) float64, 
 			hys[nCube] = true
 
 			var mvsCp = curr.moves
-			var nNode = nodeAStar{
+			var nNode = node{
 				nCube,
 				append(mvsCp, m.Move),
 			}
