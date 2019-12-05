@@ -12,6 +12,8 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	rubik = rubik.DoMoves(moves)
 	fmt.Println(rubik)
 
+	// sequence = IdaStar(rubik, ScoringHamming)
+	// sequence = IdaStar(rubik, ScoringHamming)
 	sequence = Iddfs(rubik)
 	rubik = rubik.DoMoves(sequence)
 	fmt.Println(rubik)
