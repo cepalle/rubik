@@ -12,9 +12,9 @@ func dls(r makemove.Rubik, depth uint32) []makemove.RubikMoves {
 	}
 
 	for _, m := range makemove.AllRubikMovesWithName {
-		res = dls(r.Move(m.move), depth-1)
+		res = dls(r.DoMove(m.Move), depth-1)
 		if res != nil {
-			return append(res, m.move)
+			return append(res, m.Move)
 		}
 	}
 	return nil

@@ -4,16 +4,16 @@ import (
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
-type Node struct {
+type node struct {
 	cube  makemove.Rubik
 	moves []makemove.RubikMoves
 }
 
 func Bfs(r makemove.Rubik) []makemove.RubikMoves {
 	hys := make(map[makemove.Rubik]bool)
-	var pile []Node
+	var pile []node
 
-	pile = append(pile, Node{r, []makemove.RubikMoves{}})
+	pile = append(pile, node{r, []makemove.RubikMoves{}})
 	hys[r] = true
 
 	for len(pile) > 0 {
@@ -23,8 +23,8 @@ func Bfs(r makemove.Rubik) []makemove.RubikMoves {
 			return cur.moves
 		}
 
-		for i := uint8(0); i < makemove.NbRubikMoves; i++ {
-			var nCube = cur.cube.Move(makemove.AllRubikMoves[i].move)
+		for _, m := range makemove.AllRubikMovesWithName {
+			var nCube = cur.cube.DoMove(m.Move)
 
 			_, found := hys[nCube]
 			if found {
@@ -33,9 +33,9 @@ func Bfs(r makemove.Rubik) []makemove.RubikMoves {
 			hys[nCube] = true
 
 			var mvsCp = cur.moves
-			var nNode = Node{
+			var nNode = node{
 				nCube,
-				append(mvsCp, makemove.AllRubikMoves[i].move),
+				append(mvsCp, m.Move),
 			}
 			pile = append(pile, nNode)
 		}

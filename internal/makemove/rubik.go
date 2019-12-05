@@ -371,7 +371,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 	},
 }
 
-func (cube Rubik) move(m RubikMoves) Rubik {
+func (cube Rubik) DoMove(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
 		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {
@@ -381,7 +381,6 @@ func (cube Rubik) move(m RubikMoves) Rubik {
 		}
 	}
 	log.Fatal("You should not reach this code")
-	// Unreachable
 	return cube
 }
 
