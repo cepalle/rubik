@@ -18,8 +18,12 @@ func main() {
 	flag.IntVar(&nbrMove, "r", 0,
 		"Number of random move to shuffle the cube")
 	flag.Parse()
+	if nbrMove == 0 && moves == "" {
+		fmt.Fprintf(os.Stderr, "Input error: Missing argument\n")
+		os.Exit(1)
+	}
 	if nbrMove < 0 {
-		fmt.Fprintf(os.Stderr, "Number of move to shuffle not valid\n")
+		fmt.Fprintf(os.Stderr, "Input error: Number of move to shuffle not valid\n")
 		os.Exit(1)
 	}
 	if nbrMove != 0 && len(moves) != 0 {
@@ -28,6 +32,6 @@ func main() {
 	if moves == "" {
 		input.GenerateRandom(nbrMove)
 	} else {
-		input.GenerateFromString(nbrMove)
+		input.GenerateFromString(moves)
 	}
 }

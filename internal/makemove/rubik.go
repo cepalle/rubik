@@ -41,117 +41,117 @@ type RubikMoves struct {
 }
 
 type RubikMovesWithName struct {
-	name string
-	move RubikMoves
+	Name string
+	Move RubikMoves
 }
 
 const NbRubikMoves = 18
 
 var AllRubikMoves = [NbRubikMoves]RubikMovesWithName{
 	RubikMovesWithName{
-		name: "U",
-		move: RubikMoves{
+		Name: "U",
+		Move: RubikMoves{
 			U, Clockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "U2",
-		move: RubikMoves{
+		Name: "U2",
+		Move: RubikMoves{
 			U, Clockwise, 2,
 		},
 	},
 	RubikMovesWithName{
-		name: "U'",
-		move: RubikMoves{
+		Name: "U'",
+		Move: RubikMoves{
 			U, CounterClockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "D",
-		move: RubikMoves{
+		Name: "D",
+		Move: RubikMoves{
 			D, Clockwise, 1},
 	},
 	RubikMovesWithName{
-		name: "D2",
-		move: RubikMoves{
+		Name: "D2",
+		Move: RubikMoves{
 			D, Clockwise, 2,
 		},
 	},
 	RubikMovesWithName{
-		name: "D'",
-		move: RubikMoves{
+		Name: "D'",
+		Move: RubikMoves{
 			D, CounterClockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "L",
-		move: RubikMoves{
+		Name: "L",
+		Move: RubikMoves{
 			L, Clockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "L2",
-		move: RubikMoves{
+		Name: "L2",
+		Move: RubikMoves{
 			L, Clockwise, 2,
 		},
 	},
 	RubikMovesWithName{
-		name: "L'",
-		move: RubikMoves{
+		Name: "L'",
+		Move: RubikMoves{
 			L, CounterClockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "R",
-		move: RubikMoves{
+		Name: "R",
+		Move: RubikMoves{
 			R, Clockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "R2",
-		move: RubikMoves{
+		Name: "R2",
+		Move: RubikMoves{
 			R, Clockwise, 2,
 		},
 	},
 	RubikMovesWithName{
-		name: "R'",
-		move: RubikMoves{
+		Name: "R'",
+		Move: RubikMoves{
 			R, CounterClockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "F",
-		move: RubikMoves{
+		Name: "F",
+		Move: RubikMoves{
 			F, Clockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "F2",
-		move: RubikMoves{
+		Name: "F2",
+		Move: RubikMoves{
 			F, Clockwise, 2,
 		},
 	},
 	RubikMovesWithName{
-		name: "F'",
-		move: RubikMoves{
+		Name: "F'",
+		Move: RubikMoves{
 			F, CounterClockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "B",
-		move: RubikMoves{
+		Name: "B",
+		Move: RubikMoves{
 			B, Clockwise, 1,
 		},
 	},
 	RubikMovesWithName{
-		name: "B2",
-		move: RubikMoves{
+		Name: "B2",
+		Move: RubikMoves{
 			B, Clockwise, 2,
 		},
 	},
 	RubikMovesWithName{
-		name: "B'",
-		move: RubikMoves{
+		Name: "B'",
+		Move: RubikMoves{
 			B, CounterClockwise, 1,
 		},
 	},
@@ -391,7 +391,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 	},
 }
 
-func (cube Rubik) Move(m RubikMoves) Rubik {
+func (cube Rubik) move(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
 		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {

@@ -7,12 +7,13 @@ import (
 	"log"
 	"math/rand"
 	"strings"
+	"time"
 )
 
 func getMoves(move string) (makemove.RubikMoves, error) {
 	for _, rubikMoves := range makemove.AllRubikMoves {
-		if move == rubikMoves.name {
-			return rubikMoves.move, nil
+		if move == rubikMoves.Name {
+			return rubikMoves.Move, nil
 		}
 	}
 	return makemove.RubikMoves{}, errors.New(fmt.Sprintf("Input error: <%s> is not a valid move", move))
@@ -21,13 +22,15 @@ func getMoves(move string) (makemove.RubikMoves, error) {
 func GenerateRandom(nbrMove int) []makemove.RubikMoves {
 	var Sequence []makemove.RubikMoves
 
+	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < nbrMove; i++ {
-		Sequence[i] = makemove.AllRubikMoves[rand.Intn(makemove.NbRubikMoves)].move
+		Sequence = append(Sequence, makemove.AllRubikMoves[rand.Intn(makemove.NbRubikMoves)].Move)
 	}
+	fmt.Println(Sequence)
 	return Sequence
 }
 
-func GenereateFromString(moves string) []makemove.RubikMoves {
+func GenerateFromString(moves string) []makemove.RubikMoves {
 	var listMoves []makemove.RubikMoves
 	split := strings.Split(moves, " ")
 	for _, move := range split {
@@ -38,5 +41,6 @@ func GenereateFromString(moves string) []makemove.RubikMoves {
 			listMoves = append(listMoves, rubikMove)
 		}
 	}
+	fmt.Println(listMoves)
 	return listMoves
 }
