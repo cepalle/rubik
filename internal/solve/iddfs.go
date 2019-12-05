@@ -1,13 +1,17 @@
-package internal
+package solve
 
-func dls(r Rubik, depth uint32) []RubikMoves {
-	var res []RubikMoves
+import (
+	"github.com/cepalle/rubik/internal/makemove"
+)
+
+func dls(r makemove.Rubik, depth uint32) []makemove.RubikMoves {
+	var res []makemove.RubikMoves
 
 	if depth == 0 && r.IsResolve() {
-		return []RubikMoves{}
+		return []makemove.RubikMoves{}
 	}
 
-	for _, m := range AllRubikMovesWithName {
+	for _, m := range makemove.AllRubikMovesWithName {
 		res = dls(r.Move(m.move), depth-1)
 		if res != nil {
 			return append(res, m.move)
@@ -16,8 +20,8 @@ func dls(r Rubik, depth uint32) []RubikMoves {
 	return nil
 }
 
-func Iddfs(r Rubik) []RubikMoves {
-	var res []RubikMoves
+func Iddfs(r makemove.Rubik) []makemove.RubikMoves {
+	var res []makemove.RubikMoves
 
 	for i := uint32(0); ; i++ {
 		res = dls(r, i)

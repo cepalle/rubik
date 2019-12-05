@@ -4,7 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"github.com/cepalle/rubik/internal/input"
-	//	"github.com/cepalle/rubik/internal/makemove"
+	"github.com/cepalle/rubik/internal/solve"
 	"os"
 )
 
@@ -30,8 +30,8 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
 	if moves == "" {
-		input.GenerateRandom(nbrMove)
+		soluce = solve.dispatchSolve(input.GenerateRandom(nbrMove))
 	} else {
-		input.GenerateFromString(moves)
+		soluce = solve.dispatchSolve(input.GenerateFromString(moves))
 	}
 }
