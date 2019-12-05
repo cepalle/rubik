@@ -1,15 +1,15 @@
 package internal
 
-type Node struct {
+type node struct {
 	cube  Rubik
 	moves []RubikMoves
 }
 
 func Bfs(r Rubik) []RubikMoves {
 	hys := make(map[Rubik]bool)
-	var pile []Node
+	var pile []node
 
-	pile = append(pile, Node{r, []RubikMoves{}})
+	pile = append(pile, node{r, []RubikMoves{}})
 	hys[r] = true
 
 	for len(pile) > 0 {
@@ -29,7 +29,7 @@ func Bfs(r Rubik) []RubikMoves {
 			hys[nCube] = true
 
 			var mvsCp = cur.moves
-			var nNode = Node{
+			var nNode = node{
 				nCube,
 				append(mvsCp, m.move),
 			}
