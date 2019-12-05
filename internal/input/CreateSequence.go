@@ -11,7 +11,7 @@ import (
 )
 
 func getMoves(move string) (makemove.RubikMoves, error) {
-	for _, rubikMoves := range makemove.AllRubikMoves {
+	for _, rubikMoves := range makemove.AllRubikMovesWithName {
 		if move == rubikMoves.Name {
 			return rubikMoves.Move, nil
 		}
@@ -24,7 +24,7 @@ func GenerateRandom(nbrMove int) []makemove.RubikMoves {
 
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < nbrMove; i++ {
-		Sequence = append(Sequence, makemove.AllRubikMoves[rand.Intn(makemove.NbRubikMoves)].Move)
+		Sequence = append(Sequence, makemove.AllRubikMovesWithName[rand.Intn(makemove.NbRubikMoves)].Move)
 	}
 	fmt.Println(Sequence)
 	return Sequence
