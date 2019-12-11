@@ -23,17 +23,17 @@ const (
 )
 
 type Rubik struct {
-	Pos_p3 [8]uint8
-	Rot_p3 [8]uint8
-	Pos_p2 [12]uint8
-	Rot_p2 [12]uint8
+	PosP3 [8]uint8
+	RotP3 [8]uint8
+	PosP2 [12]uint8
+	RotP2 [12]uint8
 }
 
 func InitRubik() Rubik {
 	var rubik Rubik
 
-	rubik.Pos_p3 = [8]uint8{0, 1, 2, 3, 4, 5, 6, 7}
-	rubik.Pos_p2 = [12]uint8{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
+	rubik.PosP3 = [8]uint8{0, 1, 2, 3, 4, 5, 6, 7}
+	rubik.PosP2 = [12]uint8{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11}
 	return rubik
 }
 
@@ -232,27 +232,27 @@ func clockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 	return func(cube *Rubik) *Rubik {
 		var tmp uint8 = 0
 
-		tmp = cube.Pos_p3[ip3[0]]
-		cube.Pos_p3[ip3[0]] = cube.Pos_p3[ip3[3]]
-		cube.Pos_p3[ip3[3]] = cube.Pos_p3[ip3[2]]
-		cube.Pos_p3[ip3[2]] = cube.Pos_p3[ip3[1]]
-		cube.Pos_p3[ip3[1]] = tmp
+		tmp = cube.PosP3[ip3[0]]
+		cube.PosP3[ip3[0]] = cube.PosP3[ip3[3]]
+		cube.PosP3[ip3[3]] = cube.PosP3[ip3[2]]
+		cube.PosP3[ip3[2]] = cube.PosP3[ip3[1]]
+		cube.PosP3[ip3[1]] = tmp
 
-		tmp = cube.Pos_p2[ip2[0]]
-		cube.Pos_p2[ip2[0]] = cube.Pos_p2[ip2[3]]
-		cube.Pos_p2[ip2[3]] = cube.Pos_p2[ip2[2]]
-		cube.Pos_p2[ip2[2]] = cube.Pos_p2[ip2[1]]
-		cube.Pos_p2[ip2[1]] = tmp
+		tmp = cube.PosP2[ip2[0]]
+		cube.PosP2[ip2[0]] = cube.PosP2[ip2[3]]
+		cube.PosP2[ip2[3]] = cube.PosP2[ip2[2]]
+		cube.PosP2[ip2[2]] = cube.PosP2[ip2[1]]
+		cube.PosP2[ip2[1]] = tmp
 
-		cube.Rot_p3[cube.Pos_p3[ip3[0]]] = (cube.Rot_p3[cube.Pos_p3[ip3[0]]] + 2) % 3
-		cube.Rot_p3[cube.Pos_p3[ip3[1]]] = (cube.Rot_p3[cube.Pos_p3[ip3[1]]] + 1) % 3
-		cube.Rot_p3[cube.Pos_p3[ip3[2]]] = (cube.Rot_p3[cube.Pos_p3[ip3[2]]] + 2) % 3
-		cube.Rot_p3[cube.Pos_p3[ip3[3]]] = (cube.Rot_p3[cube.Pos_p3[ip3[3]]] + 1) % 3
+		cube.RotP3[cube.PosP3[ip3[0]]] = (cube.RotP3[cube.PosP3[ip3[0]]] + 2) % 3
+		cube.RotP3[cube.PosP3[ip3[1]]] = (cube.RotP3[cube.PosP3[ip3[1]]] + 1) % 3
+		cube.RotP3[cube.PosP3[ip3[2]]] = (cube.RotP3[cube.PosP3[ip3[2]]] + 2) % 3
+		cube.RotP3[cube.PosP3[ip3[3]]] = (cube.RotP3[cube.PosP3[ip3[3]]] + 1) % 3
 
-		cube.Rot_p2[cube.Pos_p2[ip2[0]]] = (cube.Rot_p2[cube.Pos_p2[ip2[0]]] + 1) % 2
-		cube.Rot_p2[cube.Pos_p2[ip2[1]]] = (cube.Rot_p2[cube.Pos_p2[ip2[1]]] + 1) % 2
-		cube.Rot_p2[cube.Pos_p2[ip2[2]]] = (cube.Rot_p2[cube.Pos_p2[ip2[2]]] + 1) % 2
-		cube.Rot_p2[cube.Pos_p2[ip2[3]]] = (cube.Rot_p2[cube.Pos_p2[ip2[3]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[0]]] = (cube.RotP2[cube.PosP2[ip2[0]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[1]]] = (cube.RotP2[cube.PosP2[ip2[1]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[2]]] = (cube.RotP2[cube.PosP2[ip2[2]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[3]]] = (cube.RotP2[cube.PosP2[ip2[3]]] + 1) % 2
 		return cube
 	}
 }
@@ -261,27 +261,27 @@ func counterClockwiseWithPose(ip2 [4]uint8, ip3 [4]uint8) moveFunction {
 	return func(cube *Rubik) *Rubik {
 		var tmp uint8 = 0
 
-		tmp = cube.Pos_p3[ip3[0]]
-		cube.Pos_p3[ip3[0]] = cube.Pos_p3[ip3[1]]
-		cube.Pos_p3[ip3[1]] = cube.Pos_p3[ip3[2]]
-		cube.Pos_p3[ip3[2]] = cube.Pos_p3[ip3[3]]
-		cube.Pos_p3[ip3[3]] = tmp
+		tmp = cube.PosP3[ip3[0]]
+		cube.PosP3[ip3[0]] = cube.PosP3[ip3[1]]
+		cube.PosP3[ip3[1]] = cube.PosP3[ip3[2]]
+		cube.PosP3[ip3[2]] = cube.PosP3[ip3[3]]
+		cube.PosP3[ip3[3]] = tmp
 
-		tmp = cube.Pos_p2[ip2[0]]
-		cube.Pos_p2[ip2[0]] = cube.Pos_p2[ip2[1]]
-		cube.Pos_p2[ip2[1]] = cube.Pos_p2[ip2[2]]
-		cube.Pos_p2[ip2[2]] = cube.Pos_p2[ip2[3]]
-		cube.Pos_p2[ip2[3]] = tmp
+		tmp = cube.PosP2[ip2[0]]
+		cube.PosP2[ip2[0]] = cube.PosP2[ip2[1]]
+		cube.PosP2[ip2[1]] = cube.PosP2[ip2[2]]
+		cube.PosP2[ip2[2]] = cube.PosP2[ip2[3]]
+		cube.PosP2[ip2[3]] = tmp
 
-		cube.Rot_p3[cube.Pos_p3[ip3[0]]] = (cube.Rot_p3[cube.Pos_p3[ip3[0]]] + 2) % 3
-		cube.Rot_p3[cube.Pos_p3[ip3[1]]] = (cube.Rot_p3[cube.Pos_p3[ip3[1]]] + 1) % 3
-		cube.Rot_p3[cube.Pos_p3[ip3[2]]] = (cube.Rot_p3[cube.Pos_p3[ip3[2]]] + 2) % 3
-		cube.Rot_p3[cube.Pos_p3[ip3[3]]] = (cube.Rot_p3[cube.Pos_p3[ip3[3]]] + 1) % 3
+		cube.RotP3[cube.PosP3[ip3[0]]] = (cube.RotP3[cube.PosP3[ip3[0]]] + 2) % 3
+		cube.RotP3[cube.PosP3[ip3[1]]] = (cube.RotP3[cube.PosP3[ip3[1]]] + 1) % 3
+		cube.RotP3[cube.PosP3[ip3[2]]] = (cube.RotP3[cube.PosP3[ip3[2]]] + 2) % 3
+		cube.RotP3[cube.PosP3[ip3[3]]] = (cube.RotP3[cube.PosP3[ip3[3]]] + 1) % 3
 
-		cube.Rot_p2[cube.Pos_p2[ip2[0]]] = (cube.Rot_p2[cube.Pos_p2[ip2[0]]] + 1) % 2
-		cube.Rot_p2[cube.Pos_p2[ip2[1]]] = (cube.Rot_p2[cube.Pos_p2[ip2[1]]] + 1) % 2
-		cube.Rot_p2[cube.Pos_p2[ip2[2]]] = (cube.Rot_p2[cube.Pos_p2[ip2[2]]] + 1) % 2
-		cube.Rot_p2[cube.Pos_p2[ip2[3]]] = (cube.Rot_p2[cube.Pos_p2[ip2[3]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[0]]] = (cube.RotP2[cube.PosP2[ip2[0]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[1]]] = (cube.RotP2[cube.PosP2[ip2[1]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[2]]] = (cube.RotP2[cube.PosP2[ip2[2]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ip2[3]]] = (cube.RotP2[cube.PosP2[ip2[3]]] + 1) % 2
 		return cube
 	}
 }
@@ -471,22 +471,22 @@ func (cube Rubik) DoMoves(m []RubikMoves) Rubik {
 func (cube Rubik) IsResolve() bool {
 	var i uint8
 	for i = 0; i < 12; i++ {
-		if cube.Rot_p2[i] != 0 {
+		if cube.RotP2[i] != 0 {
 			return false
 		}
 	}
 	for i = 0; i < 8; i++ {
-		if cube.Rot_p3[i] != 0 {
+		if cube.RotP3[i] != 0 {
 			return false
 		}
 	}
 	for i = 0; i < 12; i++ {
-		if cube.Pos_p2[i] != i {
+		if cube.PosP2[i] != i {
 			return false
 		}
 	}
 	for i = 0; i < 8; i++ {
-		if cube.Pos_p3[i] != i {
+		if cube.PosP3[i] != i {
 			return false
 		}
 	}

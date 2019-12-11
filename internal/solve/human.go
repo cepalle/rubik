@@ -142,7 +142,7 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	}
 	for i := uint8(0); i < 4; i++ {
 		var seqTmp []makemove.RubikMoves
-		index := uint8(getIndex(rubik.Pos_p3[:], i))
+		index := uint8(getIndex(rubik.PosP3[:], i))
 		face := uint8(index % 4)
 		switch floor := uint8(index / 4); floor {
 		case 0:
@@ -152,9 +152,9 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 		rubik = rubik.DoMoves(seqTmp)
 		sequence = append(sequence, seqTmp...)
-		index = uint8(getIndex(rubik.Pos_p3[:], i))
+		index = uint8(getIndex(rubik.PosP3[:], i))
 		face = uint8(index % 4)
-		for rubik.Rot_p3[i] != 0 || rubik.Pos_p3[i] != i {
+		for rubik.RotP3[i] != 0 || rubik.PosP3[i] != i {
 			seqTmp = upCornersOrientation(rubik, face)
 			fmt.Println(input.SequenceToString(seqTmp))
 			rubik = rubik.DoMoves(seqTmp)
@@ -249,7 +249,7 @@ func upCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	}
 	for i := uint8(0); i < 4; i++ {
 		var seqTmp []makemove.RubikMoves
-		index := uint8(getIndex(rubik.Pos_p2[:], i))
+		index := uint8(getIndex(rubik.PosP2[:], i))
 		face := uint8(index % 4)
 		switch floor := index / 4; floor {
 		case 0:
@@ -262,7 +262,7 @@ func upCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		rubik = rubik.DoMoves(seqTmp)
 		fmt.Println(input.SequenceToString(seqTmp))
 		sequence = append(sequence, seqTmp...)
-		if rubik.Rot_p2[i] == 1 {
+		if rubik.RotP2[i] == 1 {
 			seqTmp = switchUpOrientation(rubik, i)
 			fmt.Println(input.SequenceToString(seqTmp))
 			sequence = append(sequence, seqTmp...)
