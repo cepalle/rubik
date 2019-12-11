@@ -298,7 +298,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				0, 1, 2, 3,
 			}, [4]uint8{
-				0, 1, 2, 3,
+				1, 2, 3, 0,
 			}),
 	},
 	dispatcher{
@@ -310,7 +310,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				0, 1, 2, 3,
 			}, [4]uint8{
-				0, 1, 2, 3,
+				1, 2, 3, 0,
 			}),
 	},
 	dispatcher{
@@ -322,7 +322,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				3, 6, 11, 7,
 			}, [4]uint8{
-				0, 3, 7, 4,
+				3, 7, 4, 0,
 			}),
 	},
 	dispatcher{
@@ -334,7 +334,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				3, 6, 11, 7,
 			}, [4]uint8{
-				0, 3, 7, 4,
+				3, 7, 4, 0,
 			}),
 	},
 	dispatcher{
@@ -346,7 +346,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				2, 5, 10, 6,
 			}, [4]uint8{
-				3, 2, 6, 7,
+				2, 6, 7, 3,
 			}),
 	},
 	dispatcher{
@@ -358,7 +358,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				2, 5, 10, 6,
 			}, [4]uint8{
-				3, 2, 6, 7,
+				2, 6, 7, 3,
 			}),
 	},
 	dispatcher{
@@ -370,7 +370,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				1, 4, 9, 5,
 			}, [4]uint8{
-				2, 1, 5, 6,
+				1, 5, 6, 2,
 			}),
 	},
 	dispatcher{
@@ -382,7 +382,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				1, 4, 9, 5,
 			}, [4]uint8{
-				2, 1, 5, 6,
+				1, 5, 6, 2,
 			}),
 	},
 	dispatcher{
@@ -394,7 +394,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				0, 7, 8, 4,
 			}, [4]uint8{
-				1, 0, 4, 5,
+				0, 4, 5, 1,
 			}),
 	},
 	dispatcher{
@@ -406,7 +406,7 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			[4]uint8{
 				0, 7, 8, 4,
 			}, [4]uint8{
-				1, 0, 4, 5,
+				0, 4, 5, 1,
 			}),
 	},
 	dispatcher{
@@ -417,9 +417,8 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: clockwiseWithPose(
 			[4]uint8{
 				8, 11, 10, 9,
-				//				10, 9, 8, 11,
 			}, [4]uint8{
-				4, 7, 6, 5,
+				6, 5, 4, 7,
 			}),
 	},
 	dispatcher{
@@ -430,9 +429,8 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 		fun: counterClockwiseWithPose(
 			[4]uint8{
 				8, 11, 10, 9,
-				//				10, 9, 8, 11,
 			}, [4]uint8{
-				4, 7, 6, 5,
+				6, 5, 4, 7,
 			}),
 	},
 }
