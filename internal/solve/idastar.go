@@ -2,7 +2,6 @@ package solve
 
 import (
 	"github.com/cepalle/rubik/internal/makemove"
-	"github.com/jupp0r/go-priority-queue"
 	"math"
 )
 
@@ -12,7 +11,8 @@ func AStart(r makemove.Rubik, scoring func(*makemove.Rubik) float64) []makemove.
 
 func aStartWithScoreMax(r makemove.Rubik, scoring func(*makemove.Rubik) float64, scoreMax float64) []makemove.RubikMoves {
 	hys := make(map[makemove.Rubik]bool)
-	open := pq.New()
+	open := New()
+	open.Insert(node{r, []makemove.RubikMoves{}}, 0)
 
 	for open.Len() > 0 {
 		var cur, _ = open.Pop()
@@ -35,10 +35,10 @@ func aStartWithScoreMax(r makemove.Rubik, scoring func(*makemove.Rubik) float64,
 				nCube,
 				append(mvsCp, m.Move),
 			}
-			score := scoring(&nNode.cube)
+			score := float64(len(nNode.moves)) + scoring(&nNode.cube)
 
 			if score < scoreMax {
-				open.Insert(nNode, -(float64(len(nNode.moves)) + score))
+				open.Insert(nNode, score)
 			}
 		}
 	}
