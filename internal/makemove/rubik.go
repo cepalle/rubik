@@ -1,6 +1,7 @@
 package makemove
 
 import (
+	"fmt"
 	"log"
 )
 
@@ -435,11 +436,24 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 	},
 }
 
+func (cube Rubik) sumRot() (sumR2, sumR3 uint8) {
+	for _, value := range cube.RotP2 {
+		sumR2 += value
+		sumR2 = sumR2 % 2
+	}
+	for _, value := range cube.RotP3 {
+		sumR3 += value
+		sumR3 = sumR3 % 3
+	}
+	return
+}
+
 func (cube Rubik) DoMove(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
 		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {
 				dispatcherTab[i].fun(&cube)
+				fmt.Println(cube)
 			}
 			return cube
 		}

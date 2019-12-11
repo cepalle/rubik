@@ -35,5 +35,6 @@ func main() {
 	} else {
 		soluce = solve.DispatchSolve(input.StringToSequence(moves))
 	}
+	fmt.Println("nbr coups :", len(soluce))
 	fmt.Println(input.SequenceToString(soluce))
 }

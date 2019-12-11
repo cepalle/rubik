@@ -1,9 +1,11 @@
 package solve
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/cepalle/rubik/internal/input"
 	"github.com/cepalle/rubik/internal/makemove"
+	"os"
 )
 
 func getIndex(lst []uint8, value uint8) int {
@@ -137,6 +139,7 @@ func upCornersOrientation(rubik makemove.Rubik, face uint8) []makemove.RubikMove
 
 func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	reader := bufio.NewReader(os.Stdin)
 	if debug {
 		fmt.Println("Placing the top corners :")
 	}
@@ -158,6 +161,7 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 			seqTmp = upCornersOrientation(rubik, face)
 			fmt.Println(input.SequenceToString(seqTmp))
 			rubik = rubik.DoMoves(seqTmp)
+			reader.ReadString('\n')
 			sequence = append(sequence, seqTmp...)
 		}
 	}
