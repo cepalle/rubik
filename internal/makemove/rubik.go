@@ -247,23 +247,23 @@ func clockwiseWithPose(ps poseSwap) moveFunction {
 		cube.RotP2[cube.PosP2[ps.ip2[2]]] = (cube.RotP2[cube.PosP2[ps.ip2[2]]] + 1) % 2
 		cube.RotP2[cube.PosP2[ps.ip2[3]]] = (cube.RotP2[cube.PosP2[ps.ip2[3]]] + 1) % 2
 
-		tmp = ps.ip3[0]
-		ps.ip3[0] = ps.ip3[3]
-		ps.ip3[3] = ps.ip3[2]
-		ps.ip3[2] = ps.ip3[1]
-		ps.ip3[1] = tmp
+		tmp = cube.PosFP3[ps.ip3[0]]
+		cube.PosFP3[ps.ip3[0]] = cube.PosFP3[ps.ip3[3]]
+		cube.PosFP3[ps.ip3[3]] = cube.PosFP3[ps.ip3[2]]
+		cube.PosFP3[ps.ip3[2]] = cube.PosFP3[ps.ip3[1]]
+		cube.PosFP3[ps.ip3[1]] = tmp
 
-		tmp = ps.ip3[0+4]
-		ps.ip3[0+4] = ps.ip3[3+4]
-		ps.ip3[3+4] = ps.ip3[2+4]
-		ps.ip3[2+4] = ps.ip3[1+4]
-		ps.ip3[1+4] = tmp
+		tmp = cube.PosFP3[ps.ip3[0+4]]
+		cube.PosFP3[ps.ip3[0+4]] = cube.PosFP3[ps.ip3[3+4]]
+		cube.PosFP3[ps.ip3[3+4]] = cube.PosFP3[ps.ip3[2+4]]
+		cube.PosFP3[ps.ip3[2+4]] = cube.PosFP3[ps.ip3[1+4]]
+		cube.PosFP3[ps.ip3[1+4]] = tmp
 
-		tmp = ps.ip3[0+8]
-		ps.ip3[0+8] = ps.ip3[3+8]
-		ps.ip3[3+8] = ps.ip3[2+8]
-		ps.ip3[2+8] = ps.ip3[1+8]
-		ps.ip3[1+8] = tmp
+		tmp = cube.PosFP3[ps.ip3[0+8]]
+		cube.PosFP3[ps.ip3[0+8]] = cube.PosFP3[ps.ip3[3+8]]
+		cube.PosFP3[ps.ip3[3+8]] = cube.PosFP3[ps.ip3[2+8]]
+		cube.PosFP3[ps.ip3[2+8]] = cube.PosFP3[ps.ip3[1+8]]
+		cube.PosFP3[ps.ip3[1+8]] = tmp
 
 		return cube
 	}
@@ -284,23 +284,23 @@ func counterClockwiseWithPose(ps poseSwap) moveFunction {
 		cube.RotP2[cube.PosP2[ps.ip2[2]]] = (cube.RotP2[cube.PosP2[ps.ip2[2]]] + 1) % 2
 		cube.RotP2[cube.PosP2[ps.ip2[3]]] = (cube.RotP2[cube.PosP2[ps.ip2[3]]] + 1) % 2
 
-		tmp = ps.ip3[0]
-		ps.ip3[0] = ps.ip3[1]
-		ps.ip3[1] = ps.ip3[2]
-		ps.ip3[2] = ps.ip3[3]
-		ps.ip3[3] = tmp
+		tmp = cube.PosFP3[ps.ip3[0]]
+		cube.PosFP3[ps.ip3[0]] = cube.PosFP3[ps.ip3[1]]
+		cube.PosFP3[ps.ip3[1]] = cube.PosFP3[ps.ip3[2]]
+		cube.PosFP3[ps.ip3[2]] = cube.PosFP3[ps.ip3[3]]
+		cube.PosFP3[ps.ip3[3]] = tmp
 
-		tmp = ps.ip3[4]
-		ps.ip3[4] = ps.ip3[5]
-		ps.ip3[5] = ps.ip3[6]
-		ps.ip3[6] = ps.ip3[7]
-		ps.ip3[7] = tmp
+		tmp = cube.PosFP3[ps.ip3[4]]
+		cube.PosFP3[ps.ip3[4]] = cube.PosFP3[ps.ip3[5]]
+		cube.PosFP3[ps.ip3[5]] = cube.PosFP3[ps.ip3[6]]
+		cube.PosFP3[ps.ip3[6]] = cube.PosFP3[ps.ip3[7]]
+		cube.PosFP3[ps.ip3[7]] = tmp
 
-		tmp = ps.ip3[8]
-		ps.ip3[8] = ps.ip3[9]
-		ps.ip3[9] = ps.ip3[10]
-		ps.ip3[10] = ps.ip3[11]
-		ps.ip3[11] = tmp
+		tmp = cube.PosFP3[ps.ip3[8]]
+		cube.PosFP3[ps.ip3[8]] = cube.PosFP3[ps.ip3[9]]
+		cube.PosFP3[ps.ip3[9]] = cube.PosFP3[ps.ip3[10]]
+		cube.PosFP3[ps.ip3[10]] = cube.PosFP3[ps.ip3[11]]
+		cube.PosFP3[ps.ip3[11]] = tmp
 
 		return cube
 	}

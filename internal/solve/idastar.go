@@ -48,7 +48,7 @@ func aStartWithScoreMax(r makemove.Rubik, scoring func(*makemove.Rubik) float64,
 
 func IdaStar(r makemove.Rubik, scoring func(*makemove.Rubik) float64) []makemove.RubikMoves {
 	var res []makemove.RubikMoves
-	for i := float64(0); ; i += 30 {
+	for i := float64(0); ; i += 10 {
 		res = aStartWithScoreMax(r, scoring, i)
 		if res != nil {
 			return res
