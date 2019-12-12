@@ -18,7 +18,7 @@ func getIndex(lst []uint8, value uint8) int {
 func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	if debug {
-		fmt.Println("Solving this cube :")
+		fmt.Println("Solving this Cube :")
 	}
 	if debug {
 		if len(sequence) != 0 {

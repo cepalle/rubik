@@ -17,7 +17,7 @@ func aStartWithScoreMax(r makemove.Rubik, scoring func(*makemove.Rubik) float64,
 	for open.Len() > 0 {
 		var cur, _ = open.Pop()
 		curr := cur.(node)
-		// fmt.Println(curr.cube)
+		// fmt.Println(curr.Cube)
 		if curr.cube.IsResolve() {
 			return curr.moves
 		}
