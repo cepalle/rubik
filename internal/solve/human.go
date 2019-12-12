@@ -136,6 +136,7 @@ func upCornersOrientation(rubik makemove.Rubik, face uint8) []makemove.RubikMove
 }
 
 func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
+	/*
 	var sequence []makemove.RubikMoves
 	if debug {
 		fmt.Println("Placing the top corners :")
@@ -169,6 +170,8 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 	}
 	return sequence
+	*/
+	return []makemove.RubikMoves{}
 }
 
 func upToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove.RubikMoves {

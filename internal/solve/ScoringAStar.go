@@ -11,18 +11,13 @@ func ScoringHamming(cube *makemove.Rubik) float64 {
 			tot++
 		}
 	}
-	for i = 0; i < 8; i++ {
-		if cube.RotP3[i] != 0 {
-			tot++
-		}
-	}
 	for i = 0; i < 12; i++ {
 		if cube.PosP2[i] != i {
 			tot++
 		}
 	}
-	for i = 0; i < 8; i++ {
-		if cube.PosP3[i] != i {
+	for i = 0; i < 24; i++ {
+		if cube.PosFP3[i] != i {
 			tot++
 		}
 	}
