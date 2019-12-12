@@ -10,7 +10,7 @@ import (
 func main() {
 	var all []solve.NodeExp
 
-	all = solve.Bfs_explorer(1)
+	all = solve.Bfs_explorer(3)
 
 	dataFile, err := os.Create("node_exp.gob")
 
