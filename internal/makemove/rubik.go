@@ -311,7 +311,10 @@ var poseSwapU = poseSwap{
 		0, 1, 2, 3,
 	},
 	[12]uint8{
-	}
+		0, 1, 2, 3,
+		11, 9, 7, 5,
+		10, 8, 6, 4,
+	},
 }
 
 var poseSwapF = poseSwap{
@@ -319,6 +322,9 @@ var poseSwapF = poseSwap{
 		2, 5, 10, 6,
 	},
 	[12]uint8{
+		6, 7, 15, 14,
+		5, 3, 16, 20,
+		21, 13, 2, 8,
 	},
 }
 
@@ -327,7 +333,10 @@ var poseSwapR = poseSwap{
 		1, 4, 9, 5,
 	},
 	[12]uint8{
-	}
+		8, 9, 17, 16,
+		7, 1, 18, 21,
+		3, 10, 23, 15,
+	},
 }
 
 var poseSwapB = poseSwap{
@@ -335,7 +344,10 @@ var poseSwapB = poseSwap{
 		0, 7, 8, 4,
 	},
 	[12]uint8{
-	}
+		10, 11, 19, 18,
+		17, 1, 4, 22,
+		23, 9, 0, 12,
+	},
 }
 
 var poseSwapL = poseSwap{
@@ -343,7 +355,10 @@ var poseSwapL = poseSwap{
 		3, 6, 11, 7,
 	},
 	[12]uint8{
-	}
+		4, 5, 13, 12,
+		11, 2, 14, 22,
+		19, 0, 6, 20,
+	},
 }
 
 var poseSwapD = poseSwap{
@@ -351,7 +366,10 @@ var poseSwapD = poseSwap{
 		8, 11, 10, 9,
 	},
 	[12]uint8{
-	}
+		20, 21, 23, 22,
+		12, 14, 16, 18,
+		13, 15, 17, 19,
+	},
 }
 
 const dispatcherLen int = 12
