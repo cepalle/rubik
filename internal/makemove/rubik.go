@@ -227,54 +227,101 @@ type dispatcher struct {
 	fun  moveFunction
 }
 
-func clockwiseWithPose(ip2 [4]uint8, ip3 [24]uint8) moveFunction {
+type poseSwap struct {
+	ip2 [4]uint8
+	ip3 [24]uint8
+}
+
+func clockwiseWithPose(ps poseSwap) moveFunction {
 	return func(cube *Rubik) *Rubik {
 		var tmp uint8 = 0
 
-		tmp = cube.PosP2[ip2[0]]
-		cube.PosP2[ip2[0]] = cube.PosP2[ip2[3]]
-		cube.PosP2[ip2[3]] = cube.PosP2[ip2[2]]
-		cube.PosP2[ip2[2]] = cube.PosP2[ip2[1]]
-		cube.PosP2[ip2[1]] = tmp
+		tmp = cube.PosP2[ps.ip2[0]]
+		cube.PosP2[ps.ip2[0]] = cube.PosP2[ps.ip2[3]]
+		cube.PosP2[ps.ip2[3]] = cube.PosP2[ps.ip2[2]]
+		cube.PosP2[ps.ip2[2]] = cube.PosP2[ps.ip2[1]]
+		cube.PosP2[ps.ip2[1]] = tmp
 
-		cube.RotP2[cube.PosP2[ip2[0]]] = (cube.RotP2[cube.PosP2[ip2[0]]] + 1) % 2
-		cube.RotP2[cube.PosP2[ip2[1]]] = (cube.RotP2[cube.PosP2[ip2[1]]] + 1) % 2
-		cube.RotP2[cube.PosP2[ip2[2]]] = (cube.RotP2[cube.PosP2[ip2[2]]] + 1) % 2
-		cube.RotP2[cube.PosP2[ip2[3]]] = (cube.RotP2[cube.PosP2[ip2[3]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[0]]] = (cube.RotP2[cube.PosP2[ps.ip2[0]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[1]]] = (cube.RotP2[cube.PosP2[ps.ip2[1]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[2]]] = (cube.RotP2[cube.PosP2[ps.ip2[2]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[3]]] = (cube.RotP2[cube.PosP2[ps.ip2[3]]] + 1) % 2
 
-		tmp = ip3[0]
+		tmp = ps.ip3[0]
 		for i := 0; i < 23; i++ {
-			ip3[i] = ip3[i+1]
+			ps.ip3[i] = ps.ip3[i+1]
 		}
-		ip3[23] = tmp
+		ps.ip3[23] = tmp
 
 		return cube
 	}
 }
 
-func counterClockwiseWithPose(ip2 [4]uint8, ip3 [24]uint8) moveFunction {
+func counterClockwiseWithPose(ps poseSwap) moveFunction {
 	return func(cube *Rubik) *Rubik {
 		var tmp uint8 = 0
 
-		tmp = cube.PosP2[ip2[0]]
-		cube.PosP2[ip2[0]] = cube.PosP2[ip2[1]]
-		cube.PosP2[ip2[1]] = cube.PosP2[ip2[2]]
-		cube.PosP2[ip2[2]] = cube.PosP2[ip2[3]]
-		cube.PosP2[ip2[3]] = tmp
+		tmp = cube.PosP2[ps.ip2[0]]
+		cube.PosP2[ps.ip2[0]] = cube.PosP2[ps.ip2[1]]
+		cube.PosP2[ps.ip2[1]] = cube.PosP2[ps.ip2[2]]
+		cube.PosP2[ps.ip2[2]] = cube.PosP2[ps.ip2[3]]
+		cube.PosP2[ps.ip2[3]] = tmp
 
-		cube.RotP2[cube.PosP2[ip2[0]]] = (cube.RotP2[cube.PosP2[ip2[0]]] + 1) % 2
-		cube.RotP2[cube.PosP2[ip2[1]]] = (cube.RotP2[cube.PosP2[ip2[1]]] + 1) % 2
-		cube.RotP2[cube.PosP2[ip2[2]]] = (cube.RotP2[cube.PosP2[ip2[2]]] + 1) % 2
-		cube.RotP2[cube.PosP2[ip2[3]]] = (cube.RotP2[cube.PosP2[ip2[3]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[0]]] = (cube.RotP2[cube.PosP2[ps.ip2[0]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[1]]] = (cube.RotP2[cube.PosP2[ps.ip2[1]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[2]]] = (cube.RotP2[cube.PosP2[ps.ip2[2]]] + 1) % 2
+		cube.RotP2[cube.PosP2[ps.ip2[3]]] = (cube.RotP2[cube.PosP2[ps.ip2[3]]] + 1) % 2
 
-		tmp = ip3[23]
+		tmp = ps.ip3[23]
 		for i := 23; i > 0; i-- {
-			ip3[i] = ip3[i-1]
+			ps.ip3[i] = ps.ip3[i-1]
 		}
-		ip3[0] = tmp
+		ps.ip3[0] = tmp
 
 		return cube
 	}
+}
+
+var poseSwapU = poseSwap{
+	[4]uint8{
+		0, 1, 2, 3,
+	},
+	[24]uint8{}
+}
+
+var poseSwapF = poseSwap{
+	[4]uint8{
+		2, 5, 10, 6,
+	},
+	[24]uint8{}
+}
+
+var poseSwapR = poseSwap{
+	[4]uint8{
+		1, 4, 9, 5,
+	},
+	[24]uint8{}
+}
+
+var poseSwapB = poseSwap{
+	[4]uint8{
+		0, 7, 8, 4,
+	},
+	[24]uint8{}
+}
+
+var poseSwapL = poseSwap{
+	[4]uint8{
+		3, 6, 11, 7,
+	},
+	[24]uint8{}
+}
+
+var poseSwapD = poseSwap{
+	[4]uint8{
+		8, 11, 10, 9,
+	},
+	[24]uint8{}
 }
 
 const dispatcherLen int = 12
@@ -285,144 +332,84 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 			face: U,
 			turn: Clockwise,
 		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				0, 1, 2, 3,
-			}, [4]uint8{
-				1, 2, 3, 0,
-			}),
+		fun: clockwiseWithPose(poseSwapU),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: U,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseWithPose(
-			[4]uint8{
-				0, 1, 2, 3,
-			}, [4]uint8{
-				1, 2, 3, 0,
-			}),
+		fun: counterClockwiseWithPose(poseSwapU),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: L,
 			turn: Clockwise,
 		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				3, 6, 11, 7,
-			}, [4]uint8{
-				3, 7, 4, 0,
-			}),
+		fun: clockwiseWithPose(poseSwapL),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: L,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseWithPose(
-			[4]uint8{
-				3, 6, 11, 7,
-			}, [4]uint8{
-				3, 7, 4, 0,
-			}),
+		fun: counterClockwiseWithPose(poseSwapL),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: F,
 			turn: Clockwise,
 		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				2, 5, 10, 6,
-			}, [4]uint8{
-				2, 6, 7, 3,
-			}),
+		fun: clockwiseWithPose(poseSwapF),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: F,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseWithPose(
-			[4]uint8{
-				2, 5, 10, 6,
-			}, [4]uint8{
-				2, 6, 7, 3,
-			}),
+		fun: counterClockwiseWithPose(poseSwapF),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: R,
 			turn: Clockwise,
 		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				1, 4, 9, 5,
-			}, [4]uint8{
-				1, 5, 6, 2,
-			}),
+		fun: clockwiseWithPose(poseSwapR),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: R,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseWithPose(
-			[4]uint8{
-				1, 4, 9, 5,
-			}, [4]uint8{
-				1, 5, 6, 2,
-			}),
+		fun: counterClockwiseWithPose(poseSwapR),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: B,
 			turn: Clockwise,
 		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				0, 7, 8, 4,
-			}, [4]uint8{
-				0, 4, 5, 1,
-			}),
+		fun: clockwiseWithPose(poseSwapB),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: B,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseWithPose(
-			[4]uint8{
-				0, 7, 8, 4,
-			}, [4]uint8{
-				0, 4, 5, 1,
-			}),
+		fun: counterClockwiseWithPose(poseSwapB),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: D,
 			turn: Clockwise,
 		},
-		fun: clockwiseWithPose(
-			[4]uint8{
-				8, 11, 10, 9,
-			}, [4]uint8{
-				6, 5, 4, 7,
-			}),
+		fun: clockwiseWithPose(poseSwapD),
 	},
 	dispatcher{
 		move: RubikMove{
 			face: D,
 			turn: CounterClockwise,
 		},
-		fun: counterClockwiseWithPose(
-			[4]uint8{
-				8, 11, 10, 9,
-			}, [4]uint8{
-				6, 5, 4, 7,
-			}),
+		fun: counterClockwiseWithPose(poseSwapD),
 	},
 }
 
