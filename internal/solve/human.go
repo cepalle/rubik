@@ -20,7 +20,7 @@ func getIndex(lst []uint8, value uint8) int {
 func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	if debug {
-		fmt.Println("Solving this cube :")
+		fmt.Println("Solving this Cube :")
 	}
 	if debug {
 		if len(sequence) != 0 {
@@ -127,9 +127,19 @@ func upToUpCorners(rubik makemove.Rubik, face, target uint8) []makemove.RubikMov
 	return sequence
 }
 
-func upCornersOrientation(rubik makemove.Rubik, face uint8) []makemove.RubikMoves {
+func upCornersOrientation(rubik makemove.Rubik, corner uint8) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
-	move := makemove.AllRubikMovesWithName[6+(3*((face+4-1)%4))]
+	var move makemove.RubikMovesWithName
+	switch corner {
+	case 0:
+		move = makemove.AllRubikMovesWithName[15]
+	case 1:
+		move = makemove.AllRubikMovesWithName[6]
+	case 2:
+		move = makemove.AllRubikMovesWithName[12]
+	case 3:
+		move = makemove.AllRubikMovesWithName[9]
+	}
 	sequence = append(sequence, move.Rev)
 	sequence = append(sequence, makemove.AllRubikMovesWithName[3].Rev)
 	sequence = append(sequence, move.Move)
@@ -139,26 +149,38 @@ func upCornersOrientation(rubik makemove.Rubik, face uint8) []makemove.RubikMove
 
 func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	var faces = [24]uint8{5, 5, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 4, 4}
+	var corners = [24]uint8{0, 1, 2, 3, 0, 2, 2, 3, 3, 1, 1, 0, 0, 2, 2, 3, 3, 1, 1, 0, 2, 3, 0, 1}
+	var rots = [4][4]uint8{{0, 0, 2, 1}, {2, 0, 1, 0}, {0, 1, 0, 2}, {1, 2, 0, 0}}
 	reader := bufio.NewReader(os.Stdin)
 	if debug {
 		fmt.Println("Placing the top corners :")
 	}
 	for i := uint8(0); i < 4; i++ {
 		var seqTmp []makemove.RubikMoves
-		index := uint8(getIndex(rubik.PosP3[:], i))
-		face := uint8(index % 4)
-		switch floor := uint8(index / 4); floor {
-		case 0:
-			seqTmp = upToUpCorners(rubik, face, i)
-		case 1:
-			seqTmp = downToUpCorners(rubik, face, i)
+		index := uint8(getIndex(rubik.PosFP3[:], i))
+		if index == i {
+			continue
+		}
+		face := faces[index]
+		corner := corners[index]
+		fmt.Printf("target : %d, index : %d, face : %d, corner : %d\n", i, index, face, corner)
+		fmt.Println(rubik)
+		if corner != i && index < 12 {
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Move)
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+rots[corner][i]].Move)
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Rev)
+		} else if corner != i && index > 11 {
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+rots[corner][i]].Move)
 		}
 		rubik = rubik.DoMoves(seqTmp)
 		sequence = append(sequence, seqTmp...)
-		index = uint8(getIndex(rubik.PosP3[:], i))
-		face = uint8(index % 4)
-		for rubik.RotP3[i] != 0 || rubik.PosP3[i] != i {
-			seqTmp = upCornersOrientation(rubik, face)
+		fmt.Println("moves :", input.SequenceToString(seqTmp))
+		index = uint8(getIndex(rubik.PosFP3[:], i))
+		face = faces[index]
+		fmt.Printf("target : %d, index : %d, face : %d, corner : %d\n", i, index, face, corner)
+		for rubik.PosFP3[i] != i {
+			seqTmp = upCornersOrientation(rubik, i)
 			fmt.Println(input.SequenceToString(seqTmp))
 			rubik = rubik.DoMoves(seqTmp)
 			reader.ReadString('\n')
