@@ -2,3 +2,5 @@ tags
 .idea
 *.swp
 build
+*.gob
+tmp

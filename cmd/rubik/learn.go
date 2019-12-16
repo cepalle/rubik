@@ -9,11 +9,12 @@ import (
 	"github.com/goml/gobrain"
 )
 
-func makePatterns(bfsRes []solve.NodeExp) [][][]float64 {
+func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 	var patterns [][][]float64
 
 	for _, e := range bfsRes {
 		var input []float64
+		var output []float64
 
 		for i := 0; i < 12; i++ {
 			input = append(input, float64(e.Cube.PosP2[i]))
@@ -24,8 +25,12 @@ func makePatterns(bfsRes []solve.NodeExp) [][][]float64 {
 		for i := 0; i < 24; i++ {
 			input = append(input, float64(e.Cube.PosFP3[i]))
 		}
+		for i := uint32(0); i <= bfs_depth; i++ {
+			output = append(output, 0)
+		}
+		output[e.Depth] = 1
 
-		line := [][]float64{input, {float64(e.Depth)}}
+		line := [][]float64{input, output}
 		patterns = append(patterns, line)
 	}
 	return patterns
@@ -54,18 +59,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(all)
+	// fmt.Println(all)
 
 	rand.Seed(0)
 
 	ff := &gobrain.FeedForward{}
 
-	ff.Init(48, 10, 1)
+	ff.Init(48, 24, 4)
 
-	patterns := makePatterns(all)
-	fmt.Println(patterns)
+	patterns := makePatterns(all, 3)
+	// fmt.Println(patterns)
 
-	ff.Train(patterns, 1000, 0.6, 0.4, true)
+	ff.Train(patterns, 100, 0.6, 0.4, true)
 	ff.Test(patterns)
-
 }
