@@ -1,4 +1,4 @@
-all: build
+all: build bfs_gen learn
 
 dir:
 	mkdir -p build/

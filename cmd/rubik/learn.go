@@ -94,15 +94,15 @@ func main() {
 
 	ff := &gobrain.FeedForward{}
 
-	ff.Init(48, 96, bfs_depth+1)
+	ff.Init(48, 48, bfs_depth+1)
 
 	patterns := makePatterns(equalize(all, bfs_depth), bfs_depth)
-	fmt.Println(patterns)
+	// fmt.Println(patterns)
 
 	ff.Train(patterns, 1000, 0.001, 0.001, true)
 	err := persist.Save("./ff.network", ff)
 	if err != nil {
 		log.Println("impossible to save network on file: ", err.Error())
 	}
-	ff.Test(patterns)
+	// ff.Test(patterns)
 }
