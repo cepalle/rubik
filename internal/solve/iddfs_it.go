@@ -26,6 +26,7 @@ func dls_predicate(r *makemove.Rubik, depth uint32, predicate func(*makemove.Rub
 	return nil
 }
 
+// /!\ update the cube with the state that has match the predicate
 func Iddfs_predicate(r *makemove.Rubik, predicate func(*makemove.Rubik) bool) []makemove.RubikMoves {
 	var res []makemove.RubikMoves
 
@@ -39,8 +40,8 @@ func Iddfs_predicate(r *makemove.Rubik, predicate func(*makemove.Rubik) bool) []
 }
 
 var rubik_goal_it = makemove.Rubik{
-	PosP2:  [12]uint8{0, 2, 1, 3,   12, 13, 14, 15,                 28, 30, 29, 31},
-	RotP2:  [12]uint8{4, 6, 5, 7,   16, 17, 18, 19,                 32, 33, 34, 35},
+	PosP2:  [12]uint8{0, 2, 1, 3, 12, 13, 14, 15, 28, 30, 29, 31},
+	RotP2:  [12]uint8{4, 6, 5, 7, 16, 17, 18, 19, 32, 33, 34, 35},
 	PosFP3: [24]uint8{8, 9, 10, 11, 20, 21, 22, 23, 24, 25, 26, 27, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47},
 }
 
@@ -67,6 +68,21 @@ func Iddfs_it(r makemove.Rubik) []makemove.RubikMoves {
 				}
 			}
 			return true
+		})
+		for _, e := range move_it {
+			res = append(res, e)
+		}
+	}
+	return input.ReverseMove(res)
+}
+
+func Iddfs_it2(r makemove.Rubik) []makemove.RubikMoves {
+	var res []makemove.RubikMoves
+
+	for nb_it := uint8(0); nb_it < 48; nb_it++ {
+		fmt.Println(nb_it)
+		move_it := Iddfs_predicate(&r, func(cube *makemove.Rubik) bool {
+			return float64(nb_it) < (48 - ScoringHamming(cube))
 		})
 		for _, e := range move_it {
 			res = append(res, e)
