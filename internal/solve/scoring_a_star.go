@@ -3,9 +3,9 @@ package solve
 import (
 	"github.com/cepalle/rubik/internal/makemove"
 	"github.com/goml/gobrain/persist"
+	"github.com/goml/gobrain"
 	"log"
 )
-import "github.com/goml/gobrain"
 
 func ScoringHamming(cube *makemove.Rubik) float64 {
 	var i uint8

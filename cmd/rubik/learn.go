@@ -4,10 +4,12 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
+	"log"
 	"math/rand"
 	"os"
 	"github.com/cepalle/rubik/internal/solve"
 	"github.com/goml/gobrain"
+	"github.com/goml/gobrain/persist"
 )
 
 func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
@@ -62,7 +64,7 @@ func equalize(bfsRes []solve.NodeExp, bfs_depth uint32) []solve.NodeExp {
 }
 
 func main() {
-	const bfs_depth = 4
+	const bfs_depth = 3
 
 	var all []solve.NodeExp
 	dataFile, err1 := os.Open("node_exp.gob")
@@ -92,11 +94,15 @@ func main() {
 
 	ff := &gobrain.FeedForward{}
 
-	ff.Init(48, 48, bfs_depth+1)
+	ff.Init(48, 96, bfs_depth+1)
 
 	patterns := makePatterns(equalize(all, bfs_depth), bfs_depth)
 	fmt.Println(patterns)
 
 	ff.Train(patterns, 1000, 0.001, 0.001, true)
+	err := persist.Save("./ff.network", ff)
+	if err != nil {
+		log.Println("impossible to save network on file: ", err.Error())
+	}
 	ff.Test(patterns)
 }

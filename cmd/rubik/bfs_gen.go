@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	const bfs_depth = 4
+	const bfs_depth = 3
 
 	var all []solve.NodeExp
 
