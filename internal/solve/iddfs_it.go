@@ -76,7 +76,7 @@ func Iddfs_it(r makemove.Rubik) []makemove.RubikMoves {
 	return input.ReverseMove(res)
 }
 
-func Iddfs_it2(r makemove.Rubik) []makemove.RubikMoves {
+func Iddfs_it_hamming(r makemove.Rubik) []makemove.RubikMoves {
 	var res []makemove.RubikMoves
 
 	for nb_it := uint8(0); nb_it < 48; nb_it++ {

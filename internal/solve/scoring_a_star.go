@@ -1,6 +1,11 @@
 package solve
 
-import "github.com/cepalle/rubik/internal/makemove"
+import (
+	"github.com/cepalle/rubik/internal/makemove"
+	"github.com/goml/gobrain/persist"
+	"log"
+)
+import "github.com/goml/gobrain"
 
 func ScoringHamming(cube *makemove.Rubik) float64 {
 	var i uint8
@@ -24,9 +29,23 @@ func ScoringHamming(cube *makemove.Rubik) float64 {
 	return tot
 }
 
-func MakeNNScoring() func(cube *makemove.Rubik) float64 {
+func nnOutputToScoring(out []float64) float64 {
+	var res float64 = 0
+
+	for i := 0; i < len(out); i++ {
+		res = res + float64(i)*out[i]
+	}
+	return res
+}
+
+func MakeNNScoring(filename string) func(cube *makemove.Rubik) float64 {
+	ff := &gobrain.FeedForward{}
+	err := persist.Load(filename, &ff)
+	if err != nil {
+		log.Println("impossible to save network on file: ", err.Error())
+	}
 
 	return func(cube *makemove.Rubik) float64 {
-		return 0
+		return nnOutputToScoring(ff.Update(makemove.Rubik_to_nn_input(cube)))
 	}
 }

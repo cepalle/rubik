@@ -513,3 +513,17 @@ func (cube Rubik) IsResolve() bool {
 	}
 	return true
 }
+
+func Rubik_to_nn_input(cube *Rubik) []float64 {
+	var input []float64
+	for i := 0; i < 12; i++ {
+		input = append(input, float64(cube.PosP2[i]))
+	}
+	for i := 0; i < 12; i++ {
+		input = append(input, float64(cube.RotP2[i]))
+	}
+	for i := 0; i < 24; i++ {
+		input = append(input, float64(cube.PosFP3[i]))
+	}
+	return input
+}

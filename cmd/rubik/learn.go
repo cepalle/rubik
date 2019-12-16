@@ -10,20 +10,6 @@ import (
 	"github.com/goml/gobrain"
 )
 
-func rubik_to_nn_input(cube *makemove.Rubik) []float64 {
-	var input []float64
-	for i := 0; i < 12; i++ {
-		input = append(input, float64(cube.PosP2[i]))
-	}
-	for i := 0; i < 12; i++ {
-		input = append(input, float64(cube.RotP2[i]))
-	}
-	for i := 0; i < 24; i++ {
-		input = append(input, float64(cube.PosFP3[i]))
-	}
-	return input
-}
-
 func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 	var patterns [][][]float64
 
@@ -31,7 +17,7 @@ func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 		var input []float64
 		var output []float64
 
-		input = rubik_to_nn_input(&e.Cube)
+		input = makemove.Rubik_to_nn_input(&e.Cube)
 		for i := uint32(0); i <= bfs_depth; i++ {
 			output = append(output, 0)
 		}

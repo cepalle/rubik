@@ -12,7 +12,8 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	rubik = rubik.DoMoves(moves)
 	fmt.Println(rubik)
 
-	sequence = Iddfs_it2(rubik)
+	// sequence = Iddfs_it_hamming(rubik)
+	sequence = IdaStar(rubik, MakeNNScoring("TODO"))
 	// sequence = Bfs(rubik)
 
 	// sequence = MechanicalHuman(rubik, true)
