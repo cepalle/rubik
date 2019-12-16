@@ -1,11 +1,9 @@
 package solve
 
 import (
-	"bufio"
 	"fmt"
 	"github.com/cepalle/rubik/internal/input"
 	"github.com/cepalle/rubik/internal/makemove"
-	"os"
 )
 
 func getIndex(lst []uint8, value uint8) int {
@@ -79,8 +77,18 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 
 func secondRow(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	var targetFaces = [8]uint8{4, 5, 5, 2, 2, 3, 3, 4}
 	if debug {
 		fmt.Println("Setting up the second row :")
+	}
+	for target := uint8(4); target < 8; target++ {
+		index := uint8(getIndex(rubik.PosP2[:], target))
+		targetFace := targetFaces[target%4+rubik.RotP2[target]]
+		if index == target {
+			continue
+		}
+		fmt.Printf("target : %d, index :%d, face : %d targetFace : %d\n", target, index, index%4+2, targetFace)
+
 	}
 	if debug {
 		if len(sequence) != 0 {
@@ -152,7 +160,6 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var faces = [24]uint8{5, 5, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 4, 4}
 	var corners = [24]uint8{0, 1, 2, 3, 0, 2, 2, 3, 3, 1, 1, 0, 0, 2, 2, 3, 3, 1, 1, 0, 2, 3, 0, 1}
 	var rots = [4][4]uint8{{0, 0, 2, 1}, {2, 0, 1, 0}, {0, 1, 0, 2}, {1, 2, 0, 0}}
-	reader := bufio.NewReader(os.Stdin)
 	if debug {
 		fmt.Println("Placing the top corners :")
 	}
@@ -164,8 +171,6 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 		face := faces[index]
 		corner := corners[index]
-		fmt.Printf("target : %d, index : %d, face : %d, corner : %d\n", i, index, face, corner)
-		fmt.Println(rubik)
 		if corner != i && index < 12 {
 			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Move)
 			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+rots[corner][i]].Move)
@@ -175,15 +180,12 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 		rubik = rubik.DoMoves(seqTmp)
 		sequence = append(sequence, seqTmp...)
-		fmt.Println("moves :", input.SequenceToString(seqTmp))
 		index = uint8(getIndex(rubik.PosFP3[:], i))
 		face = faces[index]
-		fmt.Printf("target : %d, index : %d, face : %d, corner : %d\n", i, index, face, corner)
 		for rubik.PosFP3[i] != i {
 			seqTmp = upCornersOrientation(rubik, i)
 			fmt.Println(input.SequenceToString(seqTmp))
 			rubik = rubik.DoMoves(seqTmp)
-			reader.ReadString('\n')
 			sequence = append(sequence, seqTmp...)
 		}
 	}
@@ -286,16 +288,19 @@ func upCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 			seqTmp = downToUpCross(rubik, i, index, face)
 		}
 		rubik = rubik.DoMoves(seqTmp)
-		fmt.Println(input.SequenceToString(seqTmp))
+		if len(seqTmp) != 0 {
+			fmt.Println(input.SequenceToString(seqTmp))
+		}
 		sequence = append(sequence, seqTmp...)
 		if rubik.RotP2[i] == 1 {
 			seqTmp = switchUpOrientation(rubik, i)
-			fmt.Println(input.SequenceToString(seqTmp))
+			if len(seqTmp) == 0 {
+				fmt.Println(input.SequenceToString(seqTmp))
+			}
 			sequence = append(sequence, seqTmp...)
 			rubik = rubik.DoMoves(seqTmp)
 		}
 	}
-	fmt.Println(rubik)
 	if debug {
 		if len(sequence) != 0 {
 			fmt.Println("Top cross done !")
@@ -318,10 +323,11 @@ func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
 
-	//	tmpSequence = secondRow(rubik, debug)
-	//	finalSequence = append(finalSequence, tmpSequence...)
-	//	rubik = rubik.DoMoves(tmpSequence)
-	//
+	fmt.Println(rubik)
+	tmpSequence = secondRow(rubik, debug)
+	finalSequence = append(finalSequence, tmpSequence...)
+	rubik = rubik.DoMoves(tmpSequence)
+
 	//	tmpSequence = downCross(rubik, debug)
 	//	finalSequence = append(finalSequence, tmpSequence...)
 	//	rubik = rubik.DoMoves(tmpSequence)

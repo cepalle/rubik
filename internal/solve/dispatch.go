@@ -1,7 +1,6 @@
 package solve
 
 import (
-	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
@@ -18,7 +17,6 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	// sequence = IdaStar(rubik, ScoringHamming)
 	// sequence = IdaStar(rubik, ScoringHamming)
 	rubik = rubik.DoMoves(sequence)
-	fmt.Println(rubik)
 	//sequence = []makemove.RubikMoves{}
 	return sequence
 }
