@@ -23,3 +23,10 @@ func ScoringHamming(cube *makemove.Rubik) float64 {
 	}
 	return tot
 }
+
+func MakeNNScoring() func(cube *makemove.Rubik) float64 {
+
+	return func(cube *makemove.Rubik) float64 {
+		return 0
+	}
+}

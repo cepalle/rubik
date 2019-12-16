@@ -3,11 +3,26 @@ package main
 import (
 	"encoding/gob"
 	"fmt"
+	"github.com/cepalle/rubik/internal/makemove"
 	"math/rand"
 	"os"
 	"github.com/cepalle/rubik/internal/solve"
 	"github.com/goml/gobrain"
 )
+
+func rubik_to_nn_input(cube *makemove.Rubik) []float64 {
+	var input []float64
+	for i := 0; i < 12; i++ {
+		input = append(input, float64(cube.PosP2[i]))
+	}
+	for i := 0; i < 12; i++ {
+		input = append(input, float64(cube.RotP2[i]))
+	}
+	for i := 0; i < 24; i++ {
+		input = append(input, float64(cube.PosFP3[i]))
+	}
+	return input
+}
 
 func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 	var patterns [][][]float64
@@ -16,15 +31,7 @@ func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 		var input []float64
 		var output []float64
 
-		for i := 0; i < 12; i++ {
-			input = append(input, float64(e.Cube.PosP2[i]))
-		}
-		for i := 0; i < 12; i++ {
-			input = append(input, float64(e.Cube.RotP2[i]))
-		}
-		for i := 0; i < 24; i++ {
-			input = append(input, float64(e.Cube.PosFP3[i]))
-		}
+		input = rubik_to_nn_input(&e.Cube)
 		for i := uint32(0); i <= bfs_depth; i++ {
 			output = append(output, 0)
 		}
@@ -36,7 +43,41 @@ func makePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 	return patterns
 }
 
+func equalize(bfsRes []solve.NodeExp, bfs_depth uint32) []solve.NodeExp {
+	var nbByDepth []uint32
+
+	for i := uint32(0); i <= bfs_depth; i++ {
+		nbByDepth = append(nbByDepth, 0)
+	}
+	for _, e := range bfsRes {
+		nbByDepth[e.Depth]++
+	}
+	var mx uint32
+	mx = 0
+
+	for _, e := range nbByDepth {
+		if e > mx {
+			mx = e
+		}
+	}
+
+	for i := uint32(0); i < uint32(len(nbByDepth)); i++ {
+		for ; nbByDepth[i] < mx; {
+			for j := int(0); j < len(bfsRes) && nbByDepth[i] < mx; j++ {
+				if bfsRes[j].Depth == i {
+					nbByDepth[i]++
+					bfsRes = append(bfsRes, bfsRes[j])
+				}
+			}
+		}
+
+	}
+	return bfsRes
+}
+
 func main() {
+	const bfs_depth = 4
+
 	var all []solve.NodeExp
 	dataFile, err1 := os.Open("node_exp.gob")
 
@@ -65,11 +106,11 @@ func main() {
 
 	ff := &gobrain.FeedForward{}
 
-	ff.Init(48, 24, 4)
+	ff.Init(48, 48, bfs_depth+1)
 
-	patterns := makePatterns(all, 3)
-	// fmt.Println(patterns)
+	patterns := makePatterns(equalize(all, bfs_depth), bfs_depth)
+	fmt.Println(patterns)
 
-	ff.Train(patterns, 100, 0.6, 0.4, true)
+	ff.Train(patterns, 1000, 0.001, 0.001, true)
 	ff.Test(patterns)
 }

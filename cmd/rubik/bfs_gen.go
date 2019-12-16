@@ -8,9 +8,11 @@ import (
 )
 
 func main() {
+	const bfs_depth = 4
+
 	var all []solve.NodeExp
 
-	all = solve.Bfs_explorer(3)
+	all = solve.Bfs_explorer(bfs_depth)
 
 	dataFile, err := os.Create("node_exp.gob")
 
