@@ -55,7 +55,8 @@ func MakeNNScoring(filename string) func(cube *makemove.Rubik) float64 {
 }
 
 func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
-	var n deep.Neural
+	var b []byte
+	var n *deep.Neural
 	dataFile, err := os.Open(filename)
 
 	if err != nil {
@@ -64,8 +65,8 @@ func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
 	}
 
 	dataDecoder := gob.NewDecoder(dataFile)
-	err = dataDecoder.Decode(&n)
-	fmt.Println(n)
+	err = dataDecoder.Decode(&b)
+	n, _ = deep.Unmarshal(b)
 
 	if err != nil {
 		fmt.Println(err)
@@ -80,7 +81,7 @@ func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
 
 	return func(cube *makemove.Rubik) float64 {
 
-		fmt.Println(makemove.Rubik_to_nn_input(cube), "=>", n.Predict(makemove.Rubik_to_nn_input(cube)))
+		// fmt.Println(makemove.Rubik_to_nn_input(cube), "=>", n.Predict(makemove.Rubik_to_nn_input(cube)))
 
 		return nnOutputToScoring(n.Predict(makemove.Rubik_to_nn_input(cube)))
 	}

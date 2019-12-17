@@ -96,7 +96,8 @@ func main() {
 		os.Exit(1)
 	}
 	dataEncoder := gob.NewEncoder(dataFile)
-	err = dataEncoder.Encode(*n)
+	b, _ := n.Marshal()
+	err = dataEncoder.Encode(b)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
