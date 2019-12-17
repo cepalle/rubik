@@ -16,3 +16,6 @@ bfs_gen: dir
 
 learn: dir
 	go build -o build/learn cmd/rubik/learn.go
+
+learn_deep: dir
+	go build -o build/learn cmd/rubik/learn_deep.go

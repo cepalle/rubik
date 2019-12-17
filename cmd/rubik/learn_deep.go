@@ -4,7 +4,6 @@ import (
 	"encoding/gob"
 	"fmt"
 	"github.com/cepalle/rubik/internal/learn"
-	"log"
 	"math/rand"
 	"os"
 	"github.com/cepalle/rubik/internal/solve"
