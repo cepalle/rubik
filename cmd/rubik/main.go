@@ -20,15 +20,15 @@ func main() {
 		"Number of random move to shuffle the cube")
 	flag.Parse()
 	if nbrMove == 0 && moves == "" {
-		fmt.Fprintf(os.Stderr, "Input error: Missing argument\n")
+		_, _ = fmt.Fprintf(os.Stderr, "Input error: Missing argument\n")
 		os.Exit(1)
 	}
 	if nbrMove < 0 {
-		fmt.Fprintf(os.Stderr, "Input error: Number of move to shuffle not valid\n")
+		_, _ = fmt.Fprintf(os.Stderr, "Input error: Number of move to shuffle not valid\n")
 		os.Exit(1)
 	}
 	if nbrMove != 0 && len(moves) != 0 {
-		fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
+		_, _ = fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
 	if moves == "" {
 		soluce = solve.DispatchSolve(input.GenerateRandomSequence(nbrMove))

@@ -80,9 +80,6 @@ func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
 	}
 
 	return func(cube *makemove.Rubik) float64 {
-
-		// fmt.Println(makemove.Rubik_to_nn_input(cube), "=>", n.Predict(makemove.Rubik_to_nn_input(cube)))
-
 		return nnOutputToScoring(n.Predict(makemove.Rubik_to_nn_input(cube)))
 	}
 }
