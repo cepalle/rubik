@@ -1,4 +1,4 @@
-all: build bfs_gen learn
+all: build bfs_gen learn learn_deep
 
 dir:
 	mkdir -p build/
@@ -18,4 +18,4 @@ learn: dir
 	go build -o build/learn cmd/rubik/learn.go
 
 learn_deep: dir
-	go build -o build/learn cmd/rubik/learn_deep.go
+	go build -o build/learn_deep cmd/rubik/learn_deep.go

@@ -13,7 +13,8 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	fmt.Println(rubik)
 
 	// sequence = Iddfs_it_hamming(rubik)
-	sequence = AStart(rubik, MakeNNScoring("./ff.network"))
+	// sequence = AStart(rubik, MakeNNScoring(learn.Nnfilename))
+	sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
 	// sequence = Bfs(rubik)
 
 	// sequence = MechanicalHuman(rubik, true)

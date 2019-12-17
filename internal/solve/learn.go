@@ -1,13 +1,14 @@
-package learn
+package solve
 
 import (
 	"github.com/cepalle/rubik/internal/makemove"
-	"github.com/cepalle/rubik/internal/solve"
 )
 
 const Bfs_depth = 3
+const Nnfilename = "./ff.network"
+const NnDeepFilename = "./deep.gob"
 
-func MakePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
+func MakePatterns(bfsRes []NodeExp, bfs_depth uint32) [][][]float64 {
 	var patterns [][][]float64
 
 	for _, e := range bfsRes {
@@ -26,7 +27,7 @@ func MakePatterns(bfsRes []solve.NodeExp, bfs_depth uint32) [][][]float64 {
 	return patterns
 }
 
-func Equalize(bfsRes []solve.NodeExp, bfs_depth uint32) []solve.NodeExp {
+func Equalize(bfsRes []NodeExp, bfs_depth uint32) []NodeExp {
 	var nbByDepth []uint32
 
 	for i := uint32(0); i <= bfs_depth; i++ {

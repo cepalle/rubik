@@ -3,13 +3,12 @@ package main
 import (
 	"encoding/gob"
 	"fmt"
-	"github.com/cepalle/rubik/internal/learn"
-	"log"
-	"math/rand"
-	"os"
 	"github.com/cepalle/rubik/internal/solve"
 	"github.com/goml/gobrain"
 	"github.com/goml/gobrain/persist"
+	"log"
+	"math/rand"
+	"os"
 )
 
 func main() {
@@ -42,13 +41,13 @@ func main() {
 
 	ff := &gobrain.FeedForward{}
 
-	ff.Init(48, 48, learn.Bfs_depth+1)
+	ff.Init(48, 48, solve.Bfs_depth+1)
 
-	patterns := learn.MakePatterns(learn.Equalize(all, learn.Bfs_depth), learn.Bfs_depth)
+	patterns := solve.MakePatterns(solve.Equalize(all, solve.Bfs_depth), solve.Bfs_depth)
 	// fmt.Println(patterns)
 
 	ff.Train(patterns, 1000, 0.001, 0.001, true)
-	err := persist.Save("./ff.network", ff)
+	err := persist.Save(solve.Nnfilename, ff)
 	if err != nil {
 		log.Println("impossible to save network on file: ", err.Error())
 	}
