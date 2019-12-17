@@ -6,13 +6,13 @@ import (
 	"github.com/cepalle/rubik/internal/makemove"
 	"github.com/cepalle/rubik/internal/solve"
 	"github.com/patrikeh/go-deep"
-	deep_training "github.com/patrikeh/go-deep/training"
+	deeptraining "github.com/patrikeh/go-deep/training"
 	"math/rand"
 	"os"
 )
 
-func makeExemple(bfsRes []solve.NodeExp, bfs_depth uint32) deep_training.Examples {
-	var exemple deep_training.Examples
+func makeExemple(bfsRes []solve.NodeExp, bfs_depth uint32) deeptraining.Examples {
+	var exemple deeptraining.Examples
 
 	for _, e := range bfsRes {
 		var input []float64
@@ -24,7 +24,7 @@ func makeExemple(bfsRes []solve.NodeExp, bfs_depth uint32) deep_training.Example
 		}
 		output[e.Depth] = 1
 
-		exemple = append(exemple, deep_training.Example{
+		exemple = append(exemple, deeptraining.Example{
 			Input:    input,
 			Response: output,
 		})
@@ -82,9 +82,9 @@ func main() {
 	})
 
 	// params: learning rate, momentum, alpha decay, nesterov
-	optimizer := deep_training.NewSGD(0.001, 0.001, 1e-6, true)
+	optimizer := deeptraining.NewSGD(0.001, 0.001, 1e-6, true)
 	// params: optimizer, verbosity (print stats at every 50th iteration)
-	trainer := deep_training.NewTrainer(optimizer, 10)
+	trainer := deeptraining.NewTrainer(optimizer, 10)
 
 	training, heldout := exemples.Split(0.25)
 	trainer.Train(n, training, heldout, 500) // training, validation, iterations
