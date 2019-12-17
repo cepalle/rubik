@@ -55,22 +55,7 @@ func MakeNNScoring(filename string) func(cube *makemove.Rubik) float64 {
 }
 
 func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
-	n := deep.NewNeural(&deep.Config{
-		Inputs: 48,
-		Layout: []int{48, 48, Bfs_depth + 1},
-		/* Activation functions: Sigmoid, Tanh, ReLU, Linear */
-		Activation: deep.ActivationSigmoid,
-		/* Determines output layer activation & loss function:
-		ModeRegression: linear outputs with MSE loss
-		ModeMultiClass: softmax output with Cross Entropy loss
-		ModeMultiLabel: sigmoid output with Cross Entropy loss
-		ModeBinary: sigmoid output with binary CE loss */
-		Mode: deep.ModeMultiClass,
-		/* Weight initializers: {deep.NewNormal(μ, σ), deep.NewUniform(μ, σ)} */
-		Weight: deep.NewNormal(1.0, 0.0),
-		Bias:   true,
-	})
-
+	var n deep.Neural
 	dataFile, err := os.Open(filename)
 
 	if err != nil {
@@ -80,6 +65,7 @@ func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
 
 	dataDecoder := gob.NewDecoder(dataFile)
 	err = dataDecoder.Decode(&n)
+	fmt.Println(n)
 
 	if err != nil {
 		fmt.Println(err)
@@ -93,6 +79,9 @@ func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
 	}
 
 	return func(cube *makemove.Rubik) float64 {
+
+		fmt.Println(makemove.Rubik_to_nn_input(cube), "=>", n.Predict(makemove.Rubik_to_nn_input(cube)))
+
 		return nnOutputToScoring(n.Predict(makemove.Rubik_to_nn_input(cube)))
 	}
 }

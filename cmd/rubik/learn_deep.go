@@ -67,7 +67,7 @@ func main() {
 
 	n := deep.NewNeural(&deep.Config{
 		Inputs: 48,
-		Layout: []int{48, 48, solve.Bfs_depth + 1},
+		Layout: []int{48, 96, 48, solve.Bfs_depth + 1},
 		/* Activation functions: Sigmoid, Tanh, ReLU, Linear */
 		Activation: deep.ActivationSigmoid,
 		/* Determines output layer activation & loss function:
@@ -96,7 +96,7 @@ func main() {
 		os.Exit(1)
 	}
 	dataEncoder := gob.NewEncoder(dataFile)
-	err = dataEncoder.Encode(n)
+	err = dataEncoder.Encode(*n)
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
