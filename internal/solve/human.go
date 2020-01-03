@@ -147,6 +147,7 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		var seqTmp []makemove.RubikMoves
 		index := uint8(getIndex(rubik.PosP3[:], i))
 		face := uint8(index % 4)
+		fmt.Printf("corner : %d\tindex: %d\tface : %d\n", i, index, face)
 		switch floor := uint8(index / 4); floor {
 		case 0:
 			seqTmp = upToUpCorners(rubik, face, i)
@@ -225,11 +226,11 @@ func downToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove.R
 	if face != target {
 		switch diff := (face + 4 - target) % 4; diff {
 		case 1:
-			sequence = append(sequence, makemove.AllRubikMovesWithName[3+2].Move)
+			sequence = append(sequence, makemove.AllRubikMovesWithName[3+0].Move)
 		case 2:
 			sequence = append(sequence, makemove.AllRubikMovesWithName[3+1].Move)
 		case 3:
-			sequence = append(sequence, makemove.AllRubikMovesWithName[3+0].Move)
+			sequence = append(sequence, makemove.AllRubikMovesWithName[3+2].Move)
 		}
 	}
 	sequence = append(sequence, makemove.AllRubikMovesWithName[6+(3*target+1)].Move)

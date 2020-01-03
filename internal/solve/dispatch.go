@@ -11,7 +11,7 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 
 	rubik = rubik.DoMoves(moves)
 
-	//sequence = MechanicalHuman(rubik, true)
+	sequence = MechanicalHuman(rubik, true)
 	fmt.Println()
 	fmt.Println()
 	fmt.Println()
