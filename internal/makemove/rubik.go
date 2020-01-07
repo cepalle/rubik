@@ -1,7 +1,6 @@
 package makemove
 
 import (
-	"fmt"
 	"log"
 )
 
@@ -453,7 +452,6 @@ func (cube Rubik) DoMove(m RubikMoves) Rubik {
 		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
 			for j := uint8(0); j < m.nbTurn; j++ {
 				dispatcherTab[i].fun(&cube)
-				fmt.Println(cube)
 			}
 			return cube
 		}
