@@ -2,6 +2,7 @@ package solve
 
 import (
 	"github.com/cepalle/rubik/internal/makemove"
+	"os"
 )
 
 func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
@@ -11,6 +12,9 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	rubik = rubik.DoMoves(moves)
 
 	sequence = MechanicalHuman(rubik, true)
+	if sequence == nil {
+		os.Exit(1)
+	}
 	// fmt.Println()
 	// fmt.Println()
 	// fmt.Println()
