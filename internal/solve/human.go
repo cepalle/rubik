@@ -5,6 +5,7 @@ import (
 	"github.com/cepalle/rubik/internal/input"
 	"github.com/cepalle/rubik/internal/makemove"
 	"os"
+	"time"
 )
 
 func getIndex(lst []uint8, value uint8) int {
@@ -123,26 +124,33 @@ func upCornersOrientation(rubik makemove.Rubik, corner uint8) []makemove.RubikMo
 
 func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
-	var faces = [24]uint8{5, 5, 5, 5, 3, 3, 2, 2, 1, 1, 0, 0, 3, 3, 2, 2, 1, 1, 0, 0, 4, 4, 4, 4}
-	var corners = [24]uint8{0, 1, 2, 3, 0, 2, 2, 3, 3, 1, 1, 0, 0, 2, 2, 3, 3, 1, 1, 0, 2, 3, 0, 1}
-	var rots = [4][4]uint8{{0, 0, 2, 1}, {2, 0, 1, 0}, {0, 1, 0, 2}, {1, 2, 0, 0}}
+	var faces = [24]uint8{3, 0, 2, 1, 3, 2, 2, 1, 1, 0, 0, 3, 3, 2, 2, 1, 1, 0, 0, 3, 2, 1, 3, 0}
+	var targetFace = [4]uint8{3, 0, 2, 1}
+	//	var corners = [24]uint8{0, 1, 2, 3, 0, 2, 2, 3, 3, 1, 1, 0, 0, 2, 2, 3, 3, 1, 1, 0, 2, 3, 0, 1}
+	var rots = [4][4]uint8{{3, 2, 1, 0}, {0, 3, 2, 1}, {1, 0, 3, 2}, {2, 1, 0, 3}}
 	if debug {
 		fmt.Println("Placing the top corners :")
 	}
 	for i := uint8(0); i < 4; i++ {
+		fmt.Println(rubik)
 		var seqTmp []makemove.RubikMoves
 		index := uint8(getIndex(rubik.PosFP3[:], i))
 		if index == i {
 			continue
 		}
 		face := faces[index]
-		corner := corners[index]
-		if corner != i && index < 12 {
-			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Move)
-			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+rots[corner][i]].Move)
+		targetMove := rots[face][targetFace[i]]
+		fmt.Println(i, targetFace[i], index, face, targetMove)
+		if targetMove == 3 {
+		} else if index < 12 {
 			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Rev)
-		} else if corner != i && index > 11 {
-			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+rots[corner][i]].Move)
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+targetMove].Rev)
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Move)
+			if targetMove%2 == 0 {
+				seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[4].Move)
+			}
+		} else {
+			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[3+targetMove].Move)
 		}
 		rubik = rubik.DoMoves(seqTmp)
 		fmt.Println(input.SequenceToString(seqTmp))
@@ -154,7 +162,7 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 			fmt.Println(input.SequenceToString(seqTmp))
 			rubik = rubik.DoMoves(seqTmp)
 			sequence = append(sequence, seqTmp...)
-			break
+			time.Sleep(10 * time.Millisecond)
 		}
 	}
 	if debug {
@@ -300,12 +308,21 @@ func checkTopCross(rubik makemove.Rubik) bool {
 }
 
 func checkTopCorners(rubik makemove.Rubik) bool {
-	fmt.Println(rubik)
 	for i, pos := range rubik.PosP2 {
+		if i > 3 {
+			break
+		}
+		if uint8(i) != pos && rubik.RotP2[i] != 0 {
+			fmt.Fprintf(os.Stderr, "Top cross removed\n")
+			return false
+		}
+	}
+	for i, pos := range rubik.PosFP3 {
 		if i > 11 {
 			break
 		}
 		if uint8(i) != pos {
+			fmt.Println(i, pos)
 			fmt.Fprintf(os.Stderr, "Top corners failed\n")
 			return false
 		}
