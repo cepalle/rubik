@@ -44,10 +44,12 @@ func GenerateRandomSequence(nbrMove int) []makemove.RubikMoves {
 func SequenceToString(moves []makemove.RubikMoves) string {
 	var output string
 
-	for _, move := range moves {
+	for i, move := range moves {
 		newMove, err := moveToString(move)
 		if err != nil {
 			log.Fatal(err)
+		} else if len(moves) == i+1 {
+			output += newMove
 		} else {
 			output += newMove + " "
 		}
