@@ -125,13 +125,11 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	var faces = [24]uint8{3, 0, 2, 1, 3, 2, 2, 1, 1, 0, 0, 3, 3, 2, 2, 1, 1, 0, 0, 3, 2, 1, 3, 0}
 	var targetFace = [4]uint8{3, 0, 2, 1}
-	//	var corners = [24]uint8{0, 1, 2, 3, 0, 2, 2, 3, 3, 1, 1, 0, 0, 2, 2, 3, 3, 1, 1, 0, 2, 3, 0, 1}
 	var rots = [4][4]uint8{{3, 2, 1, 0}, {0, 3, 2, 1}, {1, 0, 3, 2}, {2, 1, 0, 3}}
 	if debug {
-		fmt.Println("Placing the top corners :")
+		fmt.Println("\nPlacing the top corners :")
 	}
 	for i := uint8(0); i < 4; i++ {
-		fmt.Println(rubik)
 		var seqTmp []makemove.RubikMoves
 		index := uint8(getIndex(rubik.PosFP3[:], i))
 		if index == i {
@@ -139,7 +137,6 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 		face := faces[index]
 		targetMove := rots[face][targetFace[i]]
-		fmt.Println(i, index, face, targetFace[i], targetMove)
 		if targetMove == 3 {
 		} else if index < 12 {
 			seqTmp = append(seqTmp, makemove.AllRubikMovesWithName[6+(3*face)].Rev)
@@ -253,7 +250,7 @@ func switchUpOrientation(rubik makemove.Rubik, target uint8) []makemove.RubikMov
 func upCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	if debug {
-		fmt.Println("Placing the up cross :")
+		fmt.Println("\nPlacing the up cross :")
 	}
 	for i := uint8(0); i < 4; i++ {
 		fmt.Printf("Up edge number %d `", i)
