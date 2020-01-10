@@ -28,26 +28,32 @@ func moveToString(move makemove.RubikMoves) (string, error) {
 	return "", errors.New(fmt.Sprintf("You shouldn't get there"))
 }
 
-func GenerateRandomSequence(nbrMove int) []makemove.RubikMoves {
+func GenerateRandomSequence(nbrMove int, help string) []makemove.RubikMoves {
 	var Sequence []makemove.RubikMoves
 
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < nbrMove; i++ {
 		tmp := makemove.AllRubikMovesWithName[rand.Intn(makemove.NbRubikMoves)]
-		fmt.Printf("%s ", tmp.Name)
+		if help != "n" {
+			fmt.Printf("%s ", tmp.Name)
+		}
 		Sequence = append(Sequence, tmp.Move)
 	}
-	fmt.Printf("\n")
+	if help != "n" {
+		fmt.Printf("\n")
+	}
 	return Sequence
 }
 
 func SequenceToString(moves []makemove.RubikMoves) string {
 	var output string
 
-	for _, move := range moves {
+	for i, move := range moves {
 		newMove, err := moveToString(move)
 		if err != nil {
 			log.Fatal(err)
+		} else if len(moves) == i+1 {
+			output += newMove
 		} else {
 			output += newMove + " "
 		}

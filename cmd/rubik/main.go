@@ -12,12 +12,18 @@ import (
 func main() {
 	var moves string
 	var nbrMove int
+	var help string
+	var res string
 	var soluce []makemove.RubikMoves
 
 	flag.StringVar(&moves, "m", "",
 		"Moves that has to be done to shuffle the cube")
 	flag.IntVar(&nbrMove, "r", 0,
 		"Number of random move to shuffle the cube")
+	flag.StringVar(&help, "d", "",
+		"To print debug on human solver")
+	flag.StringVar(&res, "re", "",
+		"To print help on human solver")
 	flag.Parse()
 	if nbrMove == 0 && moves == "" {
 		_, _ = fmt.Fprintf(os.Stderr, "Input error: Missing argument\n")
@@ -31,9 +37,12 @@ func main() {
 		_, _ = fmt.Fprintf(os.Stderr, "Invalid input, either chose a random shuffle or write your own, random shuffle ignored\n")
 	}
 	if moves == "" {
-		soluce = solve.DispatchSolve(input.GenerateRandomSequence(nbrMove))
+		soluce = solve.DispatchSolve(input.GenerateRandomSequence(nbrMove, help), help)
 	} else {
-		soluce = solve.DispatchSolve(input.StringToSequence(moves))
+		soluce = solve.DispatchSolve(input.StringToSequence(moves), help)
 	}
-	fmt.Println(input.SequenceToString(soluce))
+	if res != "n" {
+		fmt.Println(input.SequenceToString(soluce))
+		fmt.Println("nbr coups :", len(soluce))
+	}
 }

@@ -3,9 +3,10 @@ package solve
 import (
 	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
+	"os"
 )
 
-func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
+func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	rubik := makemove.InitRubik()
 
@@ -15,17 +16,27 @@ func DispatchSolve(moves []makemove.RubikMoves) []makemove.RubikMoves {
 	// sequence = Bfs(rubik)
 	// sequence = Iddfs_it_hamming(rubik)
 	// sequence = AStart(rubik, MakeNNScoring(Nnfilename))
-	sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
+	// sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
 	// sequence = Bfs(rubik)
 
 	// sequence = MechanicalHuman(rubik, true)
 	// fmt.Println()
+	if help == "n" {
+		sequence = MechanicalHuman(rubik, false)
+	} else {
+		sequence = MechanicalHuman(rubik, true)
+	}
+	if sequence == nil {
+		os.Exit(1)
+	}
+	if help != "n" {
+		fmt.Println()
+	}
 	// fmt.Println()
 	// fmt.Println()
 	// sequence = IdaStar(rubik, ScoringHamming)
 	// sequence = IdaStar(rubik, ScoringHamming)
 	rubik = rubik.DoMoves(sequence)
-	fmt.Println(rubik)
 	//sequence = []makemove.RubikMoves{}
 	return sequence
 }
