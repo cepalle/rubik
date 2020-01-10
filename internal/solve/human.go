@@ -509,26 +509,15 @@ func checkDownCross(rubik makemove.Rubik) bool {
 func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var finalSequence []makemove.RubikMoves
 	var tmpSequence []makemove.RubikMoves
+	var correct bool
 
 	tmpSequence = upCross(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	correct := checkTopCross(rubik)
-	if !correct {
-		return nil
-	} else if debug {
-		fmt.Println("Check on up cross done.")
-	}
 
 	tmpSequence = upCorners(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	correct = checkTopCorners(rubik)
-	if !correct {
-		return nil
-	} else if debug {
-		fmt.Println("Check on up face done.")
-	}
 
 	tmpSequence = secondRow(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
@@ -537,17 +526,17 @@ func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	if !correct {
 		return nil
 	} else if debug {
-		fmt.Println("Check on up face done.")
+		fmt.Println("Check on second row done.")
 	}
 
-	//	tmpSequence = downCross(rubik, debug)
-	//	finalSequence = append(finalSequence, tmpSequence...)
-	//	rubik = rubik.DoMoves(tmpSequence)
+	tmpSequence = downCross(rubik, debug)
+	finalSequence = append(finalSequence, tmpSequence...)
+	rubik = rubik.DoMoves(tmpSequence)
 	correct = checkDownCross(rubik)
 	if !correct {
 		return nil
 	} else {
-		fmt.Println("Check on up face done.")
+		fmt.Println("Check on down cross done.")
 	}
 
 	//	tmpSequence = downCorners(rubik, debug)
