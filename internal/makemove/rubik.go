@@ -37,14 +37,14 @@ func InitRubik() Rubik {
 }
 
 type RubikMove struct {
-	face RubikFace
-	turn RubikFaceTurn
+	Face RubikFace
+	Turn RubikFaceTurn
 }
 
 type RubikMoves struct {
-	face   RubikFace
-	turn   RubikFaceTurn
-	nbTurn uint8
+	Face   RubikFace
+	Turn   RubikFaceTurn
+	NbTurn uint8
 }
 
 type RubikMovesWithName struct {
@@ -377,85 +377,85 @@ const dispatcherLen int = 12
 var dispatcherTab = [dispatcherLen]dispatcher{
 	dispatcher{
 		move: RubikMove{
-			face: U,
-			turn: Clockwise,
+			Face: U,
+			Turn: Clockwise,
 		},
 		fun: clockwiseWithPose(poseSwapU),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: U,
-			turn: CounterClockwise,
+			Face: U,
+			Turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(poseSwapU),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: L,
-			turn: Clockwise,
+			Face: L,
+			Turn: Clockwise,
 		},
 		fun: clockwiseWithPose(poseSwapL),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: L,
-			turn: CounterClockwise,
+			Face: L,
+			Turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(poseSwapL),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: F,
-			turn: Clockwise,
+			Face: F,
+			Turn: Clockwise,
 		},
 		fun: clockwiseWithPose(poseSwapF),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: F,
-			turn: CounterClockwise,
+			Face: F,
+			Turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(poseSwapF),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: R,
-			turn: Clockwise,
+			Face: R,
+			Turn: Clockwise,
 		},
 		fun: clockwiseWithPose(poseSwapR),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: R,
-			turn: CounterClockwise,
+			Face: R,
+			Turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(poseSwapR),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: B,
-			turn: Clockwise,
+			Face: B,
+			Turn: Clockwise,
 		},
 		fun: clockwiseWithPose(poseSwapB),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: B,
-			turn: CounterClockwise,
+			Face: B,
+			Turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(poseSwapB),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: D,
-			turn: Clockwise,
+			Face: D,
+			Turn: Clockwise,
 		},
 		fun: clockwiseWithPose(poseSwapD),
 	},
 	dispatcher{
 		move: RubikMove{
-			face: D,
-			turn: CounterClockwise,
+			Face: D,
+			Turn: CounterClockwise,
 		},
 		fun: counterClockwiseWithPose(poseSwapD),
 	},
@@ -463,8 +463,8 @@ var dispatcherTab = [dispatcherLen]dispatcher{
 
 func (cube Rubik) DoMove(m RubikMoves) Rubik {
 	for i := 0; i < dispatcherLen; i++ {
-		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
-			for j := uint8(0); j < m.nbTurn; j++ {
+		if dispatcherTab[i].move.Face == m.Face && dispatcherTab[i].move.Turn == m.Turn {
+			for j := uint8(0); j < m.NbTurn; j++ {
 				dispatcherTab[i].fun(&cube)
 			}
 			return cube
@@ -476,8 +476,8 @@ func (cube Rubik) DoMove(m RubikMoves) Rubik {
 
 func (cube *Rubik) DoMovePtr(m RubikMoves) *Rubik {
 	for i := 0; i < dispatcherLen; i++ {
-		if dispatcherTab[i].move.face == m.face && dispatcherTab[i].move.turn == m.turn {
-			for j := uint8(0); j < m.nbTurn; j++ {
+		if dispatcherTab[i].move.Face == m.Face && dispatcherTab[i].move.Turn == m.Turn {
+			for j := uint8(0); j < m.NbTurn; j++ {
 				dispatcherTab[i].fun(cube)
 			}
 			return cube

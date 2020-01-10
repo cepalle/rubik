@@ -51,6 +51,11 @@ func IddfsPredicateImax(r *makemove.Rubik, predicate func(*makemove.Rubik) bool,
 	return nil
 }
 
+func IddfsPredicateImaxMoves(r *makemove.Rubik, predicate func(*makemove.Rubik) bool, imax uint32, moves []makemove.RubikMoves) []makemove.RubikMoves {
+	// TODO
+	return nil
+}
+
 var rubikGoalIt = makemove.Rubik{
 	PosP2:  [12]uint8{0, 2, 1, 3, 12, 13, 14, 15, 28, 30, 29, 31},
 	RotP2:  [12]uint8{4, 6, 5, 7, 16, 17, 18, 19, 32, 33, 34, 35},
