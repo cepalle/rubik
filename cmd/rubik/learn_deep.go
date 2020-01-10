@@ -18,7 +18,7 @@ func makeExemple(bfsRes []solve.NodeExp, bfs_depth uint32) deeptraining.Examples
 		var input []float64
 		var output []float64
 
-		input = makemove.Rubik_to_nn_input(&e.Cube)
+		input = makemove.RubikToNnInput(&e.Cube)
 		for i := uint32(0); i <= bfs_depth; i++ {
 			output = append(output, 0)
 		}

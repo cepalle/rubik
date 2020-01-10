@@ -514,7 +514,7 @@ func (cube Rubik) IsResolve() bool {
 	return true
 }
 
-func Rubik_to_nn_input(cube *Rubik) []float64 {
+func RubikToNnInput(cube *Rubik) []float64 {
 	var input []float64
 	for i := 0; i < 12; i++ {
 		input = append(input, float64(cube.PosP2[i]))

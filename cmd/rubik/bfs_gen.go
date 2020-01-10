@@ -11,7 +11,7 @@ func main() {
 
 	var all []solve.NodeExp
 
-	all = solve.Bfs_explorer(solve.Bfs_depth)
+	all = solve.BfsExplorer(solve.Bfs_depth)
 
 	dataFile, err := os.Create("node_exp.gob")
 

@@ -50,7 +50,7 @@ func MakeNNScoring(filename string) func(cube *makemove.Rubik) float64 {
 	}
 
 	return func(cube *makemove.Rubik) float64 {
-		return nnOutputToScoring(ff.Update(makemove.Rubik_to_nn_input(cube)))
+		return nnOutputToScoring(ff.Update(makemove.RubikToNnInput(cube)))
 	}
 }
 
@@ -80,6 +80,6 @@ func MakeNNDeepScoring(filename string) func(cube *makemove.Rubik) float64 {
 	}
 
 	return func(cube *makemove.Rubik) float64 {
-		return nnOutputToScoring(n.Predict(makemove.Rubik_to_nn_input(cube)))
+		return nnOutputToScoring(n.Predict(makemove.RubikToNnInput(cube)))
 	}
 }

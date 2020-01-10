@@ -14,7 +14,7 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	fmt.Println(rubik)
 
 	// sequence = Bfs(rubik)
-	// sequence = Iddfs_it_hamming(rubik)
+	// sequence = IddfsItHamming(rubik)
 	// sequence = AStart(rubik, MakeNNScoring(Nnfilename))
 	// sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
 	// sequence = Bfs(rubik)

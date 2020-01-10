@@ -9,7 +9,7 @@ type NodeExp struct {
 	Cube  makemove.Rubik
 }
 
-func Bfs_explorer(depth uint32) []NodeExp {
+func BfsExplorer(depth uint32) []NodeExp {
 	var res []NodeExp
 	hys := make(map[makemove.Rubik]bool)
 	var pile []NodeExp
