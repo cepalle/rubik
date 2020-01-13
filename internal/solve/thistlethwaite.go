@@ -4,8 +4,8 @@ import "github.com/cepalle/rubik/internal/makemove"
 
 func predicateG0(r *makemove.Rubik) bool {
 	for i := uint8(0); i < uint8(len(r.PosP2)); i++ {
-		var cp = r
-		var d = IddfsPredicate(cp, func(rubik *makemove.Rubik) bool {
+		var cp = *r
+		var d = IddfsPredicate(&cp, func(rubik *makemove.Rubik) bool {
 			return rubik.PosP2[i] == i
 		})
 		for _, rm := range d {
