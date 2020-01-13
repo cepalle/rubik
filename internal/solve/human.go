@@ -423,6 +423,7 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 
 func upToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	fmt.Println("Up to up")
 	if face == target {
 		return sequence
 	} else {
@@ -440,13 +441,13 @@ func upToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove.Rub
 		sequence = append(sequence, move.Move)
 		sequence = append(sequence, makemove.AllRubikMovesWithName[3+diff-1].Move)
 		sequence = append(sequence, makemove.AllRubikMovesWithName[6+(3*new_face)+1].Move)
-		sequence = append(sequence, move.Rev)
 	}
 	return sequence
 }
 
 func middleToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	fmt.Println("Middle to up")
 	diff := (face + 4 - target) % 4
 	if diff == 3 {
 		move := makemove.AllRubikMovesWithName[6+(3*target)+2]
@@ -475,6 +476,9 @@ func middleToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove
 
 func downToUpCross(rubik makemove.Rubik, target, index, face uint8) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	fmt.Println("Down to up")
+	fmt.Println(rubik)
+	fmt.Printf("Target index : %d\tActual index : %d\tActual face : %d\n", target, index, face)
 	if face != target {
 		switch diff := (face + 4 - target) % 4; diff {
 		case 1:
