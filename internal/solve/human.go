@@ -106,6 +106,7 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	if debug {
 		fmt.Print("\nCreating the bottom cross :")
 	}
+	rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3].Move)
 	if debug {
 		var res = [4]uint8{0, 0, 0, 0}
 		for i, pos := range rubik.PosP2 {
@@ -113,8 +114,23 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 				continue
 			}
 			fmt.Print("\n", pos, i, rubik.RotP2[i])
-			res[i%4] = (pos + uint8(i) + rubik.RotP2[i]) % 2
+			res[pos%4] = (pos + uint8(i) + rubik.RotP2[i]) % 2
 		}
+		//		var res2 = [4]uint8{1, 1, 1, 1}
+		//		a := 0
+		//		for a < 4 {
+		//			rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3].Move)
+		//			b := 8
+		//			for b < 12 {
+		//				fmt.Println(b, rubik.PosP2[b], rubik.RotP2[b])
+		//				if rubik.PosP2[b] == uint8(b) && rubik.RotP2[b] == 0 {
+		//					res2[b%4] = 0
+		//				}
+		//				b += 1
+		//			}
+		//			a += 1
+		//		}
+		//		fmt.Print("res :", res, "\nres2 :", res2, "\n")
 		evenLine := res[0] + res[2]
 		oddLine := res[1] + res[3]
 		if evenLine+oddLine == 0 {
@@ -138,10 +154,10 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 			sequence = append(sequence, seqTmp...)
 		} else {
 			var seqTmp []makemove.RubikMoves
-			index := uint8(getIndex(res[:], 0))
+			index := uint8(getIndex(res[:], 1))
 			fmt.Println(res, index)
 			fmt.Println(rubik)
-			if index == 0 && res[3] == 0 {
+			if index == 0 && res[3] == 1 {
 				seqTmp = downCrossByQuarter(3)
 			} else {
 				seqTmp = downCrossByQuarter(index)
@@ -607,25 +623,32 @@ func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	tmpSequence = upCross(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-
-	tmpSequence = upCorners(rubik, debug)
-	finalSequence = append(finalSequence, tmpSequence...)
-	rubik = rubik.DoMoves(tmpSequence)
-
-	tmpSequence = secondRow(rubik, debug)
-	finalSequence = append(finalSequence, tmpSequence...)
-	rubik = rubik.DoMoves(tmpSequence)
-
-	tmpSequence = downCross(rubik, debug)
-	finalSequence = append(finalSequence, tmpSequence...)
-	rubik = rubik.DoMoves(tmpSequence)
-	correct = checkDownCross(rubik)
+	correct = checkTopCross(rubik)
 	if !correct {
 		return nil
 	} else {
-		fmt.Println("Check on down cross done.")
+		fmt.Println("Check on up cross done.")
 	}
-
+	fmt.Print(rubik)
+	//
+	//	tmpSequence = upCorners(rubik, debug)
+	//	finalSequence = append(finalSequence, tmpSequence...)
+	//	rubik = rubik.DoMoves(tmpSequence)
+	//
+	//	tmpSequence = secondRow(rubik, debug)
+	//	finalSequence = append(finalSequence, tmpSequence...)
+	//	rubik = rubik.DoMoves(tmpSequence)
+	//
+	//	tmpSequence = downCross(rubik, debug)
+	//	finalSequence = append(finalSequence, tmpSequence...)
+	//	rubik = rubik.DoMoves(tmpSequence)
+	//	correct = checkDownCross(rubik)
+	//	if !correct {
+	//		return nil
+	//	} else {
+	//		fmt.Println("Check on down cross done.")
+	//	}
+	//
 	//	tmpSequence = downCorners(rubik, debug)
 	//	finalSequence = append(finalSequence, tmpSequence...)
 	//	rubik = rubik.DoMoves(tmpSequence)

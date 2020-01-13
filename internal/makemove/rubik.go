@@ -319,7 +319,7 @@ var poseSwapU = poseSwap{
 
 var poseSwapF = poseSwap{
 	[4]uint8{
-		2, 5, 10, 6,
+		2, 5, 8, 6,
 	},
 	[12]uint8{
 		6, 7, 15, 14,
@@ -341,7 +341,7 @@ var poseSwapR = poseSwap{
 
 var poseSwapB = poseSwap{
 	[4]uint8{
-		0, 7, 8, 4,
+		0, 7, 10, 4,
 	},
 	[12]uint8{
 		10, 11, 19, 18,
@@ -363,7 +363,7 @@ var poseSwapL = poseSwap{
 
 var poseSwapD = poseSwap{
 	[4]uint8{
-		8, 11, 10, 9,
+		8, 9, 10, 11,
 	},
 	[12]uint8{
 		20, 21, 23, 22,
