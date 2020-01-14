@@ -5,7 +5,21 @@ import (
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
-// Algo: http://www.stefan-pochmann.info/spocc/other_stuff/tools/solver_thistlethwaite/solver_thistlethwaite_cpp.txt
+/*
+	Algo: http://www.stefan-pochmann.info/spocc/other_stuff/tools/solver_thistlethwaite/solver_thistlethwaite_cpp.txt
+
+	turns = move % 3;
+	face = move / 3;
+*/
+
+var affectedCubies = [6][8]uint8{
+	{0, 1, 2, 3, 0, 1, 2, 3},   // U
+	{4, 7, 6, 5, 4, 5, 6, 7},   // D
+	{0, 9, 4, 8, 0, 3, 5, 4},   // F
+	{2, 10, 6, 11, 2, 1, 7, 6}, // B
+	{3, 11, 7, 9, 3, 2, 6, 5},  // L
+	{1, 8, 5, 10, 1, 0, 4, 7},  // R
+}
 
 type cube struct {
 	PosP2 [12]uint8
@@ -30,7 +44,7 @@ func doMoves(c cube, moves []uint8) cube {
 	res := c
 
 	for _, e := range moves {
-		res = doMove(e, res)
+		res = doMove(res, e)
 	}
 
 	return res
@@ -144,7 +158,12 @@ func idG0(c cube) cube {
 
 func g0(c cube) []uint8 {
 	var dirG0 = []uint8{
-
+		0, 1, 2,
+		3, 4, 5,
+		6, 7, 8,
+		9, 10, 11,
+		12, 13, 14,
+		15, 16, 17,
 	}
 
 	return bidirectionalBfs(c, goalCube, idG0, dirG0)
@@ -156,7 +175,12 @@ func idG1(c cube) cube {
 
 func g1(c cube) []uint8 {
 	var dirG1 = []uint8{
-
+		17, 16, 15,
+		14, 13, 12,
+		10,
+		7,
+		5, 4, 3,
+		2, 1, 0,
 	}
 
 	return bidirectionalBfs(c, goalCube, idG1, dirG1)
@@ -168,22 +192,31 @@ func idG2(c cube) cube {
 
 func g2(c cube) []uint8 {
 	var dirG2 = []uint8{
-
+		16,
+		13,
+		10,
+		7,
+		5, 4, 3,
+		2, 1, 0,
 	}
 
-	return bidirectionalBfs(c, goalCube, idG0, dirG2)
+	return bidirectionalBfs(c, goalCube, idG2, dirG2)
 }
 
 func idG3(c cube) cube {
-	// TODO
 }
 
 func g3(c cube) []uint8 {
 	var dirG3 = []uint8{
-
+		16,
+		13,
+		10,
+		7,
+		4,
+		1,
 	}
 
-	return bidirectionalBfs(c, goalCube, idG0, dirG3)
+	return bidirectionalBfs(c, goalCube, idG3, dirG3)
 }
 
 func thistlethwaite_uint8(init_moves []uint8) []uint8 {
