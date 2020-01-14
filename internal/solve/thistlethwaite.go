@@ -194,10 +194,19 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 }
 
 func idG0(c cube) cube {
-	// TODO
+	for i := uint8(0); i < 8; i++ {
+		c.RotP3[i] = 0
+		c.PosP3[i] = 0
+	}
+
+	for i := uint8(0); i < 12; i++ {
+		c.PosP2[i] = 0
+	}
+	return c
 }
 
 func g0(c cube) []uint8 {
+	//--- Phase 1: Edge orientations.
 	var dirG0 = []uint8{
 		0, 1, 2,
 		3, 4, 5,
@@ -211,7 +220,7 @@ func g0(c cube) []uint8 {
 }
 
 func idG1(c cube) cube {
-	// TODO
+	//-- Phase 2: Corner orientations, E slice edges.
 }
 
 func g1(c cube) []uint8 {
@@ -228,7 +237,7 @@ func g1(c cube) []uint8 {
 }
 
 func idG2(c cube) cube {
-	// TODO
+	//--- Phase 3: Edge slices M and S, corner tetrads, overall parity.
 }
 
 func g2(c cube) []uint8 {
@@ -245,6 +254,7 @@ func g2(c cube) []uint8 {
 }
 
 func idG3(c cube) cube {
+	//--- Phase 4: The rest.
 }
 
 func g3(c cube) []uint8 {
