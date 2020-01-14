@@ -206,7 +206,7 @@ func idG0(c cube) cube {
 }
 
 func g0(c cube) []uint8 {
-	//--- Phase 1: Edge orientations.
+	//--- Phase 1: Edge orientations. g0 -> g1
 	var dirG0 = []uint8{
 		0, 1, 2,
 		3, 4, 5,
@@ -220,7 +220,16 @@ func g0(c cube) []uint8 {
 }
 
 func idG1(c cube) cube {
-	//-- Phase 2: Corner orientations, E slice edges.
+	//-- Phase 2: Corner orientations, E slice edges. g1 -> g2
+	for i := uint8(0); i < 8; i++ {
+		c.PosP3[i] = 0
+	}
+
+	for i := uint8(0); i < 12; i++ {
+		c.PosP2[i] = c.PosP2[i] / 8
+		c.RotP2[i] = 0
+	}
+	return c
 }
 
 func g1(c cube) []uint8 {
@@ -237,7 +246,7 @@ func g1(c cube) []uint8 {
 }
 
 func idG2(c cube) cube {
-	//--- Phase 3: Edge slices M and S, corner tetrads, overall parity.
+	//--- Phase 3: Edge slices M and S, corner tetrads, overall parity. g2 -> g3
 }
 
 func g2(c cube) []uint8 {
@@ -254,7 +263,8 @@ func g2(c cube) []uint8 {
 }
 
 func idG3(c cube) cube {
-	//--- Phase 4: The rest.
+	//--- Phase 4: The rest. g3 -> g4
+	return c
 }
 
 func g3(c cube) []uint8 {
