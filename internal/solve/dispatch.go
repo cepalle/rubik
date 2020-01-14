@@ -2,6 +2,7 @@ package solve
 
 import (
 	"fmt"
+	"github.com/cepalle/rubik/internal/input"
 	"github.com/cepalle/rubik/internal/makemove"
 	"os"
 )
@@ -18,6 +19,7 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 		sequence = MechanicalHuman(rubik, true)
 	}
 	if sequence == nil {
+		fmt.Println(input.SequenceToString(moves))
 		os.Exit(1)
 	}
 	if help != "n" {
