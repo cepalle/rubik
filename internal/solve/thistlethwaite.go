@@ -12,13 +12,13 @@ import (
 	face = move / 3;
 */
 
-var affectedCubies = [6][8]uint8{
-	{0, 1, 2, 3, 0, 1, 2, 3},   // U
-	{4, 7, 6, 5, 4, 5, 6, 7},   // D
-	{0, 9, 4, 8, 0, 3, 5, 4},   // F
-	{2, 10, 6, 11, 2, 1, 7, 6}, // B
-	{3, 11, 7, 9, 3, 2, 6, 5},  // L
-	{1, 8, 5, 10, 1, 0, 4, 7},  // R
+var affectedCubies = [6][2][4]uint8{
+	{{0, 1, 2, 3}, {0, 1, 2, 3}},   // U
+	{{4, 7, 6, 5}, {4, 5, 6, 7}},   // D
+	{{0, 9, 4, 8}, {0, 3, 5, 4}},   // F
+	{{2, 10, 6, 11}, {2, 1, 7, 6}}, // B
+	{{3, 11, 7, 9}, {3, 2, 6, 5}},  // L
+	{{1, 8, 5, 10}, {1, 0, 4, 7}},  // R
 }
 
 type cube struct {
@@ -37,23 +37,36 @@ var goalCube = cube{
 }
 
 func doMove(cur cube, move uint8) cube {
-	var nbTurns = move % 3 + 1
+	var nbTurns = move%3 + 1
 	var face = move / 3
 
-	for t := nbTurns; t > 0; t-- {
+	for t := uint8(0); t < nbTurns; t++ {
 		var oldC = cur
 
-		for i := 0; i < 8; i++ {
-			var isCorner uint8 = 0
-			if i > 3  {
-				isCorner = 1
+		for i := uint8(0); i < 4; i++ {
+			var target uint8 = affectedCubies[face][0][i]
+			var killer uint8 = affectedCubies[face][0][(i+1)%4]
+			var orientationDelta uint8 = 0
+			// F or B
+			if face == 2 || face == 3 {
+				orientationDelta = 1
 			}
-			var target = affectedCubies[face][i] + isCorner * 12
-			var killer = affectedCubies[face][(i & 3) == 3 ? i - 3 : i + 1] + isCorner * 12
-			var orientationDelta = (i < 4) ? (face > 1 && face < 4) : (face < 2) ? 0 : 2 - (i & 1)
 
-			state[target] = oldState[killer]
-			state[target + 20] = oldState[killer + 20] + orientationDelta
+			cur.PosP2[target] = oldC.PosP2[killer]
+			cur.RotP2[target] = oldC.RotP2[killer] + orientationDelta
+		}
+
+		for i := uint8(0); i < 4; i++ {
+			var target uint8 = affectedCubies[face][1][i]
+			var killer uint8 = affectedCubies[face][1][(i+1)%4]
+			var orientationDelta uint8 = 0
+			// not U and not D
+			if face > 1 {
+				orientationDelta = 2 - (i % 2)
+			}
+
+			cur.PosP3[target] = oldC.PosP3[killer]
+			cur.RotP3[target] = oldC.RotP3[killer] + orientationDelta
 		}
 	}
 
