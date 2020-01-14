@@ -36,8 +36,36 @@ var goalCube = cube{
 	[8]uint8{0, 0, 0, 0, 0, 0, 0, 0},
 }
 
-func doMove(c cube, move uint8) cube {
-	// TODO
+func doMove(cur cube, move uint8) cube {
+	var nbTurns = move % 3 + 1
+	var face = move / 3
+
+	for t := nbTurns; t > 0; t-- {
+		var oldC = cur
+
+		for i := 0; i < 8; i++ {
+			var isCorner uint8 = 0
+			if i > 3  {
+				isCorner = 1
+			}
+			var target = affectedCubies[face][i] + isCorner * 12
+			var killer = affectedCubies[face][(i & 3) == 3 ? i - 3 : i + 1] + isCorner * 12
+			var orientationDelta = (i < 4) ? (face > 1 && face < 4) : (face < 2) ? 0 : 2 - (i & 1)
+
+			state[target] = oldState[killer]
+			state[target + 20] = oldState[killer + 20] + orientationDelta
+		}
+	}
+
+	for i := 0; i < 12; i++ {
+		cur.RotP2[i] = (cur.RotP2[i] + 4) % 2
+	}
+
+	for i := 0; i < 8; i++ {
+		cur.RotP3[i] = (cur.RotP3[i] + 6) % 3
+	}
+
+	return cur
 }
 
 func doMoves(c cube, moves []uint8) cube {
