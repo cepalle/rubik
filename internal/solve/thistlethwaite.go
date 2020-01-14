@@ -245,8 +245,40 @@ func g1(c cube) []uint8 {
 	return bidirectionalBfs(c, goalCube, idG1, dirG1)
 }
 
+func bool_to_uint8(a bool) uint8 {
+	if a {
+		return 1
+	}
+	return 0
+}
+
 func idG2(c cube) cube {
 	//--- Phase 3: Edge slices M and S, corner tetrads, overall parity. g2 -> g3
+
+	var r2 uint8 = 0
+	for i := 0; i < 8; i++ {
+		for j := i + 1; j < 8; j++ {
+			r2 = r2 ^ bool_to_uint8(c.PosP2[i] > c.PosP2[j])
+		}
+	}
+
+	for i := uint8(0); i < 8; i++ {
+		c.RotP3[i] = 0
+
+		c.PosP3[i] = c.PosP3[i] & 5
+	}
+
+	for i := uint8(0); i < 12; i++ {
+		c.RotP2[i] = 0
+
+		c.PosP2[i] = 2
+		if c.PosP2[i] < 8 {
+			c.PosP2[i] = c.PosP2[i] % 2
+		}
+	}
+	c.RotP2[0] = r2
+
+	return c
 }
 
 func g2(c cube) []uint8 {
