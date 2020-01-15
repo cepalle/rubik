@@ -36,6 +36,13 @@ var goalCube = cube{
 	[8]uint8{0, 0, 0, 0, 0, 0, 0, 0},
 }
 
+func bool_to_uint8(a bool) uint8 {
+	if a {
+		return 1
+	}
+	return 0
+}
+
 func doMove(cur cube, move uint8) cube {
 	var nbTurns = move%3 + 1
 	var face = move / 3
@@ -233,16 +240,9 @@ func g0(c cube) []uint8 {
 
 func idG1(c cube) cube {
 	//-- Phase 2: Corner orientations, E slice edges. g1 -> g2
-	for i := uint8(0); i < 8; i++ {
-		// c.PosF3[i] = 0
-	}
-
-	// var r2 uint8 = c.RotF2[11]
 	for i := uint8(0); i < 12; i++ {
 		c.PosF2[i] = c.PosF2[i] / 8
-		c.RotF2[i] = 0
 	}
-	// c.RotF2[11] = r2
 	return c
 }
 
@@ -257,13 +257,6 @@ func g1(c cube) []uint8 {
 	}
 
 	return bidirectionalBfs(c, goalCube, idG1, dirG1)
-}
-
-func bool_to_uint8(a bool) uint8 {
-	if a {
-		return 1
-	}
-	return 0
 }
 
 func idG2(c cube) cube {
@@ -357,10 +350,10 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 	fmt.Printf("%+v\n", c)
 
 	var moveG2 []uint8
-	// println("G2 Start")
-	// moveG2 := g2(c)
-	// c = doMoves(c, moveG2)
-	// fmt.Printf("%+v\n", c)
+	println("G2 Start")
+	moveG2 = g2(c)
+	c = doMoves(c, moveG2)
+	fmt.Printf("%+v\n", c)
 
 	println("G3 Start")
 	moveG3 := g3(c)
