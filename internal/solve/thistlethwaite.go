@@ -311,7 +311,6 @@ func idG3(c cube) cube {
 }
 
 func g3(c cube) []uint8 {
-	/*
 	var dirG3 = []uint8{
 		16,
 		13,
@@ -320,17 +319,8 @@ func g3(c cube) []uint8 {
 		4,
 		1,
 	}
-	*/
-	var dirG0 = []uint8{
-		0, 1, 2,
-		3, 4, 5,
-		6, 7, 8,
-		9, 10, 11,
-		12, 13, 14,
-		15, 16, 17,
-	}
 
-	return bidirectionalBfs(c, goalCube, idG3, dirG0)
+	return bidirectionalBfs(c, goalCube, idG3, dirG3)
 }
 
 func thistlethwaiteUint8(init_moves []uint8) []uint8 {
@@ -342,7 +332,6 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 	}
 
 	fmt.Printf("%+v\n", c)
-	/*
 	println("G0 Start")
 	moveG0 := g0(c)
 	c = doMoves(c, moveG0)
@@ -355,15 +344,13 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 	moveG2 := g2(c)
 	c = doMoves(c, moveG2)
 	fmt.Printf("%+v\n", c)
-	 */
 	println("G3 Start")
 	moveG3 := g3(c)
 	c = doMoves(c, moveG3)
 	fmt.Printf("%+v\n", c)
 	println("END")
 
-	// return append(moveG0, append(moveG1, append(moveG2, moveG3...)...)...)
-	return moveG3
+	return append(moveG0, append(moveG1, append(moveG2, moveG3...)...)...)
 }
 
 var uint8ToRbikMoves = [makemove.NbRubikMoves]makemove.RubikMoves{
