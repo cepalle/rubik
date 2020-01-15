@@ -239,7 +239,7 @@ func g0(c cube) []uint8 {
 }
 
 func idG1(c cube) cube {
-	//-- Phase 2: Corner orientations, E slice edges. g1 -> g2
+	//-- Phase 2: Corner orientations, E slice edges. g1 -> g23
 	for i := uint8(0); i < 12; i++ {
 		c.PosF2[i] = c.PosF2[i] / 8
 	}
@@ -259,37 +259,12 @@ func g1(c cube) []uint8 {
 	return bidirectionalBfs(c, goalCube, idG1, dirG1)
 }
 
-func idG2(c cube) cube {
-	//--- Phase 3: Edge slices M and S, corner tetrads, overall parity. g2 -> g3
-
-	/*
-	var r2 uint8 = 0
-	for i := 0; i < 8; i++ {
-		for j := i + 1; j < 8; j++ {
-			r2 = r2 ^ boolToUint8(c.PosF3[i] > c.PosF3[j])
-		}
-	}
-
-	for i := uint8(0); i < 8; i++ {
-		c.RotF3[i] = 0
-
-		c.PosF3[i] = c.PosF3[i] & 5
-	}
-
-	for i := uint8(0); i < 12; i++ {
-		c.RotF2[i] = 0
-
-		c.PosF2[i] = 2
-		if c.PosF2[i] < 8 {
-			c.PosF2[i] = c.PosF2[i] % 2
-		}
-	}
-	c.RotF2[0] = r2
-	*/
+func idG23(c cube) cube {
+	//--- Phase 3: All. g2 -> g4
 	return c
 }
 
-func g2(c cube) []uint8 {
+func g23(c cube) []uint8 {
 	var dirG2 = []uint8{
 		16,
 		13,
@@ -299,25 +274,7 @@ func g2(c cube) []uint8 {
 		2, 1, 0,
 	}
 
-	return bidirectionalBfs(c, goalCube, idG2, dirG2)
-}
-
-func idG3(c cube) cube {
-	//--- Phase 4: The rest. g3 -> g4
-	return c
-}
-
-func g3(c cube) []uint8 {
-	var dirG3 = []uint8{
-		16,
-		13,
-		10,
-		7,
-		4,
-		1,
-	}
-
-	return bidirectionalBfs(c, goalCube, idG3, dirG3)
+	return bidirectionalBfs(c, goalCube, idG23, dirG2)
 }
 
 func thistlethwaiteUint8(init_moves []uint8) []uint8 {
@@ -330,29 +287,24 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 
 	fmt.Printf("%+v\n", c)
 
-	println("G0 Start")
+	println("G0 -> G1 Start")
 	moveG0 := g0(c)
 	c = doMoves(c, moveG0)
 	fmt.Printf("%+v\n", c)
 
-	println("G1 Start")
+	println("G1 -> G2 Start")
 	moveG1 := g1(c)
 	c = doMoves(c, moveG1)
 	fmt.Printf("%+v\n", c)
 
-	println("G2 Start")
-	moveG2 := g2(c)
-	c = doMoves(c, moveG2)
-	fmt.Printf("%+v\n", c)
-
-	println("G3 Start")
-	moveG3 := g3(c)
-	c = doMoves(c, moveG3)
+	println("G2 -> G4 Start")
+	moveG23 := g23(c)
+	c = doMoves(c, moveG23)
 	fmt.Printf("%+v\n", c)
 
 	println("END")
 
-	return append(moveG0, append(moveG1, append(moveG2, moveG3...)...)...)
+	return append(moveG0, append(moveG1, moveG23...)...)
 }
 
 var uint8ToRbikMoves = [makemove.NbRubikMoves]makemove.RubikMoves{
