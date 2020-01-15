@@ -262,6 +262,7 @@ func g1(c cube) []uint8 {
 func idG2(c cube) cube {
 	//--- Phase 3: Edge slices M and S, corner tetrads, overall parity. g2 -> g3
 
+	/*
 	var r2 uint8 = 0
 	for i := 0; i < 8; i++ {
 		for j := i + 1; j < 8; j++ {
@@ -284,7 +285,7 @@ func idG2(c cube) cube {
 		}
 	}
 	c.RotF2[0] = r2
-
+	*/
 	return c
 }
 
@@ -315,16 +316,6 @@ func g3(c cube) []uint8 {
 		4,
 		1,
 	}
-	/*
-	var dirG0 = []uint8{
-		0, 1, 2,
-		3, 4, 5,
-		6, 7, 8,
-		9, 10, 11,
-		12, 13, 14,
-		15, 16, 17,
-	}
-	*/
 
 	return bidirectionalBfs(c, goalCube, idG3, dirG3)
 }
@@ -349,9 +340,8 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 	c = doMoves(c, moveG1)
 	fmt.Printf("%+v\n", c)
 
-	var moveG2 []uint8
 	println("G2 Start")
-	moveG2 = g2(c)
+	moveG2 := g2(c)
 	c = doMoves(c, moveG2)
 	fmt.Printf("%+v\n", c)
 
