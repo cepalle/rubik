@@ -8,8 +8,8 @@ import (
 /*
 	Algo: http://www.stefan-pochmann.info/spocc/other_stuff/tools/solver_thistlethwaite/solver_thistlethwaite_cpp.txt
 
-	turns = move % 3;
-	face = move / 3;
+	turns = move % 3
+	face = move / 3
 */
 
 var affectedCubies = [6][2][4]uint8{
@@ -91,12 +91,19 @@ func doMoves(c cube, moves []uint8) cube {
 	return res
 }
 
+func reversUint8Move(m uint8) uint8 {
+	turns := m % 3
+	face := m / 3
+
+	return face * 3 + (2 - turns)
+}
+
 func appendMovesReversed(a []uint8, b []uint8) []uint8 {
 	aCp := make([]uint8, len(a))
 	copy(aCp, a)
 
 	for i := len(b); i > 0; i-- {
-		aCp = append(aCp, b[i-1])
+		aCp = append(aCp, reversUint8Move(b[i-1]))
 	}
 
 	return aCp
