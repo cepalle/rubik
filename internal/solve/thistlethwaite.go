@@ -36,7 +36,7 @@ var goalCube = cube{
 	[8]uint8{0, 0, 0, 0, 0, 0, 0, 0},
 }
 
-func bool_to_uint8(a bool) uint8 {
+func boolToUint8(a bool) uint8 {
 	if a {
 		return 1
 	}
@@ -266,7 +266,7 @@ func idG2(c cube) cube {
 	var r2 uint8 = 0
 	for i := 0; i < 8; i++ {
 		for j := i + 1; j < 8; j++ {
-			r2 = r2 ^ bool_to_uint8(c.PosF3[i] > c.PosF3[j])
+			r2 = r2 ^ boolToUint8(c.PosF3[i] > c.PosF3[j])
 		}
 	}
 
