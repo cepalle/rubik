@@ -16,6 +16,14 @@ func getIndex(lst []uint8, value uint8) int {
 	return -1
 }
 
+func sum(lst []uint8) uint8 {
+	var tot = uint8(0)
+	for _, value := range lst {
+		tot += value
+	}
+	return tot
+}
+
 func getTargetFaceP2(target uint8) uint8 {
 	var targetFace = [12]uint8{0, 1, 2, 3, 0, 1, 2, 3, 2, 1, 0, 3}
 	return targetFace[target]
@@ -43,14 +51,122 @@ func numberGoodCorner(rubik makemove.Rubik) uint8 {
 	return tot
 }
 
+func rotLst(lst [4]uint8, rot int) [4]uint8 {
+	var res [4]uint8
+	res[(0+(4-rot))%4] = lst[0]
+	res[(1+(4-rot))%4] = lst[1]
+	res[(2+(4-rot))%4] = lst[2]
+	res[(3+(4-rot))%4] = lst[3]
+	fmt.Println("From", lst, "To", res)
+	return res
+}
+
+func numberGoodOrientedCorner(rubik makemove.Rubik) [4]uint8 {
+	var saveSequence [4]uint8
+	for j := uint8(0); j < 4; j++ {
+		if rubik.PosFP3[13] == 13 && rubik.PosFP3[14] == 14 && rubik.PosFP3[20] == 20 {
+			saveSequence[0] = j
+		}
+		if rubik.PosFP3[15] == 15 && rubik.PosFP3[16] == 16 && rubik.PosFP3[21] == 21 {
+			saveSequence[1] = j
+		}
+		if rubik.PosFP3[17] == 17 && rubik.PosFP3[18] == 18 && rubik.PosFP3[23] == 23 {
+			saveSequence[2] = j
+		}
+		if rubik.PosFP3[12] == 12 && rubik.PosFP3[19] == 19 && rubik.PosFP3[22] == 22 {
+			saveSequence[3] = j
+		}
+		rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3].Move)
+	}
+	return saveSequence
+}
+
+func finalMovesClockwise(face int) []makemove.RubikMoves {
+	var sequence []makemove.RubikMoves
+	frontMove := makemove.AllRubikMovesWithName[6+3*(face)+1]
+	rightMove := makemove.AllRubikMovesWithName[6+3*((face+3)%4)]
+	leftMove := makemove.AllRubikMovesWithName[6+3*((face+1)%4)]
+	downMove := makemove.AllRubikMovesWithName[3]
+	sequence = append(sequence, frontMove.Move)
+	sequence = append(sequence, downMove.Move)
+	sequence = append(sequence, rightMove.Move)
+	sequence = append(sequence, leftMove.Rev)
+	sequence = append(sequence, frontMove.Move)
+	sequence = append(sequence, rightMove.Rev)
+	sequence = append(sequence, leftMove.Move)
+	sequence = append(sequence, downMove.Move)
+	sequence = append(sequence, frontMove.Move)
+	return sequence
+}
+
+func finalMovesCounterClockwise(face int) []makemove.RubikMoves {
+	var sequence []makemove.RubikMoves
+	frontMove := makemove.AllRubikMovesWithName[6+3*(face)+1]
+	rightMove := makemove.AllRubikMovesWithName[6+3*((face+3)%4)]
+	leftMove := makemove.AllRubikMovesWithName[6+3*((face+1)%4)]
+	downMove := makemove.AllRubikMovesWithName[3]
+	sequence = append(sequence, frontMove.Move)
+	sequence = append(sequence, downMove.Rev)
+	sequence = append(sequence, rightMove.Move)
+	sequence = append(sequence, leftMove.Rev)
+	sequence = append(sequence, frontMove.Move)
+	sequence = append(sequence, rightMove.Rev)
+	sequence = append(sequence, leftMove.Move)
+	sequence = append(sequence, downMove.Rev)
+	sequence = append(sequence, frontMove.Move)
+	return sequence
+}
+
 func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	var seqTmp []makemove.RubikMoves
+	fmt.Println(rubik)
 	if debug {
-		fmt.Println("Solving this Cube :")
+		fmt.Print("\nSolving this Cube :")
+	}
+	var status [4]int
+	for i := 8; i < 12; i++ {
+		status[i%4] = int(rubik.PosP2[i] % 4)
+	}
+	var index, tot int
+	for i, value := range status {
+		if value == i {
+			index = i
+			tot++
+		}
+	}
+	if tot == 0 {
+		sequence = finalMovesClockwise(0)
+		rubik = rubik.DoMoves(sequence)
+		for i := 8; i < 12; i++ {
+			status[i%4] = int(rubik.PosP2[i] % 4)
+		}
+		for i, value := range status {
+			if value == i {
+				index = i
+				tot++
+			}
+		}
+	}
+	if tot != 4 {
+		fmt.Println(status, index)
+		face := (4 - index) % 4
+		if status[face]-face > 0 {
+			seqTmp = finalMovesClockwise(face)
+			if debug {
+				fmt.Printf("Still 3 edges wrongly place, turning clockwise : `%s`\n", input.SequenceToString(seqTmp))
+			}
+		} else {
+			seqTmp = finalMovesCounterClockwise(face)
+			if debug {
+				fmt.Printf("Still 3 edges wrongly place, turning counter clockwise : `%s`\n", input.SequenceToString(seqTmp))
+			}
+		}
+		sequence = append(sequence, seqTmp...)
 	}
 	if debug {
 		if len(sequence) != 0 {
-			fmt.Println("Cube solved !")
+			fmt.Printf("Cube solved ! Small recap : `%s`\n", input.SequenceToString(sequence))
 		} else {
 			fmt.Println("There was nothing to do")
 		}
@@ -58,14 +174,69 @@ func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	return sequence
 }
 
+func downCornersOrientationMove(face uint8) []makemove.RubikMoves {
+	var sequence []makemove.RubikMoves
+	sideMove := makemove.AllRubikMovesWithName[6+3*((face+1)%4)]
+	frontMove := makemove.AllRubikMovesWithName[6+3*(face)]
+	backMove := makemove.AllRubikMovesWithName[6+3*((face+2)%4)+1].Move
+	sequence = append(sequence, sideMove.Rev)
+	sequence = append(sequence, frontMove.Move)
+	sequence = append(sequence, sideMove.Rev)
+	sequence = append(sequence, backMove)
+	sequence = append(sequence, sideMove.Move)
+	sequence = append(sequence, frontMove.Rev)
+	sequence = append(sequence, sideMove.Rev)
+	sequence = append(sequence, backMove)
+	sequence = append(sequence, makemove.AllRubikMovesWithName[6+3*((face+1)%4)+1].Move)
+	sequence = append(sequence, makemove.AllRubikMovesWithName[5].Move)
+	return sequence
+}
+
 func downCornersOrientation(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
+	var seqTmp []makemove.RubikMoves
 	if debug {
-		fmt.Println("Changing corners orientation :")
+		fmt.Printf("\nChanging corners orientation : ")
+	}
+	saveState := numberGoodOrientedCorner(rubik)
+	if sum(saveState[:]) == 0 {
+	} else if saveState[0] == saveState[2] || saveState[1] == saveState[3] {
+		seqTmp = downCornersOrientationMove(0)
+		rubik = rubik.DoMoves(seqTmp)
+		sequence = append(sequence, seqTmp...)
+		if debug {
+			fmt.Printf("Corners are forming a diagonal : `%s`\n", input.SequenceToString(seqTmp))
+		}
+	}
+	saveState = numberGoodOrientedCorner(rubik)
+	var rot [4]uint8
+	for _, value := range saveState {
+		rot[value]++
+	}
+	face := getIndex(rot[:], 2)
+	if face != -1 {
+		if face != 0 {
+			rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3+face-1].Move)
+			sequence = append(sequence, makemove.AllRubikMovesWithName[3+face-1].Move)
+		}
+		saveState = numberGoodOrientedCorner(rubik)
+		face = getIndex(saveState[:], 0)
+		if face == 0 && saveState[3] == 0 {
+			face = 3
+		}
+		seqTmp = downCornersOrientationMove(uint8(4-face) % 4)
+		rubik = rubik.DoMoves(seqTmp)
+		sequence = append(sequence, seqTmp...)
+		if debug {
+			fmt.Printf("Corners are next to each other : `%s`\n", input.SequenceToString(seqTmp))
+		}
+	} else if saveState[0] != 0 {
+		rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3+saveState[0]-1].Move)
+		sequence = append(sequence, makemove.AllRubikMovesWithName[3+saveState[0]-1].Move)
 	}
 	if debug {
 		if len(sequence) != 0 {
-			fmt.Println("The bottom edges should be in a good orientation now !")
+			fmt.Printf("The bottom edges should be in a good orientation now !\nSmall recap : `%s`\n", input.SequenceToString(sequence))
 		} else {
 			fmt.Println("There was nothing to do")
 		}
@@ -133,7 +304,7 @@ func downCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	var seqTmp []makemove.RubikMoves
 	if debug {
-		fmt.Println("Placing bottom corner at their respectives places, not regarding the orientation :")
+		fmt.Println("\nPlacing bottom corner at their respectives places, not regarding the orientation :")
 	}
 	a := numberGoodCorner(rubik)
 	for a != 4 {
@@ -160,7 +331,6 @@ func downCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 }
 
 func downCrossByQuarter(odd uint8) []makemove.RubikMoves {
-	fmt.Print(odd)
 	var sequence []makemove.RubikMoves
 	var vertMove makemove.RubikMovesWithName
 	var frontMove makemove.RubikMovesWithName
@@ -238,6 +408,7 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		} else if evenLine == 0 {
 			seqTmp := downCrossByLine(1)
 			if debug {
+				fmt.Printf(" found a straight line. `%s`\n", input.SequenceToString(seqTmp))
 			}
 			sequence = append(sequence, seqTmp...)
 		} else if oddLine == 0 {
@@ -686,6 +857,35 @@ func checkDownCorners(rubik makemove.Rubik) bool {
 	return true
 }
 
+func checkDownFace(rubik makemove.Rubik) bool {
+	if checkDownCorners(rubik) == false {
+		return false
+	}
+	for i := uint8(12); i < 24; i++ {
+		if rubik.PosFP3[i] != i {
+			fmt.Fprintf(os.Stderr, "Down face failed\n")
+			return false
+		}
+	}
+	return true
+}
+
+func checkRubik(rubik makemove.Rubik) bool {
+	for i := uint8(0); i < 24; i++ {
+		if rubik.PosFP3[i] != i {
+			fmt.Fprintf(os.Stderr, "Down orientation failed\n")
+			return false
+		}
+	}
+	for i := uint8(0); i < 12; i++ {
+		if rubik.PosP2[i] != i || rubik.RotP2[i] == 1 {
+			fmt.Fprintf(os.Stderr, "Down orientation failed\n")
+			return false
+		}
+	}
+	return true
+}
+
 func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var finalSequence []makemove.RubikMoves
 	var tmpSequence []makemove.RubikMoves
@@ -724,30 +924,44 @@ func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	tmpSequence = downCross(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//	correct = checkDownCross(rubik)
-	//	if !correct {
-	//		return nil
-	//	} else if debug {
-	//		fmt.Println("Check on down cross done.")
-	//	}
+	//correct = checkDownCross(rubik)
+	//if !correct {
+	//	return nil
+	//} else if debug {
+	//	fmt.Println("Check on down cross done.")
+	//}
 
 	tmpSequence = downCorners(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	correct = checkDownCorners(rubik)
+	//correct = checkDownCorners(rubik)
+	//if !correct {
+	//	return nil
+	//} else if debug {
+	//	fmt.Println("Check on down cross done.")
+	//}
+
+	tmpSequence = downCornersOrientation(rubik, debug)
+	finalSequence = append(finalSequence, tmpSequence...)
+	rubik = rubik.DoMoves(tmpSequence)
+	//correct = checkDownFace(rubik)
+	//if !correct {
+	//	fmt.Println(rubik)
+	//	return nil
+	//} else if debug {
+	//	fmt.Println("Check on down face done.")
+	//}
+
+	tmpSequence = downEdges(rubik, debug)
+	finalSequence = append(finalSequence, tmpSequence...)
+	rubik = rubik.DoMoves(tmpSequence)
+	correct = checkRubik(rubik)
 	if !correct {
+		fmt.Println(rubik)
 		return nil
 	} else if debug {
-		fmt.Println("Check on down cross done.")
+		fmt.Println("Check on down face done.")
 	}
-	//
-	//	tmpSequence = downCornersOrientation(rubik, debug)
-	//	finalSequence = append(finalSequence, tmpSequence...)
-	//	rubik = rubik.DoMoves(tmpSequence)
-	//
-	//	tmpSequence = downEdges(rubik, debug)
-	//	finalSequence = append(finalSequence, tmpSequence...)
-	//	rubik = rubik.DoMoves(tmpSequence)
 
 	return finalSequence
 }
