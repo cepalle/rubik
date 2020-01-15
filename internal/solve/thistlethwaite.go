@@ -60,7 +60,7 @@ func doMove(cur cube, move uint8) cube {
 			var target uint8 = affectedCubies[face][1][i]
 			var killer uint8 = affectedCubies[face][1][(i+1)%4]
 			var orientationDelta uint8 = 0
-			// not U and not D
+			// F or B or L or R
 			if face > 1 {
 				orientationDelta = 2 - (i % 2)
 			}
@@ -104,22 +104,26 @@ func appendMovesReversed(a []uint8, b []uint8) []uint8 {
 
 func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []uint8 {
 
+	if id(src) == id(dst) {
+		return []uint8{}
+	}
+
 	type node struct {
 		cube  cube
 		moves []uint8
 	}
 
 	hysSrc := make(map[cube][]uint8)
-	var pileSrc []node
-
-	pileSrc = append(pileSrc, node{src, []uint8{}})
 	hysSrc[id(src)] = []uint8{}
 
-	hysDst := make(map[cube][]uint8)
-	var pileDst []node
+	var pileSrc []node
+	pileSrc = append(pileSrc, node{src, []uint8{}})
 
-	pileDst = append(pileDst, node{dst, []uint8{}})
+	hysDst := make(map[cube][]uint8)
 	hysDst[id(dst)] = []uint8{}
+
+	var pileDst []node
+	pileDst = append(pileDst, node{dst, []uint8{}})
 
 	for len(pileSrc) > 0 || len(pileDst) > 0 {
 
@@ -127,11 +131,6 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 			// SRC
 			curSrc := pileSrc[0]
 			pileSrc = pileSrc[1:]
-
-			movesDst, found := hysDst[id(curSrc.cube)]
-			if found {
-				return appendMovesReversed(curSrc.moves, movesDst)
-			}
 
 			for _, d := range dir {
 				var nwCube = doMove(curSrc.cube, d)
@@ -145,6 +144,12 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 				mvsCp := make([]uint8, len(curSrc.moves))
 				copy(mvsCp, curSrc.moves)
 				nwMvs := append(mvsCp, d)
+
+				movesDst, found := hysDst[idCubeSrc]
+				if found {
+					return appendMovesReversed(nwMvs, movesDst)
+				}
+
 				var nNode = node{
 					nwCube,
 					nwMvs,
@@ -160,16 +165,11 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 			curDst := pileDst[0]
 			pileDst = pileDst[1:]
 
-			movesSrc, found := hysSrc[id(curDst.cube)]
-			if found {
-				return appendMovesReversed(movesSrc, curDst.moves)
-			}
-
 			for _, d := range dir {
 				var nwCube = doMove(curDst.cube, d)
 
 				idCubeDst := id(nwCube)
-				_, found := hysSrc[idCubeDst]
+				_, found := hysDst[idCubeDst]
 				if found {
 					continue
 				}
@@ -177,6 +177,12 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 				mvsCp := make([]uint8, len(curDst.moves))
 				copy(mvsCp, curDst.moves)
 				nwMvs := append(mvsCp, d)
+
+				movesSrc, found := hysSrc[idCubeDst]
+				if found {
+					return appendMovesReversed(movesSrc, nwMvs)
+				}
+
 				var nNode = node{
 					nwCube,
 					nwMvs,
