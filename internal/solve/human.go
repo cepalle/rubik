@@ -122,8 +122,8 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		//			rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3].Move)
 		//			b := 8
 		//			for b < 12 {
-		//				fmt.Println(b, rubik.PosP2[b], rubik.RotP2[b])
-		//				if rubik.PosP2[b] == uint8(b) && rubik.RotP2[b] == 0 {
+		//				fmt.Println(b, rubik.PosF2[b], rubik.RotF2[b])
+		//				if rubik.PosF2[b] == uint8(b) && rubik.RotF2[b] == 0 {
 		//					res2[b%4] = 0
 		//				}
 		//				b += 1

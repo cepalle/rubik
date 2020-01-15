@@ -22,11 +22,11 @@ var affectedCubies = [6][2][4]uint8{
 }
 
 type cube struct {
-	PosP2 [12]uint8
-	RotP2 [12]uint8
+	PosF2 [12]uint8
+	RotF2 [12]uint8
 
-	PosP3 [8]uint8
-	RotP3 [8]uint8
+	PosF3 [8]uint8
+	RotF3 [8]uint8
 }
 
 var goalCube = cube{
@@ -52,8 +52,8 @@ func doMove(cur cube, move uint8) cube {
 				orientationDelta = 1
 			}
 
-			cur.PosP2[target] = oldC.PosP2[killer]
-			cur.RotP2[target] = oldC.RotP2[killer] + orientationDelta
+			cur.PosF2[target] = oldC.PosF2[killer]
+			cur.RotF2[target] = oldC.RotF2[killer] + orientationDelta
 		}
 
 		for i := uint8(0); i < 4; i++ {
@@ -65,17 +65,17 @@ func doMove(cur cube, move uint8) cube {
 				orientationDelta = 2 - (i % 2)
 			}
 
-			cur.PosP3[target] = oldC.PosP3[killer]
-			cur.RotP3[target] = oldC.RotP3[killer] + orientationDelta
+			cur.PosF3[target] = oldC.PosF3[killer]
+			cur.RotF3[target] = oldC.RotF3[killer] + orientationDelta
 		}
 	}
 
 	for i := 0; i < 12; i++ {
-		cur.RotP2[i] = (cur.RotP2[i] + 4) % 2
+		cur.RotF2[i] = (cur.RotF2[i] + 4) % 2
 	}
 
 	for i := 0; i < 8; i++ {
-		cur.RotP3[i] = (cur.RotP3[i] + 6) % 3
+		cur.RotF3[i] = (cur.RotF3[i] + 6) % 3
 	}
 
 	return cur
@@ -201,17 +201,18 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 		}
 
 	}
+	println("BFS failed...")
 	return nil
 }
 
 func idG0(c cube) cube {
 	for i := uint8(0); i < 8; i++ {
-		c.RotP3[i] = 0
-		c.PosP3[i] = 0
+		c.RotF3[i] = 0
+		c.PosF3[i] = 0
 	}
 
 	for i := uint8(0); i < 12; i++ {
-		c.PosP2[i] = 0
+		c.PosF2[i] = 0
 	}
 	return c
 }
@@ -233,13 +234,15 @@ func g0(c cube) []uint8 {
 func idG1(c cube) cube {
 	//-- Phase 2: Corner orientations, E slice edges. g1 -> g2
 	for i := uint8(0); i < 8; i++ {
-		c.PosP3[i] = 0
+		// c.PosF3[i] = 0
 	}
 
+	// var r2 uint8 = c.RotF2[11]
 	for i := uint8(0); i < 12; i++ {
-		c.PosP2[i] = c.PosP2[i] / 8
-		c.RotP2[i] = 0
+		c.PosF2[i] = c.PosF2[i] / 8
+		c.RotF2[i] = 0
 	}
+	// c.RotF2[11] = r2
 	return c
 }
 
@@ -269,25 +272,25 @@ func idG2(c cube) cube {
 	var r2 uint8 = 0
 	for i := 0; i < 8; i++ {
 		for j := i + 1; j < 8; j++ {
-			r2 = r2 ^ bool_to_uint8(c.PosP3[i] > c.PosP3[j])
+			r2 = r2 ^ bool_to_uint8(c.PosF3[i] > c.PosF3[j])
 		}
 	}
 
 	for i := uint8(0); i < 8; i++ {
-		c.RotP3[i] = 0
+		c.RotF3[i] = 0
 
-		c.PosP3[i] = c.PosP3[i] & 5
+		c.PosF3[i] = c.PosF3[i] & 5
 	}
 
 	for i := uint8(0); i < 12; i++ {
-		c.RotP2[i] = 0
+		c.RotF2[i] = 0
 
-		c.PosP2[i] = 2
-		if c.PosP2[i] < 8 {
-			c.PosP2[i] = c.PosP2[i] % 2
+		c.PosF2[i] = 2
+		if c.PosF2[i] < 8 {
+			c.PosF2[i] = c.PosF2[i] % 2
 		}
 	}
-	c.RotP2[0] = r2
+	c.RotF2[0] = r2
 
 	return c
 }
@@ -319,6 +322,16 @@ func g3(c cube) []uint8 {
 		4,
 		1,
 	}
+	/*
+	var dirG0 = []uint8{
+		0, 1, 2,
+		3, 4, 5,
+		6, 7, 8,
+		9, 10, 11,
+		12, 13, 14,
+		15, 16, 17,
+	}
+	*/
 
 	return bidirectionalBfs(c, goalCube, idG3, dirG3)
 }
@@ -332,22 +345,28 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 	}
 
 	fmt.Printf("%+v\n", c)
+
 	println("G0 Start")
 	moveG0 := g0(c)
 	c = doMoves(c, moveG0)
 	fmt.Printf("%+v\n", c)
+
 	println("G1 Start")
 	moveG1 := g1(c)
 	c = doMoves(c, moveG1)
 	fmt.Printf("%+v\n", c)
-	println("G2 Start")
-	moveG2 := g2(c)
-	c = doMoves(c, moveG2)
-	fmt.Printf("%+v\n", c)
+
+	var moveG2 []uint8
+	// println("G2 Start")
+	// moveG2 := g2(c)
+	// c = doMoves(c, moveG2)
+	// fmt.Printf("%+v\n", c)
+
 	println("G3 Start")
 	moveG3 := g3(c)
 	c = doMoves(c, moveG3)
 	fmt.Printf("%+v\n", c)
+
 	println("END")
 
 	return append(moveG0, append(moveG1, append(moveG2, moveG3...)...)...)
