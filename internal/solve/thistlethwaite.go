@@ -130,7 +130,6 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 
 			movesDst, found := hysDst[id(curSrc.cube)]
 			if found {
-				fmt.Println(curSrc)
 				return appendMovesReversed(curSrc.moves, movesDst)
 			}
 
@@ -163,7 +162,6 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 
 			movesSrc, found := hysSrc[id(curDst.cube)]
 			if found {
-				fmt.Println(curDst)
 				return appendMovesReversed(movesSrc, curDst.moves)
 			}
 
@@ -314,19 +312,29 @@ func g3(c cube) []uint8 {
 
 func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 
-	var c cube
-	// make cube with init_moves
+	var c cube = goalCube
+
+	for _, m := range init_moves {
+		c = doMove(c, m)
+	}
+
+	fmt.Printf("%+v\n", c)
 	println("G0 Start")
 	moveG0 := g0(c)
 	c = doMoves(c, moveG0)
+	fmt.Printf("%+v\n", c)
 	println("G1 Start")
 	moveG1 := g1(c)
 	c = doMoves(c, moveG1)
+	fmt.Printf("%+v\n", c)
 	println("G2 Start")
 	moveG2 := g2(c)
 	c = doMoves(c, moveG2)
+	fmt.Printf("%+v\n", c)
 	println("G3 Start")
 	moveG3 := g3(c)
+	c = doMoves(c, moveG3)
+	fmt.Printf("%+v\n", c)
 	println("END")
 
 	return append(moveG0, append(moveG1, append(moveG2, moveG3...)...)...)

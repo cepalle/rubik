@@ -3,7 +3,6 @@ package solve
 import (
 	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
-	"os"
 )
 
 func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMoves {
@@ -18,9 +17,11 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	// sequence = AStart(rubik, MakeNNScoring(Nnfilename))
 	// sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
 	// sequence = Bfs(rubik)
+	sequence = Thistlethwaite(moves)
 
 	// sequence = MechanicalHuman(rubik, true)
 	// fmt.Println()
+	/*
 	if help == "n" {
 		sequence = MechanicalHuman(rubik, false)
 	} else {
@@ -32,6 +33,7 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	if help != "n" {
 		fmt.Println()
 	}
+	*/
 	// fmt.Println()
 	// fmt.Println()
 	// sequence = IdaStar(rubik, ScoringHamming)
