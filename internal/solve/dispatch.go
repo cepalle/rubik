@@ -1,9 +1,7 @@
 package solve
 
 import (
-	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
-	"os"
 )
 
 func DispatchSolve(moves []makemove.RubikMoves, algorithm int) []makemove.RubikMoves {
