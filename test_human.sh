@@ -8,7 +8,7 @@ do
 		echo "Done $x times"
 	fi
 	x=$(( $x + 1 ))
-	eval './build/rubik -r 50 -re n -d n'
+	eval './build/rubik -r 10000 -re n -d n'
 	if [ $? -ne 0 ]
 	then
 		exit 1

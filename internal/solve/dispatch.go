@@ -12,16 +12,18 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	rubik := makemove.InitRubik()
 
 	rubik = rubik.DoMoves(moves)
-	fmt.Println(rubik)
 
 	// sequence = Bfs(rubik)
 	// sequence = IddfsItHamming(rubik)
 	// sequence = AStart(rubik, MakeNNScoring(Nnfilename))
 	// sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
 	// sequence = Bfs(rubik)
+//	sequence = Thistlethwaite(moves)
+	// sequence = CleanMoves(moves)
 
 	// sequence = MechanicalHuman(rubik, true)
 	// fmt.Println()
+
 	if help == "n" {
 		sequence = MechanicalHuman(rubik, false)
 	} else {
@@ -34,11 +36,12 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	if help != "n" {
 		fmt.Println()
 	}
+
 	// fmt.Println()
 	// fmt.Println()
 	// sequence = IdaStar(rubik, ScoringHamming)
 	// sequence = IdaStar(rubik, ScoringHamming)
 	rubik = rubik.DoMoves(sequence)
 	//sequence = []makemove.RubikMoves{}
-	return sequence
+	return CleanMoves(sequence)
 }
