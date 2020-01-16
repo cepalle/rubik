@@ -65,28 +65,28 @@ var rubikGoalIt = makemove.Rubik{
 func IddfsIt(r makemove.Rubik) []makemove.RubikMoves {
 	var res []makemove.RubikMoves
 
-	for nb_it := uint8(0); nb_it < 48; nb_it++ {
-		fmt.Println(nb_it)
-		move_it := IddfsPredicate(&r, func(cube *makemove.Rubik) bool {
+	for nbIt := uint8(0); nbIt < 48; nbIt++ {
+		fmt.Println(nbIt)
+		moveIt := IddfsPredicate(&r, func(cube *makemove.Rubik) bool {
 			var i uint8
 			for i = 0; i < 12; i++ {
-				if rubikGoalIt.RotP2[i] <= nb_it && cube.RotP2[i] != 0 {
+				if rubikGoalIt.RotP2[i] <= nbIt && cube.RotP2[i] != 0 {
 					return false
 				}
 			}
 			for i = 0; i < 12; i++ {
-				if rubikGoalIt.RotP2[i] <= nb_it && cube.PosP2[i] != i {
+				if rubikGoalIt.RotP2[i] <= nbIt && cube.PosP2[i] != i {
 					return false
 				}
 			}
 			for i = 0; i < 24; i++ {
-				if rubikGoalIt.PosFP3[i] <= nb_it && cube.PosFP3[i] != i {
+				if rubikGoalIt.PosFP3[i] <= nbIt && cube.PosFP3[i] != i {
 					return false
 				}
 			}
 			return true
 		})
-		for _, e := range move_it {
+		for _, e := range moveIt {
 			res = append(res, e)
 		}
 	}
@@ -96,12 +96,12 @@ func IddfsIt(r makemove.Rubik) []makemove.RubikMoves {
 func IddfsItHamming(r makemove.Rubik) []makemove.RubikMoves {
 	var res []makemove.RubikMoves
 
-	for nb_it := uint8(0); nb_it < 48; nb_it++ {
-		fmt.Println(nb_it)
-		move_it := IddfsPredicate(&r, func(cube *makemove.Rubik) bool {
-			return float64(nb_it) < (48 - ScoringHamming(cube))
+	for nbIt := uint8(0); nbIt < 48; nbIt++ {
+		fmt.Println(nbIt)
+		moveIt := IddfsPredicate(&r, func(cube *makemove.Rubik) bool {
+			return float64(nbIt) < (48 - ScoringHamming(cube))
 		})
-		for _, e := range move_it {
+		for _, e := range moveIt {
 			res = append(res, e)
 		}
 	}

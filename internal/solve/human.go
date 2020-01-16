@@ -664,7 +664,6 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 		sequence = append(sequence, seqTmp...)
 		index = uint8(getIndex(rubik.PosFP3[:], i))
-		face = faces[index]
 		repeat = 0
 		for rubik.PosFP3[i] != i {
 			repeat += 1
@@ -692,7 +691,6 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 func upToUpCross(actualFace, targetFace uint8) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	if actualFace == targetFace {
-		return sequence
 	} else {
 		sequence = append(sequence, makemove.AllRubikMovesWithName[6+(3*actualFace)+1].Move)
 		sequence = append(sequence, toFace(actualFace, targetFace))

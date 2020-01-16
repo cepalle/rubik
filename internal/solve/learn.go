@@ -4,11 +4,11 @@ import (
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
-const Bfs_depth = 3
+const BfsDepth = 3
 const Nnfilename = "./ff.network"
 const NnDeepFilename = "./deep.gob"
 
-func MakePatterns(bfsRes []NodeExp, bfs_depth uint32) [][][]float64 {
+func MakePatterns(bfsRes []NodeExp, bfsDepth uint32) [][][]float64 {
 	var patterns [][][]float64
 
 	for _, e := range bfsRes {
@@ -16,7 +16,7 @@ func MakePatterns(bfsRes []NodeExp, bfs_depth uint32) [][][]float64 {
 		var output []float64
 
 		input = makemove.RubikToNnInput(&e.Cube)
-		for i := uint32(0); i <= bfs_depth; i++ {
+		for i := uint32(0); i <= bfsDepth; i++ {
 			output = append(output, 0)
 		}
 		output[e.Depth] = 1
@@ -27,10 +27,10 @@ func MakePatterns(bfsRes []NodeExp, bfs_depth uint32) [][][]float64 {
 	return patterns
 }
 
-func Equalize(bfsRes []NodeExp, bfs_depth uint32) []NodeExp {
+func Equalize(bfsRes []NodeExp, bfsDepth uint32) []NodeExp {
 	var nbByDepth []uint32
 
-	for i := uint32(0); i <= bfs_depth; i++ {
+	for i := uint32(0); i <= bfsDepth; i++ {
 		nbByDepth = append(nbByDepth, 0)
 	}
 	for _, e := range bfsRes {
@@ -46,7 +46,7 @@ func Equalize(bfsRes []NodeExp, bfs_depth uint32) []NodeExp {
 	}
 
 	for i := uint32(0); i < uint32(len(nbByDepth)); i++ {
-		for ; nbByDepth[i] < mx; {
+		for nbByDepth[i] < mx {
 			for j := int(0); j < len(bfsRes) && nbByDepth[i] < mx; j++ {
 				if bfsRes[j].Depth == i {
 					nbByDepth[i]++

@@ -15,10 +15,10 @@ const (
 	D
 )
 
-type RubikFaceTurn uint8
+type rubikFaceTurn uint8
 
 const (
-	Clockwise RubikFaceTurn = iota + 1
+	Clockwise rubikFaceTurn = iota + 1
 	CounterClockwise
 )
 
@@ -38,12 +38,12 @@ func InitRubik() Rubik {
 
 type RubikMove struct {
 	Face RubikFace
-	Turn RubikFaceTurn
+	Turn rubikFaceTurn
 }
 
 type RubikMoves struct {
 	Face   RubikFace
-	Turn   RubikFaceTurn
+	Turn   rubikFaceTurn
 	NbTurn uint8
 }
 
@@ -234,7 +234,7 @@ type poseSwap struct {
 
 func clockwiseWithPose(ps poseSwap) moveFunction {
 	return func(cube *Rubik) *Rubik {
-		var tmp uint8 = 0
+		var tmp uint8
 
 		tmp = cube.PosP2[ps.ip2[0]]
 		cube.PosP2[ps.ip2[0]] = cube.PosP2[ps.ip2[3]]
@@ -271,7 +271,7 @@ func clockwiseWithPose(ps poseSwap) moveFunction {
 
 func counterClockwiseWithPose(ps poseSwap) moveFunction {
 	return func(cube *Rubik) *Rubik {
-		var tmp uint8 = 0
+		var tmp uint8
 
 		tmp = cube.PosP2[ps.ip2[0]]
 		cube.PosP2[ps.ip2[0]] = cube.PosP2[ps.ip2[1]]

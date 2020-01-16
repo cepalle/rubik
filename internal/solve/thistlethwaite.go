@@ -45,7 +45,7 @@ func doMove(cur cube, move uint8) cube {
 		for i := uint8(0); i < 4; i++ {
 			var target uint8 = affectedCubies[face][0][i]
 			var killer uint8 = affectedCubies[face][0][(i+1)%4]
-			var orientationDelta uint8 = 0
+			var orientationDelta uint8
 			// F or B
 			if face == 2 || face == 3 {
 				orientationDelta = 1
@@ -58,7 +58,7 @@ func doMove(cur cube, move uint8) cube {
 		for i := uint8(0); i < 4; i++ {
 			var target uint8 = affectedCubies[face][1][i]
 			var killer uint8 = affectedCubies[face][1][(i+1)%4]
-			var orientationDelta uint8 = 0
+			var orientationDelta uint8
 			// F or B or L or R
 			if face > 1 {
 				orientationDelta = 2 - (i % 2)
@@ -269,11 +269,11 @@ func g23(c cube) []uint8 {
 	return bidirectionalBfs(c, goalCube, idG23, dirG2)
 }
 
-func thistlethwaiteUint8(init_moves []uint8) []uint8 {
+func thistlethwaiteUint8(initMoves []uint8) []uint8 {
 
 	var c cube = goalCube
 
-	for _, m := range init_moves {
+	for _, m := range initMoves {
 		c = doMove(c, m)
 	}
 
@@ -291,7 +291,7 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 
 	// println("G2 -> G4 Start")
 	moveG23 := g23(c)
-	c = doMoves(c, moveG23)
+	doMoves(c, moveG23)
 	// fmt.Printf("%+v\n", c)
 
 	// println("END")
@@ -330,11 +330,11 @@ func rubikMovesToUint8(m makemove.RubikMoves) uint8 {
 	}
 }
 
-func Thistlethwaite(init_moves []makemove.RubikMoves) []makemove.RubikMoves {
+func Thistlethwaite(initMoves []makemove.RubikMoves) []makemove.RubikMoves {
 	var movesUnit8 []uint8
 
-	for i := 0; i < len(init_moves); i++ {
-		movesUnit8 = append(movesUnit8, rubikMovesToUint8(init_moves[i]))
+	for i := 0; i < len(initMoves); i++ {
+		movesUnit8 = append(movesUnit8, rubikMovesToUint8(initMoves[i]))
 	}
 
 	solUint8 := thistlethwaiteUint8(movesUnit8)
@@ -347,11 +347,11 @@ func Thistlethwaite(init_moves []makemove.RubikMoves) []makemove.RubikMoves {
 	return sol
 }
 
-func BidiBfs(init_moves []makemove.RubikMoves) []makemove.RubikMoves {
+func BidiBfs(initMoves []makemove.RubikMoves) []makemove.RubikMoves {
 	var movesUnit8 []uint8
 
-	for i := 0; i < len(init_moves); i++ {
-		movesUnit8 = append(movesUnit8, rubikMovesToUint8(init_moves[i]))
+	for i := 0; i < len(initMoves); i++ {
+		movesUnit8 = append(movesUnit8, rubikMovesToUint8(initMoves[i]))
 	}
 
 	var c cube = goalCube

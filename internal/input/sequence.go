@@ -1,7 +1,6 @@
 package input
 
 import (
-	"errors"
 	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
 	"io/ioutil"
@@ -45,7 +44,7 @@ func stringToMove(move string) (makemove.RubikMoves, error) {
 			return rubikMoves.Move, nil
 		}
 	}
-	return makemove.RubikMoves{}, errors.New(fmt.Sprintf("Input error: <%s> is not a valid move", strings.TrimSpace(move)))
+	return makemove.RubikMoves{}, fmt.Errorf("Input error: <%s> is not a valid move", strings.TrimSpace(move))
 }
 
 func moveToString(move makemove.RubikMoves) (string, error) {
@@ -54,7 +53,7 @@ func moveToString(move makemove.RubikMoves) (string, error) {
 			return rubikMoves.Name, nil
 		}
 	}
-	return "", errors.New(fmt.Sprintf("You shouldn't get there"))
+	return "", fmt.Errorf("You shouldn't get there")
 }
 
 func GenerateRandomSequence(nbrMove int) []makemove.RubikMoves {

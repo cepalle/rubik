@@ -11,25 +11,25 @@ import (
 	"os"
 )
 
-func makeExemple(bfsRes []solve.NodeExp, bfs_depth uint32) deeptraining.Examples {
-	var exemple deeptraining.Examples
+func makeExample(bfsRes []solve.NodeExp, bfsDepth uint32) deeptraining.Examples {
+	var example deeptraining.Examples
 
 	for _, e := range bfsRes {
 		var input []float64
 		var output []float64
 
 		input = makemove.RubikToNnInput(&e.Cube)
-		for i := uint32(0); i <= bfs_depth; i++ {
+		for i := uint32(0); i <= bfsDepth; i++ {
 			output = append(output, 0)
 		}
 		output[e.Depth] = 1
 
-		exemple = append(exemple, deeptraining.Example{
+		example = append(example, deeptraining.Example{
 			Input:    input,
 			Response: output,
 		})
 	}
-	return exemple
+	return example
 }
 
 func main() {
@@ -59,15 +59,15 @@ func main() {
 
 	// ---
 
-	exemples := makeExemple(solve.Equalize(all, solve.Bfs_depth), solve.Bfs_depth)
-	rand.Shuffle(len(exemples), func(i, j int) { exemples[i], exemples[j] = exemples[j], exemples[i] })
-	rand.Shuffle(len(exemples), func(i, j int) { exemples[i], exemples[j] = exemples[j], exemples[i] })
-	rand.Shuffle(len(exemples), func(i, j int) { exemples[i], exemples[j] = exemples[j], exemples[i] })
-	rand.Shuffle(len(exemples), func(i, j int) { exemples[i], exemples[j] = exemples[j], exemples[i] })
+	examples := makeExample(solve.Equalize(all, solve.bfsDepth), solve.bfsDepth)
+	rand.Shuffle(len(examples), func(i, j int) { examples[i], examples[j] = examples[j], examples[i] })
+	rand.Shuffle(len(examples), func(i, j int) { examples[i], examples[j] = examples[j], examples[i] })
+	rand.Shuffle(len(examples), func(i, j int) { examples[i], examples[j] = examples[j], examples[i] })
+	rand.Shuffle(len(examples), func(i, j int) { examples[i], examples[j] = examples[j], examples[i] })
 
 	n := deep.NewNeural(&deep.Config{
 		Inputs: 48,
-		Layout: []int{48, 96, 48, solve.Bfs_depth + 1},
+		Layout: []int{48, 96, 48, solve.bfsDepth + 1},
 		/* Activation functions: Sigmoid, Tanh, ReLU, Linear */
 		Activation: deep.ActivationSigmoid,
 		/* Determines output layer activation & loss function:
@@ -86,7 +86,7 @@ func main() {
 	// params: optimizer, verbosity (print stats at every 50th iteration)
 	trainer := deeptraining.NewTrainer(optimizer, 10)
 
-	training, heldout := exemples.Split(0.25)
+	training, heldout := examples.Split(0.25)
 	trainer.Train(n, training, heldout, 500) // training, validation, iterations
 
 	dataFile, err := os.Create(solve.NnDeepFilename)

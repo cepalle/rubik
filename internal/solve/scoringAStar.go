@@ -44,7 +44,7 @@ func ScoringHuman(cube *makemove.Rubik) float64 {
 }
 
 func nnOutputToScoring(out []float64) float64 {
-	var res float64 = 0
+	var res float64
 
 	for i := 0; i < len(out); i++ {
 		res = res + float64(i)*out[i]
