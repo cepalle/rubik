@@ -36,13 +36,6 @@ var goalCube = cube{
 	[8]uint8{0, 0, 0, 0, 0, 0, 0, 0},
 }
 
-func boolToUint8(a bool) uint8 {
-	if a {
-		return 1
-	}
-	return 0
-}
-
 func doMove(cur cube, move uint8) cube {
 	var nbTurns = move%3 + 1
 	var face = move / 3
@@ -102,7 +95,7 @@ func reversUint8Move(m uint8) uint8 {
 	turns := m % 3
 	face := m / 3
 
-	return face * 3 + (2 - turns)
+	return face*3 + (2 - turns)
 }
 
 func appendMovesReversed(a []uint8, b []uint8) []uint8 {
@@ -308,60 +301,24 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 }
 
 var uint8ToRbikMoves = [makemove.NbRubikMoves]makemove.RubikMoves{
-	makemove.RubikMoves{
-		makemove.U, makemove.Clockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.U, makemove.Clockwise, 2,
-	},
-	makemove.RubikMoves{
-		makemove.U, makemove.CounterClockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.D, makemove.Clockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.D, makemove.Clockwise, 2,
-	},
-	makemove.RubikMoves{
-		makemove.D, makemove.CounterClockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.F, makemove.Clockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.F, makemove.Clockwise, 2,
-	},
-	makemove.RubikMoves{
-		makemove.F, makemove.CounterClockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.B, makemove.Clockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.B, makemove.Clockwise, 2,
-	},
-	makemove.RubikMoves{
-		makemove.B, makemove.CounterClockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.L, makemove.Clockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.L, makemove.Clockwise, 2,
-	},
-	makemove.RubikMoves{
-		makemove.L, makemove.CounterClockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.R, makemove.Clockwise, 1,
-	},
-	makemove.RubikMoves{
-		makemove.R, makemove.Clockwise, 2,
-	},
-	makemove.RubikMoves{
-		makemove.R, makemove.CounterClockwise, 1,
-	},
+	{makemove.U, makemove.Clockwise, 1},
+	{makemove.U, makemove.Clockwise, 2},
+	{makemove.U, makemove.CounterClockwise, 1},
+	{makemove.D, makemove.Clockwise, 1},
+	{makemove.D, makemove.Clockwise, 2},
+	{makemove.D, makemove.CounterClockwise, 1},
+	{makemove.F, makemove.Clockwise, 1},
+	{makemove.F, makemove.Clockwise, 2},
+	{makemove.F, makemove.CounterClockwise, 1},
+	{makemove.B, makemove.Clockwise, 1},
+	{makemove.B, makemove.Clockwise, 2},
+	{makemove.B, makemove.CounterClockwise, 1},
+	{makemove.L, makemove.Clockwise, 1},
+	{makemove.L, makemove.Clockwise, 2},
+	{makemove.L, makemove.CounterClockwise, 1},
+	{makemove.R, makemove.Clockwise, 1},
+	{makemove.R, makemove.Clockwise, 2},
+	{makemove.R, makemove.CounterClockwise, 1},
 }
 
 func rubikMovesToUint8(m makemove.RubikMoves) uint8 {
@@ -382,6 +339,38 @@ func Thistlethwaite(init_moves []makemove.RubikMoves) []makemove.RubikMoves {
 	}
 
 	solUint8 := thistlethwaiteUint8(movesUnit8)
+	var sol []makemove.RubikMoves
+
+	for i := 0; i < len(solUint8); i++ {
+		sol = append(sol, uint8ToRbikMoves[solUint8[i]])
+	}
+
+	return sol
+}
+
+func BidiBfs(init_moves []makemove.RubikMoves) []makemove.RubikMoves {
+	var movesUnit8 []uint8
+
+	for i := 0; i < len(init_moves); i++ {
+		movesUnit8 = append(movesUnit8, rubikMovesToUint8(init_moves[i]))
+	}
+
+	var c cube = goalCube
+
+	for _, m := range movesUnit8 {
+		c = doMove(c, m)
+	}
+
+	var dirG0 = []uint8{
+		0, 1, 2,
+		3, 4, 5,
+		6, 7, 8,
+		9, 10, 11,
+		12, 13, 14,
+		15, 16, 17,
+	}
+
+	solUint8 := bidirectionalBfs(c, goalCube, idG23, dirG0)
 	var sol []makemove.RubikMoves
 
 	for i := 0; i < len(solUint8); i++ {
