@@ -6,5 +6,4 @@ build
 tmp
 .lastMoves.txt
 tags.lock
-go.mod
 go.sum
