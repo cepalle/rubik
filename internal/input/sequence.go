@@ -45,7 +45,7 @@ func stringToMove(move string) (makemove.RubikMoves, error) {
 			return rubikMoves.Move, nil
 		}
 	}
-	return makemove.RubikMoves{}, errors.New(fmt.Sprintf("Input error: <%s> is not a valid move", move))
+	return makemove.RubikMoves{}, errors.New(fmt.Sprintf("Input error: <%s> is not a valid move", strings.TrimSpace(move)))
 }
 
 func moveToString(move makemove.RubikMoves) (string, error) {

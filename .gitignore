@@ -3,4 +3,6 @@ tags
 *.swp
 build
 *.gob
-tmp.lastMoves.txt
+tmp
+.lastMoves.txt
+tags.lock
