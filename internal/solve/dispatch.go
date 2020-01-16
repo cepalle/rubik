@@ -28,11 +28,5 @@ func DispatchSolve(moves []makemove.RubikMoves, algorithm int) []makemove.RubikM
 	}
 
 	finalSequence := CleanMoves(sequence)
-	rubik = rubik.DoMoves(sequence)
-	if rubik.IsResolve() {
-		fmt.Println("Good job !")
-	} else {
-		os.Exit(1)
-	}
 	return finalSequence
 }
