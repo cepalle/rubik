@@ -663,7 +663,6 @@ func upCorners(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 			}
 		}
 		sequence = append(sequence, seqTmp...)
-		index = uint8(getIndex(rubik.PosFP3[:], i))
 		repeat = 0
 		for rubik.PosFP3[i] != i {
 			repeat += 1
