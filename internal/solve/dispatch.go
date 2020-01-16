@@ -18,6 +18,7 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	// sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
 	// sequence = Bfs(rubik)
 	sequence = Thistlethwaite(moves)
+	// sequence = CleanMoves(moves)
 
 	// sequence = MechanicalHuman(rubik, true)
 	// fmt.Println()
@@ -40,5 +41,5 @@ func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMov
 	// sequence = IdaStar(rubik, ScoringHamming)
 	rubik = rubik.DoMoves(sequence)
 	//sequence = []makemove.RubikMoves{}
-	return sequence
+	return CleanMoves(sequence)
 }
