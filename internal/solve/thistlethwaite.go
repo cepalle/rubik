@@ -1,7 +1,6 @@
 package solve
 
 import (
-	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
 )
 
@@ -201,7 +200,7 @@ func bidirectionalBfs(src cube, dst cube, id func(c cube) cube, dir []uint8) []u
 		}
 
 	}
-	println("BFS failed...")
+	// println("BFS failed...")
 	return nil
 }
 
@@ -278,24 +277,24 @@ func thistlethwaiteUint8(init_moves []uint8) []uint8 {
 		c = doMove(c, m)
 	}
 
-	fmt.Printf("%+v\n", c)
+	// fmt.Printf("%+v\n", c)
 
-	println("G0 -> G1 Start")
+	// println("G0 -> G1 Start")
 	moveG0 := g0(c)
 	c = doMoves(c, moveG0)
-	fmt.Printf("%+v\n", c)
+	// fmt.Printf("%+v\n", c)
 
-	println("G1 -> G2 Start")
+	// println("G1 -> G2 Start")
 	moveG1 := g1(c)
 	c = doMoves(c, moveG1)
-	fmt.Printf("%+v\n", c)
+	// fmt.Printf("%+v\n", c)
 
-	println("G2 -> G4 Start")
+	// println("G2 -> G4 Start")
 	moveG23 := g23(c)
 	c = doMoves(c, moveG23)
-	fmt.Printf("%+v\n", c)
+	// fmt.Printf("%+v\n", c)
 
-	println("END")
+	// println("END")
 
 	return append(moveG0, append(moveG1, moveG23...)...)
 }
