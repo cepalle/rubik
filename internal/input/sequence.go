@@ -4,11 +4,40 @@ import (
 	"errors"
 	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
+	"io/ioutil"
 	"log"
 	"math/rand"
+	"os"
 	"strings"
 	"time"
 )
+
+func createFile(sequence string) {
+	file, err := os.Create(".lastMoves.txt")
+	if err != nil {
+		log.Fatalf("failed creating file : %s", err)
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(sequence)
+
+	if err != nil {
+		log.Fatalf("failed writing to file : %s", err)
+	}
+}
+
+func readFile() string {
+	data, err := ioutil.ReadFile(".lastMoves.txt")
+
+	if err != nil {
+		log.Fatalf("Failed reading data from file : %s", err)
+	}
+	return string(data)
+}
+
+func LoadSequence() []makemove.RubikMoves {
+	return StringToSequence(readFile())
+}
 
 func stringToMove(move string) (makemove.RubikMoves, error) {
 	for _, rubikMoves := range makemove.AllRubikMovesWithName {
@@ -28,21 +57,16 @@ func moveToString(move makemove.RubikMoves) (string, error) {
 	return "", errors.New(fmt.Sprintf("You shouldn't get there"))
 }
 
-func GenerateRandomSequence(nbrMove int, help string) []makemove.RubikMoves {
-	var Sequence []makemove.RubikMoves
+func GenerateRandomSequence(nbrMove int) []makemove.RubikMoves {
+	var sequence []makemove.RubikMoves
 
 	rand.Seed(time.Now().UnixNano())
 	for i := 0; i < nbrMove; i++ {
 		tmp := makemove.AllRubikMovesWithName[rand.Intn(makemove.NbRubikMoves)]
-		if help != "n" {
-			fmt.Printf("%s ", tmp.Name)
-		}
-		Sequence = append(Sequence, tmp.Move)
+		sequence = append(sequence, tmp.Move)
 	}
-	if help != "n" {
-		fmt.Printf("\n")
-	}
-	return Sequence
+	createFile(SequenceToString(sequence))
+	return sequence
 }
 
 func SequenceToString(moves []makemove.RubikMoves) string {

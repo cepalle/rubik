@@ -1,47 +1,30 @@
 package solve
 
 import (
-	"fmt"
-	"github.com/cepalle/rubik/internal/input"
 	"github.com/cepalle/rubik/internal/makemove"
-	"os"
 )
 
-func DispatchSolve(moves []makemove.RubikMoves, help string) []makemove.RubikMoves {
+func DispatchSolve(moves []makemove.RubikMoves, algorithm int) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	rubik := makemove.InitRubik()
 
 	rubik = rubik.DoMoves(moves)
 
-	// sequence = Bfs(rubik)
-	// sequence = IddfsItHamming(rubik)
-	// sequence = AStart(rubik, MakeNNScoring(Nnfilename))
-	// sequence = AStart(rubik, MakeNNDeepScoring(NnDeepFilename))
-	// sequence = Bfs(rubik)
-//	sequence = Thistlethwaite(moves)
-	// sequence = CleanMoves(moves)
-
-	// sequence = MechanicalHuman(rubik, true)
-	// fmt.Println()
-
-	if help == "n" {
+	switch algorithm {
+	case 1:
 		sequence = MechanicalHuman(rubik, false)
-	} else {
+	case 2:
+		sequence = AStart(rubik, ScoringHuman)
+	case 3:
+		sequence = AStart(rubik, MakeBfsScore(2, ScoringHuman))
+	case 4:
+		sequence = Thistlethwaite(moves)
+	case 5:
+		sequence = BidiBfs(moves)
+	case 6:
 		sequence = MechanicalHuman(rubik, true)
 	}
-	if sequence == nil {
-		fmt.Println(input.SequenceToString(moves))
-		os.Exit(1)
-	}
-	if help != "n" {
-		fmt.Println()
-	}
 
-	// fmt.Println()
-	// fmt.Println()
-	// sequence = IdaStar(rubik, ScoringHamming)
-	// sequence = IdaStar(rubik, ScoringHamming)
-	rubik = rubik.DoMoves(sequence)
-	//sequence = []makemove.RubikMoves{}
-	return CleanMoves(sequence)
+	finalSequence := CleanMoves(sequence)
+	return finalSequence
 }

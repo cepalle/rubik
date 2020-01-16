@@ -3,4 +3,4 @@ tags
 *.swp
 build
 *.gob
-tmp
+tmp.lastMoves.txt

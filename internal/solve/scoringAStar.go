@@ -33,6 +33,16 @@ func ScoringHamming(cube *makemove.Rubik) float64 {
 	return tot
 }
 
+func MakeBfsScore(depth uint32, scoring func(c *makemove.Rubik) float64) func(*makemove.Rubik) float64 {
+	return func(c *makemove.Rubik) float64 {
+		return BfsScore(*c, depth, scoring)
+	}
+}
+
+func ScoringHuman(cube *makemove.Rubik) float64 {
+	return float64(len(MechanicalHuman(*cube, false)))
+}
+
 func nnOutputToScoring(out []float64) float64 {
 	var res float64 = 0
 

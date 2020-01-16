@@ -878,7 +878,7 @@ func checkDownFace(rubik makemove.Rubik) bool {
 	return true
 }
 
-func checkRubik(rubik makemove.Rubik) bool {
+func CheckRubik(rubik makemove.Rubik) bool {
 	for i := uint8(0); i < 24; i++ {
 		if rubik.PosFP3[i] != i {
 			fmt.Fprintf(os.Stderr, "Down orientation failed\n")
@@ -897,78 +897,34 @@ func checkRubik(rubik makemove.Rubik) bool {
 func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var finalSequence []makemove.RubikMoves
 	var tmpSequence []makemove.RubikMoves
-	//var correct bool
 
 	tmpSequence = upCross(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkTopCross(rubik)
-	//if !correct {
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on up cross done.")
-	//}
 
 	tmpSequence = upCorners(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkTopCorners(rubik)
-	//if !correct {
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on up corners done.")
-	//}
 
 	tmpSequence = secondRow(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkSecondRow(rubik)
-	//if !correct {
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on second row done.")
-	//}
 
 	tmpSequence = downCross(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkDownCross(rubik)
-	//if !correct {
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on down cross done.")
-	//}
 
 	tmpSequence = downCorners(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkDownCorners(rubik)
-	//if !correct {
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on down cross done.")
-	//}
 
 	tmpSequence = downCornersOrientation(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkDownFace(rubik)
-	//if !correct {
-	//	fmt.Println(rubik)
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on down face done.")
-	//}
 
 	tmpSequence = downEdges(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	//correct = checkRubik(rubik)
-	//if !correct {
-	//	fmt.Println(rubik)
-	//	return nil
-	//} else if debug {
-	//	fmt.Println("Check on down face done.")
-	//}
-	return finalSequence
+
+	return CleanMoves(finalSequence)
 }
