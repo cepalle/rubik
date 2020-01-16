@@ -1,9 +1,0 @@
-github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
-github.com/goml/gobrain v0.0.0-20190708142826-a9d9724c9e47 h1:cMBwfuoSxorEwgRo83PXI2sDsJG513LEwywags7AcT0=
-github.com/goml/gobrain v0.0.0-20190708142826-a9d9724c9e47/go.mod h1:3C9khhaMIcUpCkbwcG7fVaqIjUOOnRxRUvZ+btWi+5A=
-github.com/jupp0r/go-priority-queue v0.0.0-20160601094913-ab1073853bde h1:+5PMaaQtDUwOcJIUlmX89P0J3iwTvErTmyn5WghzXAQ=
-github.com/jupp0r/go-priority-queue v0.0.0-20160601094913-ab1073853bde/go.mod h1:RDgD/dfPmIwFH0qdUOjw71HjtWg56CtyLIoHL+R1wJw=
-github.com/patrikeh/go-deep v0.0.0-20191210195838-b811ffc4083e h1:ZoskZldqobVtWFV8kMAHrlHji5uuhKP9ok578SKnZhQ=
-github.com/patrikeh/go-deep v0.0.0-20191210195838-b811ffc4083e/go.mod h1:W7GtTeZHpwautuPVtKBFp1+df69GkwlOGD2cwvYeYIE=
-github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
-github.com/stretchr/testify v1.1.4/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
