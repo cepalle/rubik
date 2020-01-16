@@ -120,7 +120,6 @@ func finalMovesCounterClockwise(face int) []makemove.RubikMoves {
 func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 	var seqTmp []makemove.RubikMoves
-	fmt.Println(rubik)
 	if debug {
 		fmt.Print("\nSolving this Cube :")
 	}
@@ -137,6 +136,9 @@ func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	}
 	if tot == 0 {
 		sequence = finalMovesClockwise(0)
+		if debug {
+			fmt.Printf("The four edges are wrongly place, turning clockwise : `%s` \n", input.SequenceToString(sequence))
+		}
 		rubik = rubik.DoMoves(sequence)
 		for i := 8; i < 12; i++ {
 			status[i%4] = int(rubik.PosP2[i] % 4)
@@ -149,9 +151,8 @@ func downEdges(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 		}
 	}
 	if tot != 4 {
-		fmt.Println(status, index)
 		face := (4 - index) % 4
-		if status[face]-face > 0 {
+		if status[(index+2)%4] == (index+3)%4 {
 			seqTmp = finalMovesClockwise(face)
 			if debug {
 				fmt.Printf("Still 3 edges wrongly place, turning clockwise : `%s`\n", input.SequenceToString(seqTmp))
@@ -200,6 +201,12 @@ func downCornersOrientation(rubik makemove.Rubik, debug bool) []makemove.RubikMo
 	}
 	saveState := numberGoodOrientedCorner(rubik)
 	if sum(saveState[:]) == 0 {
+	} else if saveState[0] == saveState[1] && saveState[1] == saveState[2] {
+		rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3+saveState[0]-1].Move)
+		sequence = append(sequence, makemove.AllRubikMovesWithName[3+saveState[0]-1].Move)
+		if debug {
+			fmt.Printf("only a small rotation to do")
+		}
 	} else if saveState[0] == saveState[2] || saveState[1] == saveState[3] {
 		seqTmp = downCornersOrientationMove(0)
 		rubik = rubik.DoMoves(seqTmp)
@@ -218,6 +225,9 @@ func downCornersOrientation(rubik makemove.Rubik, debug bool) []makemove.RubikMo
 		if face != 0 {
 			rubik = rubik.DoMove(makemove.AllRubikMovesWithName[3+face-1].Move)
 			sequence = append(sequence, makemove.AllRubikMovesWithName[3+face-1].Move)
+			if debug {
+				fmt.Printf("A small rotation and ")
+			}
 		}
 		saveState = numberGoodOrientedCorner(rubik)
 		face = getIndex(saveState[:], 0)
@@ -375,72 +385,70 @@ func downCross(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	if debug {
 		fmt.Print("\nCreating the bottom cross :")
 	}
-	if debug {
-		var res = [4]uint8{2, 2, 2, 2}
+	var res = [4]uint8{2, 2, 2, 2}
+	for i, pos := range rubik.PosP2 {
+		if i < 8 {
+			continue
+		}
+		res[i%4] = (pos + uint8(i) + rubik.RotP2[pos]) % 2
+	}
+	evenLine := res[0] + res[2]
+	oddLine := res[1] + res[3]
+	if oddLine+evenLine >= 3 {
+		seqTmp := downCrossByQuarter(0)
+		if debug {
+			fmt.Printf(" found no pattern. `%s`\n", input.SequenceToString(seqTmp))
+		}
+		sequence = append(sequence, seqTmp...)
+		rubik = rubik.DoMoves(seqTmp)
 		for i, pos := range rubik.PosP2 {
 			if i < 8 {
 				continue
 			}
 			res[i%4] = (pos + uint8(i) + rubik.RotP2[pos]) % 2
 		}
-		evenLine := res[0] + res[2]
-		oddLine := res[1] + res[3]
-		if oddLine+evenLine >= 3 {
-			seqTmp := downCrossByQuarter(0)
-			if debug {
-				fmt.Printf(" found no pattern. `%s`\n", input.SequenceToString(seqTmp))
-			}
-			sequence = append(sequence, seqTmp...)
-			rubik = rubik.DoMoves(seqTmp)
-			for i, pos := range rubik.PosP2 {
-				if i < 8 {
-					continue
-				}
-				res[i%4] = (pos + uint8(i) + rubik.RotP2[pos]) % 2
-			}
-			evenLine = res[0] + res[2]
-			oddLine = res[1] + res[3]
-		}
-		if evenLine+oddLine == 0 {
-			if debug {
-				fmt.Printf(" cross already done\n")
-			}
-		} else if evenLine == 0 {
-			seqTmp := downCrossByLine(1)
-			if debug {
-				fmt.Printf(" found a straight line. `%s`\n", input.SequenceToString(seqTmp))
-			}
-			sequence = append(sequence, seqTmp...)
-		} else if oddLine == 0 {
-			seqTmp := downCrossByLine(0)
-			if debug {
-				fmt.Printf(" found a straight line. `%s`\n", input.SequenceToString(seqTmp))
-			}
-			sequence = append(sequence, seqTmp...)
-		} else {
-			var seqTmp []makemove.RubikMoves
-			index := uint8(getIndex(res[:], 0))
-			if index == 0 && res[3] == 0 {
-				seqTmp = downCrossByQuarter(0)
-			} else if index == 0 {
-				seqTmp = downCrossByQuarter(3)
-			} else if index == 1 {
-				seqTmp = downCrossByQuarter(2)
-			} else if index == 2 {
-				seqTmp = downCrossByQuarter(1)
-			}
-			if debug {
-				fmt.Printf(" found comma. `%s`\n", input.SequenceToString(seqTmp))
-			}
-			sequence = append(sequence, seqTmp...)
-		}
-
+		evenLine = res[0] + res[2]
+		oddLine = res[1] + res[3]
+	}
+	if evenLine+oddLine == 0 {
 		if debug {
-			if len(sequence) != 0 {
-				fmt.Printf("Bottom cross placed ! Small recap : `%s`\n", input.SequenceToString(sequence))
-			} else {
-				fmt.Println("There was nothing to do")
-			}
+			fmt.Printf(" cross already done\n")
+		}
+	} else if evenLine == 0 {
+		seqTmp := downCrossByLine(1)
+		if debug {
+			fmt.Printf(" found a straight line. `%s`\n", input.SequenceToString(seqTmp))
+		}
+		sequence = append(sequence, seqTmp...)
+	} else if oddLine == 0 {
+		seqTmp := downCrossByLine(0)
+		if debug {
+			fmt.Printf(" found a straight line. `%s`\n", input.SequenceToString(seqTmp))
+		}
+		sequence = append(sequence, seqTmp...)
+	} else {
+		var seqTmp []makemove.RubikMoves
+		index := uint8(getIndex(res[:], 0))
+		if index == 0 && res[3] == 0 {
+			seqTmp = downCrossByQuarter(0)
+		} else if index == 0 {
+			seqTmp = downCrossByQuarter(3)
+		} else if index == 1 {
+			seqTmp = downCrossByQuarter(2)
+		} else if index == 2 {
+			seqTmp = downCrossByQuarter(1)
+		}
+		if debug {
+			fmt.Printf(" found comma. `%s`\n", input.SequenceToString(seqTmp))
+		}
+		sequence = append(sequence, seqTmp...)
+	}
+
+	if debug {
+		if len(sequence) != 0 {
+			fmt.Printf("Bottom cross placed ! Small recap : `%s`\n", input.SequenceToString(sequence))
+		} else {
+			fmt.Println("There was nothing to do")
 		}
 	}
 	return sequence
@@ -889,7 +897,7 @@ func checkRubik(rubik makemove.Rubik) bool {
 func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	var finalSequence []makemove.RubikMoves
 	var tmpSequence []makemove.RubikMoves
-	var correct bool
+	//var correct bool
 
 	tmpSequence = upCross(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
@@ -955,13 +963,12 @@ func MechanicalHuman(rubik makemove.Rubik, debug bool) []makemove.RubikMoves {
 	tmpSequence = downEdges(rubik, debug)
 	finalSequence = append(finalSequence, tmpSequence...)
 	rubik = rubik.DoMoves(tmpSequence)
-	correct = checkRubik(rubik)
-	if !correct {
-		fmt.Println(rubik)
-		return nil
-	} else if debug {
-		fmt.Println("Check on down face done.")
-	}
-
+	//correct = checkRubik(rubik)
+	//if !correct {
+	//	fmt.Println(rubik)
+	//	return nil
+	//} else if debug {
+	//	fmt.Println("Check on down face done.")
+	//}
 	return finalSequence
 }
