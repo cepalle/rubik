@@ -12,19 +12,19 @@ import (
 func main() {
 	var moves string
 	var nbrMove int
-	var res string
+	var nbr bool
 	var algorithm int
-	var load string
+	var load int64
 	var soluce []makemove.RubikMoves
 
 	flag.StringVar(&moves, "m", "",
-		"Moves that has to be done to shuffle the cube")
+		"Sequence of move that has to be done to shuffle the cube")
 	flag.IntVar(&nbrMove, "r", 0,
 		"Number of random move to shuffle the cube")
-	flag.StringVar(&load, "l", "n",
-		"Load the last moves so you can try with new algorithm (y or n)")
-	flag.StringVar(&res, "re", "n",
-		"To print help on human solver")
+	flag.Int64Var(&load, "l", -1,
+		"Load a given seed for the random generator")
+	flag.BoolVar(&nbr, "n", false,
+		"To print the number of move done")
 	flag.IntVar(&algorithm, "a", 4,
 		`The algorithm you want to use to solve the rubik :
 		1 -> Solving like a human, without steps.
@@ -34,24 +34,25 @@ func main() {
 		5 -> Bidirectionnal BFS. Get the best number of move.
 		6 -> Solving like a human, with steps to describe each moves`)
 	flag.Parse()
-	if nbrMove == 0 && moves == "" && load == "n" {
+	if nbrMove == 0 && moves == "" && load == -1 {
 		log.Fatalf("Input error: Missing argument")
+	}
+	if algorithm < 1 || algorithm > 6 {
+		log.Fatalf("Wrong choice of algorithm")
 	}
 	if nbrMove < 0 {
 		log.Fatalf("Input error: Number of move to shuffle not valid\n")
 	}
-	if (nbrMove != 0 && len(moves) != 0) || (nbrMove != 0 && load == "y") || (len(moves) != 0 && load == "y") {
+	if (nbrMove != 0 && len(moves) != 0) || (len(moves) != 0 && load != -1) {
 		log.Fatalf("Invalid input, either chose a random shuffle or write your own or load the old shuffle")
 	}
-	if load == "y" {
-		soluce = solve.DispatchSolve(input.LoadSequence(), algorithm)
-	} else if moves == "" {
-		soluce = solve.DispatchSolve(input.GenerateRandomSequence(nbrMove), algorithm)
+	if moves == "" || load != -1 {
+		soluce = solve.DispatchSolve(input.GenerateRandomSequence(load, nbrMove), algorithm)
 	} else {
 		soluce = solve.DispatchSolve(input.StringToSequence(moves), algorithm)
 	}
 	fmt.Println(input.SequenceToString(soluce))
-	if res != "n" {
+	if nbr {
 		fmt.Println("nbr coups :", len(soluce))
 	}
 }

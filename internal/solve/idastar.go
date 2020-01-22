@@ -5,6 +5,11 @@ import (
 	"math"
 )
 
+type node struct {
+	cube  makemove.Rubik
+	moves []makemove.RubikMoves
+}
+
 func AStart(r makemove.Rubik, scoring func(*makemove.Rubik) float64) []makemove.RubikMoves {
 	return aStartWithScoreMax(r, scoring, math.MaxFloat64)
 }

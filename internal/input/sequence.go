@@ -3,40 +3,11 @@ package input
 import (
 	"fmt"
 	"github.com/cepalle/rubik/internal/makemove"
-	"io/ioutil"
 	"log"
 	"math/rand"
-	"os"
 	"strings"
 	"time"
 )
-
-func createFile(sequence string) {
-	file, err := os.Create(".lastMoves.txt")
-	if err != nil {
-		log.Fatalf("failed creating file : %s", err)
-	}
-	defer file.Close()
-
-	_, err = file.WriteString(sequence)
-
-	if err != nil {
-		log.Fatalf("failed writing to file : %s", err)
-	}
-}
-
-func readFile() string {
-	data, err := ioutil.ReadFile(".lastMoves.txt")
-
-	if err != nil {
-		log.Fatalf("Failed reading data from file : %s", err)
-	}
-	return string(data)
-}
-
-func LoadSequence() []makemove.RubikMoves {
-	return StringToSequence(readFile())
-}
 
 func stringToMove(move string) (makemove.RubikMoves, error) {
 	for _, rubikMoves := range makemove.AllRubikMovesWithName {
@@ -56,15 +27,20 @@ func moveToString(move makemove.RubikMoves) (string, error) {
 	return "", fmt.Errorf("You shouldn't get there")
 }
 
-func GenerateRandomSequence(nbrMove int) []makemove.RubikMoves {
+func GenerateRandomSequence(seed int64, nbrMove int) []makemove.RubikMoves {
 	var sequence []makemove.RubikMoves
 
-	rand.Seed(time.Now().UnixNano())
+	if seed == -1 {
+		newSeed := time.Now().UnixNano()
+		rand.Seed(newSeed)
+		fmt.Println("Seed :", newSeed)
+	} else {
+		rand.Seed(seed)
+	}
 	for i := 0; i < nbrMove; i++ {
 		tmp := makemove.AllRubikMovesWithName[rand.Intn(makemove.NbRubikMoves)]
 		sequence = append(sequence, tmp.Move)
 	}
-	createFile(SequenceToString(sequence))
 	return sequence
 }
 
